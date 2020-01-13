@@ -7,9 +7,10 @@
 
 package frc.robot.drivetrain.commands;
 
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.FPS;
+
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.Drivetrain.CommandUnits;
 
 public class VelocityTuning extends Command {
   public VelocityTuning() {
@@ -27,7 +28,7 @@ public class VelocityTuning extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Drivetrain.getDrivetrain().setSetpoint(CommandUnits.FPS, -2, 2);
+    Drivetrain.getDrivetrain().setSetpoint(FPS, -2, 2);
   }
 
   // Make this return true when this Command no longer needs to run execute()

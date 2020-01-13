@@ -8,6 +8,7 @@
 package frc.robot.drivetrain.commands;
 
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
 import static frc.robot.oi.OI.getOI;
 import static java.lang.Math.abs;
 
@@ -18,19 +19,18 @@ import com.team2363.controller.PIDController;
 import com.team2363.utilities.RollingAverager;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.drivetrain.Drivetrain.CommandUnits;
 
 /**
- * This command will check to see if there is no turn command being applied and will attempt to 
- * hold the current heading
+ * This command will check to see if there is no turn command being applied and
+ * will attempt to hold the current heading
  */
 public class StraightAssistedDrive extends NormalizedArcadeDrive {
 
-  private PIDController controller = new PIDController(0.001, 0, 0, 0.02);
+  private final PIDController controller = new PIDController(0.001, 0, 0, 0.02);
   private boolean holdingHeading;
   private Date turnTimeout;
-  
-  private RollingAverager throttleAverage = new RollingAverager(20);
+
+  private final RollingAverager throttleAverage = new RollingAverager(20);
 
   public StraightAssistedDrive() {
     super(getDrivetrain());
@@ -48,11 +48,12 @@ public class StraightAssistedDrive extends NormalizedArcadeDrive {
 
   @Override
   protected double getTurn() {
-    double turn =  getOI().getTurn();
-    double turnPower = abs(turn);
-    double currentHeading = getDrivetrain().getHeading();
+    final double turn = getOI().getTurn();
+    final double turnPower = abs(turn);
+    final double currentHeading = getDrivetrain().getHeading();
 
-    // Is the robot being commanded to turn? If yes then use that as the command and reset the hold heading
+    // Is the robot being commanded to turn? If yes then use that as the command and
+    // reset the hold heading
     if (turnPower > 0.05) {
       holdingHeading = false;
       turnTimeout = null;
@@ -79,8 +80,8 @@ public class StraightAssistedDrive extends NormalizedArcadeDrive {
   }
 
   @Override
-  protected void useOutputs(double left, double right) {
-    getDrivetrain().setSetpoint(CommandUnits.PERCENT_FULLSPEED, left, right);
+  protected void useOutputs(final double left, final double right) {
+    getDrivetrain().setSetpoint(PERCENT_FULLSPEED, left, right);
   }
 
   @Override

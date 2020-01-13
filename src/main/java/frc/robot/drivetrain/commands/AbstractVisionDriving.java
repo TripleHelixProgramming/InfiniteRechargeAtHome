@@ -8,6 +8,7 @@
 package frc.robot.drivetrain.commands;
 
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.FPS;
 
 import com.team2363.controller.PIDController;
 import com.team2363.logger.HelixEvents;
@@ -15,13 +16,12 @@ import com.team2363.logger.HelixEvents;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.drivetrain.Camera;
-import frc.robot.drivetrain.Drivetrain.CommandUnits;
 
 public abstract class AbstractVisionDriving extends Command {
 
-  private PIDController controller = new PIDController(0.05, 0, 0);
-  private Notifier notifier = new Notifier(this::calculate);
-  private Camera camera;
+  private final PIDController controller = new PIDController(0.05, 0, 0);
+  private final Notifier notifier = new Notifier(this::calculate);
+  private final Camera camera;
 
   public AbstractVisionDriving() {
     requires(getDrivetrain());
@@ -38,7 +38,7 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void execute() {
-    double angleToTarget = camera.getRotationalDegreesToTarget();
+    final double angleToTarget = camera.getRotationalDegreesToTarget();
     controller.setReference(getDrivetrain().getHeading() + angleToTarget);
   }
 
@@ -59,7 +59,7 @@ public abstract class AbstractVisionDriving extends Command {
   }
 
   private void calculate() {
-    double output = controller.calculate(getDrivetrain().getHeading());
-    getDrivetrain().setSetpoint(CommandUnits.FPS, getThrottle() + output, getThrottle() - output);
+    final double output = controller.calculate(getDrivetrain().getHeading());
+    getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
   }
 }
