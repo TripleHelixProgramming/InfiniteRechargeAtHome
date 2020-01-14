@@ -8,6 +8,7 @@
 package frc.robot;
 
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
+import static frc.robot.shooter.Shooter.getShooter;
 import static frc.robot.oi.OI.getOI;
 
 import com.team2363.logger.HelixEvents;
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
   private void initializeSubsystems() {
     getOI();
     getDrivetrain();
+    getShooter();
   }
 
   /**
