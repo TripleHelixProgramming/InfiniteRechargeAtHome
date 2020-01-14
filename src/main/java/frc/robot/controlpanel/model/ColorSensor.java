@@ -5,9 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.manipulator;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
+package frc.robot.controlpanel.model;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +15,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 
-public class Manipulator extends Subsystem {
+public class ColorSensor {
 
   /**
    * Change the I2C port below to match the connection of your color sensor
@@ -48,25 +46,10 @@ public class Manipulator extends Subsystem {
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-  // singleton instance
-  private static Manipulator INSTANCE = null;
-
   /**
-   * @return the singleton instance of the JesterArm subsystem
+   * Creates a new ColorSensor.
    */
-  public static Manipulator getManipulator() {
-    if (INSTANCE == null) {
-      INSTANCE = new Manipulator();
-    }
-    return INSTANCE;
-  }
-
-  /**
-   * Creates a new Manipulator.
-   */
-  private Manipulator() {
-    super("Manipulator Subsystem");
-
+  public ColorSensor() {
     this.colorSensorInit();
   }
 
@@ -88,13 +71,13 @@ public class Manipulator extends Subsystem {
      * is the more light from the surroundings will bleed into the measurements and
      * make it difficult to accurately determine its color.
      */
-    Color detectedColor = m_colorSensor.getColor();
+    final Color detectedColor = m_colorSensor.getColor();
 
     /**
      * Run the color match algorithm on our detected color
      */
     String colorString;
-    ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+    final ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kBlueTarget) {
       colorString = "Blue";
@@ -118,16 +101,8 @@ public class Manipulator extends Subsystem {
     SmartDashboard.putString("Detected Color", colorString);
   }
 
-  @Override
-  protected void initDefaultCommand() {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     this.colorSensorPeriodic();
   }
 

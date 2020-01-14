@@ -8,7 +8,7 @@
 package frc.robot;
 
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
-import static frc.robot.manipulator.Manipulator.getManipulator;
+import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.oi.OI.getOI;
 
 import com.team2363.logger.HelixEvents;
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
   private void initializeSubsystems() {
     getOI();
     getDrivetrain();
-    getManipulator();
+    getControlPanel();
   }
 
   /**
