@@ -16,7 +16,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.oi.OI;
 import frc.robot.shooter.commands.StopShooter;
 import frc.robot.shooter.commands.TestWithController;
 
@@ -35,8 +34,7 @@ public class Shooter extends Subsystem {
     }
   
     private static final int SHOOTER_ID = 1;
-    private static final double MAX_RPM = 5700;
-    private double setPoint = 0.0;
+    public double MAX_RPM = 5700;
 
     private CANSparkMax motor;
     private CANPIDController pidController;
@@ -119,9 +117,8 @@ public class Shooter extends Subsystem {
         }
     }
 
-    public void setFromThrottle(){
-        setPoint = OI.getOI().getThrottle() * MAX_RPM;
-        setVelocity(setPoint);
+    public double getMAXRPM(){
+        return(MAX_RPM);
     }
 
     public void setVelocity(double setPoint) {
