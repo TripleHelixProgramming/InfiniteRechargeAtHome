@@ -36,12 +36,8 @@ public class Drivetrain extends Subsystem {
     return INSTANCE;
   }
 
-  public enum CommandType {
-    PERCENT, FPS, TICKSPER100MS
-  }
-
-  public enum ControlType {
-    POWER, VELOCITY
+  public enum CommandUnits {
+    PERCENT_FULLPOWER, PERCENT_FULLSPEED, FPS, TICKSPER100MS
   }
 
   private final double WHEEL_DIAMETER_IN_INCHES = 4;
@@ -51,17 +47,17 @@ public class Drivetrain extends Subsystem {
   private static final int VELOCITY_CONTROL_SLOT = 0;
 
   //  Competition & Practice Bot  Talon Masters with Victors as Slaves.
-  private BaseMotorController rightSlave1 = new BobTalonSRX(11);
-  private BobTalonSRX rightSlave2 = new BobTalonSRX(10);
-  private BaseMotorController leftSlave1 = new BobTalonSRX(24);
-  private BaseMotorController leftSlave2 = new BobTalonSRX(25);
+  private final BaseMotorController rightSlave1 = new BobTalonSRX(11);
+  private final BobTalonSRX rightSlave2 = new BobTalonSRX(10);
+  private final BaseMotorController leftSlave1 = new BobTalonSRX(24);
+  private final BaseMotorController leftSlave2 = new BobTalonSRX(25);
 
-  private LeaderBobTalonSRX left = new LeaderBobTalonSRX(23, leftSlave1, leftSlave2);
-  private LeaderBobTalonSRX right = new LeaderBobTalonSRX(12, rightSlave1, rightSlave2);
+  private final LeaderBobTalonSRX left = new LeaderBobTalonSRX(23, leftSlave1, leftSlave2);
+  private final LeaderBobTalonSRX right = new LeaderBobTalonSRX(12, rightSlave1, rightSlave2);
 
-  //private PowerDistributionPanel pdp = new PowerDistributionPanel();
-  private PigeonIMU pigeon = new PigeonIMU(rightSlave2);
-  private Camera frontCamera = new Camera("limelight-front");
+  // private PowerDistributionPanel pdp = new PowerDistributionPanel();
+  private final PigeonIMU pigeon = new PigeonIMU(rightSlave2);
+  private final Camera frontCamera = new Camera("limelight-front");
 
   private Drivetrain() {
     setPIDFValues();
@@ -80,45 +76,50 @@ public class Drivetrain extends Subsystem {
     // setDefaultCommand(new SampleDrive());
   }
 
-  private void setVelocityOutput(double leftVelocity, double rightVelocity) {
+  private void setVelocityOutput(final double leftVelocity, final double rightVelocity) {
     left.set(Velocity, leftVelocity);
     right.set(Velocity, rightVelocity);
   }
 
-  private void setPowerOutput(double leftPercent, double rightPercent) {
+  private void setPowerOutput(final double leftPercent, final double rightPercent) {
     left.set(ControlMode.PercentOutput, leftPercent);
     right.set(ControlMode.PercentOutput, rightPercent);
   }
 
-  public void setSetpoint(CommandType commandType, ControlType controlType, double left, double right) {
-    if (commandType == CommandType.PERCENT && controlType == ControlType.POWER) {
+  public void setSetpoint(final CommandUnits commandUnits, final double left, final double right) {
+    switch (commandUnits) {
+    case PERCENT_FULLPOWER:
       setPowerOutput(left, right);
-    } else if (commandType == CommandType.PERCENT && controlType == ControlType.VELOCITY) {
+      break;
+    case PERCENT_FULLSPEED:
       setVelocityOutput(
-        HelixMath.convertFromFpsToTicksPer100Ms(left * MAX_VELOCITY_IN_FPS, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION), 
-        HelixMath.convertFromFpsToTicksPer100Ms(right * MAX_VELOCITY_IN_FPS, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION)
-        );
-    } else if (commandType == CommandType.FPS && controlType == ControlType.VELOCITY) {
-      setVelocityOutput(HelixMath.convertFromFpsToTicksPer100Ms(left, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION), 
-        HelixMath.convertFromFpsToTicksPer100Ms(right, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION)
-        );
-    } else if (commandType == CommandType.TICKSPER100MS && controlType == ControlType.VELOCITY) {
+          HelixMath.convertFromFpsToTicksPer100Ms(left * MAX_VELOCITY_IN_FPS, WHEEL_DIAMETER_IN_INCHES,
+              ENCODER_TICKS_PER_REVOLUTION),
+          HelixMath.convertFromFpsToTicksPer100Ms(right * MAX_VELOCITY_IN_FPS, WHEEL_DIAMETER_IN_INCHES,
+              ENCODER_TICKS_PER_REVOLUTION));
+      break;
+    case FPS:
+      setVelocityOutput(
+          HelixMath.convertFromFpsToTicksPer100Ms(left, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION),
+          HelixMath.convertFromFpsToTicksPer100Ms(right, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
+      break;
+    case TICKSPER100MS:
       setVelocityOutput(left, right);
-    } else {
-      setPowerOutput(left, right);
     }
   }
 
   private void setPIDFValues() {
-    double kF = 1.25;
-    double kP = 1; //5
-    double kI = 0.01;
-    double kD = 0;
+    final double kF = 1.25;
+    final double kP = 1; // 5
+    final double kI = 0.01;
+    final double kD = 0;
     left.configPIDF(VELOCITY_CONTROL_SLOT, kP, kI, kD, kF);
     right.configPIDF(VELOCITY_CONTROL_SLOT, kP, kI, kD, kF);
 
-    left.config_IntegralZone(VELOCITY_CONTROL_SLOT, (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
-    right.config_IntegralZone(VELOCITY_CONTROL_SLOT, (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
+    left.config_IntegralZone(VELOCITY_CONTROL_SLOT,
+        (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
+    right.config_IntegralZone(VELOCITY_CONTROL_SLOT,
+        (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
   }
 
   private void setupSensors() {
@@ -126,28 +127,40 @@ public class Drivetrain extends Subsystem {
     right.configPrimaryFeedbackDevice(FeedbackDevice.QuadEncoder);
   }
 
-  private void setBrakeMode(NeutralMode neutralMode) {
+  private void setBrakeMode(final NeutralMode neutralMode) {
     left.setNeutralMode(neutralMode);
     right.setNeutralMode(neutralMode);
   }
 
   private void setupLogs() {
-    // HelixLogger.getInstance().addDoubleSource("TOTAL CURRENT", pdp::getTotalCurrent);
-    // HelixLogger.getInstance().addDoubleSource("DT LM Current", left::getOutputCurrent);
-    // HelixLogger.getInstance().addDoubleSource("DT RM Current", right::getOutputCurrent);
+    // HelixLogger.getInstance().addDoubleSource("TOTAL CURRENT",
+    // pdp::getTotalCurrent);
+    // HelixLogger.getInstance().addDoubleSource("DT LM Current",
+    // left::getOutputCurrent);
+    // HelixLogger.getInstance().addDoubleSource("DT RM Current",
+    // right::getOutputCurrent);
 
-    // //  This logging format should work for Talons OR Victor SLAVES.
-    // HelixLogger.getInstance().addDoubleSource("DT LS1 Current", () -> pdp.getCurrent(LEFT_SLAVE_1_PDP));
-    // HelixLogger.getInstance().addDoubleSource("DT LS2 Current", () -> pdp.getCurrent(LEFT_SLAVE_2_PDP));
-    // HelixLogger.getInstance().addDoubleSource("DT RS1 Current", () -> pdp.getCurrent(RIGHT_SLAVE_1_PDP));
-    // HelixLogger.getInstance().addDoubleSource("DT RS2 Current", () -> pdp.getCurrent(RIGHT_SLAVE_1_PDP));
+    // // This logging format should work for Talons OR Victor SLAVES.
+    // HelixLogger.getInstance().addDoubleSource("DT LS1 Current", () ->
+    // pdp.getCurrent(LEFT_SLAVE_1_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DT LS2 Current", () ->
+    // pdp.getCurrent(LEFT_SLAVE_2_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DT RS1 Current", () ->
+    // pdp.getCurrent(RIGHT_SLAVE_1_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DT RS2 Current", () ->
+    // pdp.getCurrent(RIGHT_SLAVE_1_PDP));
 
-    // HelixLogger.getInstance().addDoubleSource("PIGEON HEADING", () -> this.getYaw());
+    // HelixLogger.getInstance().addDoubleSource("PIGEON HEADING", () ->
+    // this.getYaw());
 
-    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN LEFT Voltage", left::getMotorOutputVoltage);
-    // HelixLogger.getInstance().addIntegerSource("DRIVETRAIN LEFT Velocity", this::getLeftVelocity);
-    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN RIGHT Voltage", right::getMotorOutputVoltage);
-    // HelixLogger.getInstance().addIntegerSource("DRIVETRAIN RIGHT Velocity", this::getRightVelocity);
+    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN LEFT Voltage",
+    // left::getMotorOutputVoltage);
+    // HelixLogger.getInstance().addIntegerSource("DRIVETRAIN LEFT Velocity",
+    // this::getLeftVelocity);
+    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN RIGHT Voltage",
+    // right::getMotorOutputVoltage);
+    // HelixLogger.getInstance().addIntegerSource("DRIVETRAIN RIGHT Velocity",
+    // this::getRightVelocity);
   }
 
   public void resetEncoders() {
@@ -160,7 +173,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getHeading() {
-    double [] ypr = {0, 0, 0};
+    final double[] ypr = { 0, 0, 0 };
     pigeon.getYawPitchRoll(ypr);
     return ypr[0];
   }

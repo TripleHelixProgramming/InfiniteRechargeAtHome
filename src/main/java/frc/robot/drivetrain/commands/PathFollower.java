@@ -7,22 +7,22 @@
 
 package frc.robot.drivetrain.commands;
 
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.FPS;
+
 import com.team2363.commands.HelixFollower;
 import com.team2363.controller.PIDController;
 import com.team319.trajectory.Path;
 
 import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.Drivetrain.CommandType;
-import frc.robot.drivetrain.Drivetrain.ControlType;
 
 public class PathFollower extends HelixFollower {
 
-    private Drivetrain drivetrain = Drivetrain.getDrivetrain();
+    private final Drivetrain drivetrain = Drivetrain.getDrivetrain();
 
-    private PIDController headingController = new PIDController(15, 0, 0, 0.001);
-    private PIDController distanceController = new PIDController(10, 0, 0, 0.001);
+    private final PIDController headingController = new PIDController(15, 0, 0, 0.001);
+    private final PIDController distanceController = new PIDController(10, 0, 0, 0.001);
 
-    public PathFollower(Path path) {
+    public PathFollower(final Path path) {
         super(path);
         requires(drivetrain);
     }
@@ -53,7 +53,7 @@ public class PathFollower extends HelixFollower {
     }
 
     @Override
-    public void useOutputs(double left, double right) {
-        drivetrain.setSetpoint(CommandType.FPS, ControlType.VELOCITY, left, right);
+    public void useOutputs(final double left, final double right) {
+        drivetrain.setSetpoint(FPS, left, right);
 	}
 }
