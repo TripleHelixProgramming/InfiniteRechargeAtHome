@@ -37,7 +37,7 @@ public class SampleDrive extends HelixDrive {
         if (Math.abs(newThrottle) < 0.05) {
             newThrottle = 0;
         }
-        return throttle.getNewAverage(newThrottle);
+        return -throttle.getNewAverage(newThrottle);
     }
 
     @Override
