@@ -9,6 +9,8 @@ package frc.robot;
 
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.controlpanel.ControlPanel.getControlPanel;
+import static frc.robot.intake.Intake.getIntake;
+import static frc.robot.climber.Climber.getClimber;
 import static frc.robot.oi.OI.getOI;
 
 import com.team2363.logger.HelixEvents;
@@ -53,6 +55,11 @@ public class Robot extends TimedRobot {
     getOI();
     getDrivetrain();
     getControlPanel();
+
+    // TODO: Commented since hardware not ready yet.
+    // Don't enable until tesed, CAN/PCM ids are set, etc.
+    //getIntake();
+    //getClimber();
   }
 
   /**
