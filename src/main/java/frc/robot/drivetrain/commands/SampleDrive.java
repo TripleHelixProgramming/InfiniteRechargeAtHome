@@ -7,17 +7,17 @@
 
 package frc.robot.drivetrain.commands;
 
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
+
 import com.team2363.commands.HelixDrive;
 import com.team2363.utilities.RollingAverager;
 
 import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.Drivetrain.CommandType;
-import frc.robot.drivetrain.Drivetrain.ControlType;
 import frc.robot.oi.OI;
 
 public class SampleDrive extends HelixDrive {
 
-    private RollingAverager throttle = new RollingAverager(7);
+    private final RollingAverager throttle = new RollingAverager(7);
 
     public SampleDrive() {
         requires(Drivetrain.getDrivetrain());
@@ -37,7 +37,7 @@ public class SampleDrive extends HelixDrive {
         if (Math.abs(newThrottle) < 0.05) {
             newThrottle = 0;
         }
-        return throttle.getNewAverage(newThrottle);
+        return -throttle.getNewAverage(newThrottle);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SampleDrive extends HelixDrive {
     }
 
     @Override
-    protected void useOutputs(double left, double right) {
-        Drivetrain.getDrivetrain().setSetpoint(CommandType.PERCENT, ControlType.VELOCITY, left, right);
+    protected void useOutputs(final double left, final double right) {
+        Drivetrain.getDrivetrain().setSetpoint(PERCENT_FULLSPEED, left, right);
     }
 }

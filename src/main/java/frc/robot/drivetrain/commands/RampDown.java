@@ -7,23 +7,23 @@
 
 package frc.robot.drivetrain.commands;
 
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.FPS;
+
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.Drivetrain.CommandType;
-import frc.robot.drivetrain.Drivetrain.ControlType;
 
 public class RampDown extends Command {
 
   private double heading;
   private double acceleration;
   private double currentVelocity;
-  private double distance;
-  private double kP;
+  private final double distance;
+  private final double kP;
   private int directionScalar;
 
-  public RampDown(double distance, double kP) {
+  public RampDown(final double distance, final double kP) {
     requires(Drivetrain.getDrivetrain());
     this.distance = distance;
     this.kP = kP;
@@ -33,7 +33,8 @@ public class RampDown extends Command {
   @Override
   protected void initialize() {
     heading = Drivetrain.getDrivetrain().getHeading();
-    double initialVelocity = (Drivetrain.getDrivetrain().getLeftVelocity() + Drivetrain.getDrivetrain().getRightVelocity()) / 2.0;
+    final double initialVelocity = (Drivetrain.getDrivetrain().getLeftVelocity()
+        + Drivetrain.getDrivetrain().getRightVelocity()) / 2.0;
     currentVelocity = initialVelocity;
 
     if (initialVelocity < 0) {
@@ -42,7 +43,7 @@ public class RampDown extends Command {
       directionScalar = 1;
     }
 
-    double deceleratrionTime = (2.0 * distance) / initialVelocity;
+    final double deceleratrionTime = (2.0 * distance) / initialVelocity;
     acceleration = initialVelocity / deceleratrionTime;
     acceleration *= 0.02;
     acceleration *= directionScalar;
@@ -52,9 +53,10 @@ public class RampDown extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double headingError = heading - Drivetrain.getDrivetrain().getHeading();
-    double headingCorrection = headingError * kP;
-    Drivetrain.getDrivetrain().setSetpoint(CommandType.FPS, ControlType.VELOCITY, currentVelocity + headingCorrection, currentVelocity - headingCorrection);
+    final double headingError = heading - Drivetrain.getDrivetrain().getHeading();
+    final double headingCorrection = headingError * kP;
+    Drivetrain.getDrivetrain().setSetpoint(FPS, currentVelocity + headingCorrection,
+        currentVelocity - headingCorrection);
     currentVelocity -= acceleration;
   }
 
@@ -71,7 +73,7 @@ public class RampDown extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Drivetrain.getDrivetrain().setSetpoint(CommandType.FPS, ControlType.VELOCITY, 0, 0);
+    Drivetrain.getDrivetrain().setSetpoint(FPS, 0, 0);
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Finished Rampdown");
   }
 
