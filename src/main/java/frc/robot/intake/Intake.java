@@ -19,13 +19,18 @@ public class Intake extends Subsystem {
 
     private static Intake INSTANCE = null;
 
-    // The solenoid responsible for the cylinder that controls the intake arm.
-    // TODO: Make constants/enumerations for the solenoid IDs.
-    private DoubleSolenoid solenoid = new DoubleSolenoid(0, 1);
+    // TODO: Update solenoid IDs once robot is wired.
+    public static int INTAKE_EXTEND_ID= 4;
+    public static int INTAKE_RETRACT_ID= 5;
 
-    // The controller for the motor that spins the intake rod.
-    // TODO: Get CAN ID for the victor, see pinned #Software items for the 2020 Robot Worksheet.
-    private VictorSPX motor = new VictorSPX(00);
+   // TODO: Get CAN ID for the victor, see pinned #Software items for the 2020 Robot Worksheet.
+    public static int INTAKE_MOTOR_ID = 0;
+
+    // The solenoid responsible for the cylinder that controls the intake arm.
+    private DoubleSolenoid solenoid = new DoubleSolenoid(INTAKE_EXTEND_ID, INTAKE_RETRACT_ID);
+
+    // The controller for the motor that spins the intake roller.
+    private VictorSPX motor = new VictorSPX(INTAKE_MOTOR_ID);
 
     private Intake() {
         super();
@@ -41,21 +46,19 @@ public class Intake extends Subsystem {
         return INSTANCE;
     }
 
-    // TODO: Need to determine proper values for the controller.
-
     // Spins the intake roller to bring balls/cells into the robot.
     public void rollerIn() {
-        motor.set(ControlMode.PercentOutput, -30);
+        motor.set(ControlMode.PercentOutput, -.3);
     }
 
     // Spins the intake roller to eject balls/cells from the robot.
     public void rollerOut() {
-        motor.set(ControlMode.PercentOutput, 30);
+        motor.set(ControlMode.PercentOutput, .3);
     }
 
     // Stops the intake roller.
     public void rollerOff() {
-        motor.set(ControlMode.PercentOutput, 0);
+        motor.set(ControlMode.PercentOutput, 0.0);
     }
 
     // Extends the intake arm/platform.
