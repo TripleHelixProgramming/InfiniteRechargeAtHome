@@ -7,8 +7,7 @@
 
 package frc.robot.oi;
 
-import static com.team2363.utilities.ControllerMap.X_BOX_LEFT_STICK_Y;
-import static com.team2363.utilities.ControllerMap.X_BOX_RIGHT_STICK_X;
+import static com.team2363.utilities.ControllerMap.*;
 import static com.team2363.utilities.ControllerPatroller.getPatroller;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -80,4 +79,14 @@ public class OI {
     controller.setRumble(RumbleType.kLeftRumble, state);
 		controller.setRumble(RumbleType.kRightRumble, state);
   }
+
+  //Get Climber power from operator controller right joystick y-axis
+	public double getClimberPower() {
+		double stick = -operator.getRawAxis( PS4_RIGHT_STICK_Y);
+		stick *= Math.abs(stick);
+		if (Math.abs(stick) < 0.05) {
+			stick = 0;
+		}
+		return stick;
+	}
 }
