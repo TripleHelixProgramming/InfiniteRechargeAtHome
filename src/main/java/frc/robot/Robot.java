@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
     getOI();
     getDrivetrain();
     getControlPanel();
+    getShooter();
   }
 
   /** 
