@@ -40,6 +40,7 @@ public class Shooter extends Subsystem {
     private CANPIDController pidController;
     private CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+    public double setpoint = 0.0;
      
     public Shooter() {
 
@@ -50,13 +51,14 @@ public class Shooter extends Subsystem {
         encoder = motor.getEncoder();
 
         // PID coefficients
-        kP = 5e-5;
-        kI = 1e-6;
-        kD = 0;
-        kIz = 0;
-        kFF = 0;
+        kP = 10e-7;
+        kI = 0.0;
+        kD = 0.0;
+        kIz = 0.0;
+        kFF = 1;
         kMaxOutput = 1;
         kMinOutput = -1;
+        setpoint = 0.0;  // .55 is setpoint with the above PIDF to shoot from the trench
 
         // set PID coefficients
         pidController.setP(kP);
@@ -74,6 +76,7 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Feed Forward", kFF);
         SmartDashboard.putNumber("Max Output", kMaxOutput);
         SmartDashboard.putNumber("Min Output", kMinOutput);
+        SmartDashboard.putNumber("Set Point", setpoint);
     }
 
     @Override
@@ -87,6 +90,7 @@ public class Shooter extends Subsystem {
         double ff = SmartDashboard.getNumber("Feed Forward", 0);
         double max = SmartDashboard.getNumber("Max Output", 0);
         double min = SmartDashboard.getNumber("Min Output", 0);
+        double sp = SmartDashboard.getNumber("Set Point", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to
         // controller
@@ -115,22 +119,29 @@ public class Shooter extends Subsystem {
             kMinOutput = min;
             kMaxOutput = max;
         }
+        if ((sp != setpoint)) {
+            pidController.setReference(setpoint, ControlType.kVelocity);
+            setpoint = sp;
+            SmartDashboard.putNumber("Set Point", setpoint);
+            SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
+        }
     }
 
     public double getMAXRPM(){
         return(MAX_RPM);
     }
 
-    public void setVelocity(double setPoint) {
-        pidController.setReference(setPoint, ControlType.kVelocity);
+    public void setVelocity(double sp) {
+        setpoint = sp;
+        pidController.setReference(setpoint, ControlType.kVelocity);
 
-        SmartDashboard.putNumber("SetPoint", setPoint);
-        SmartDashboard.putNumber("ProcessVariable", encoder.getVelocity());
+        SmartDashboard.putNumber("Set Point", setpoint);
+        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
     }
 
     @Override
     protected void initDefaultCommand() {
         // setDefaultCommand(new TestWithController());
-        setDefaultCommand(new StopShooter());
+        // setDefaultCommand(new StopShooter());
     }
 }
