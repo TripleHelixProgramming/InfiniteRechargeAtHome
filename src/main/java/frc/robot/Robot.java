@@ -8,6 +8,7 @@
 package frc.robot;
 
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
+import static frc.robot.shooter.Shooter.getShooter;
 import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.oi.OI.getOI;
 
@@ -53,10 +54,11 @@ public class Robot extends TimedRobot {
     getOI();
     getDrivetrain();
     getControlPanel();
+    getShooter();
   }
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use
+  /** 
+   *  This function is called every robot packet, no matter the mode. Use
    * this for items like diagnostics that you want ran during disabled,
    * autonomous, teleoperated and test.
    *
@@ -64,7 +66,9 @@ public class Robot extends TimedRobot {
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() { }
+  public void robotPeriodic() {
+    
+  }
 
   /**
    * This function is called once each time the robot enters Disabled mode.
@@ -73,6 +77,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+
   }
 
   @Override
@@ -138,5 +143,8 @@ public class Robot extends TimedRobot {
    * This function is called periodically during test mode.
    */
   @Override
-  public void testPeriodic() { }
+  public void testPeriodic() {
+    
+  }
 }
+
