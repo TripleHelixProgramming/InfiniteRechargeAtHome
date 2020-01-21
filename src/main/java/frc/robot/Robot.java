@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import static frc.robot.Preferences.getPreferences;
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
 import static frc.robot.controlpanel.ControlPanel.getControlPanel;
@@ -45,7 +46,9 @@ public class Robot extends TimedRobot {
    * used for any initialization code.
    */
   @Override
-  public void robotInit() { 
+  public void robotInit() {
+    SmartDashboard.putString("ROBOT_NAME", getPreferences().getRobotName());
+    
     initializeSubsystems();
     getDrivetrain().resetHeading();
     HelixEvents.getInstance().startLogging();
