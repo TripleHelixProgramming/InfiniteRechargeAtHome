@@ -36,9 +36,9 @@ public class Shooter extends Subsystem {
     private static final int SHOOTER_ID = 1;
     public double MAX_RPM = 5700;
 
-    private CANSparkMax motor;
-    private CANPIDController pidController;
-    private CANEncoder encoder;
+    private final CANSparkMax motor;
+    private final CANPIDController pidController;
+    private final CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     public double setpoint = 0.0;
      
@@ -83,14 +83,14 @@ public class Shooter extends Subsystem {
     public void periodic() {
         
         // read PID coefficients from SmartDashboard
-        double p = SmartDashboard.getNumber("P Gain", 0);
-        double i = SmartDashboard.getNumber("I Gain", 0);
-        double d = SmartDashboard.getNumber("D Gain", 0);
-        double iz = SmartDashboard.getNumber("I Zone", 0);
-        double ff = SmartDashboard.getNumber("Feed Forward", 0);
-        double max = SmartDashboard.getNumber("Max Output", 0);
-        double min = SmartDashboard.getNumber("Min Output", 0);
-        double sp = SmartDashboard.getNumber("Set Point", 0);
+        final double p = SmartDashboard.getNumber("P Gain", 0);
+        final double i = SmartDashboard.getNumber("I Gain", 0);
+        final double d = SmartDashboard.getNumber("D Gain", 0);
+        final double iz = SmartDashboard.getNumber("I Zone", 0);
+        final double ff = SmartDashboard.getNumber("Feed Forward", 0);
+        final double max = SmartDashboard.getNumber("Max Output", 0);
+        final double min = SmartDashboard.getNumber("Min Output", 0);
+        final double sp = SmartDashboard.getNumber("Set Point", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to
         // controller
@@ -131,12 +131,16 @@ public class Shooter extends Subsystem {
         return(MAX_RPM);
     }
 
-    public void setVelocity(double sp) {
+    public void setSetPoint(final double sp) {
         setpoint = sp;
         pidController.setReference(setpoint, ControlType.kVelocity);
 
         SmartDashboard.putNumber("Set Point", setpoint);
         SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
+    }
+
+    public double getRPM() {
+        return encoder.getVelocity();
     }
 
     @Override

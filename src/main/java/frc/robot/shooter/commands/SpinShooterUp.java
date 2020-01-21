@@ -8,31 +8,38 @@
 package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 
-public class StopShooter extends Command {
-  public StopShooter() {
+public class SpinShooterUp extends Command {
+
+  Position position;
+
+  private static double RPM_DELTA = 3.0;
+
+  public SpinShooterUp(Position pos) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Shooter.getShooter());
+    this.position = pos;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Shooter.getShooter().setSetPoint(position.getSetPoint());
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().setSetPoint(0.0);
+      
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return (Math.abs(position.getRPM() - Shooter.getShooter().getRPM()) <= RPM_DELTA);
   }
 
   // Called once after isFinished returns true
