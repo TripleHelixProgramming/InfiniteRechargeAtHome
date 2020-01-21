@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    SmartDashboard.putString("ROBOT_NAME", getPreferences().getRobotName());
+    SmartDashboard.putString("Robot Name", getPreferences().getRobotName());
     
     initializeSubsystems();
     getDrivetrain().resetHeading();
