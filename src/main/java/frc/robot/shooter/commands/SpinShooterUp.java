@@ -39,6 +39,8 @@ public class SpinShooterUp extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    // Was looking for a PID controller method on the SPARK MAX that tells us it is at
+    // the setpoint, but could not find one, so doing it this way -   +/- a # of rpms
     return (Math.abs(position.getRPM() - Shooter.getShooter().getRPM()) <= RPM_DELTA);
   }
 

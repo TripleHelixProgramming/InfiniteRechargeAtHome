@@ -17,16 +17,20 @@ public enum Position {
     RIGHT_AUTO(.55, 3135, 0),
     CENTER_AUTO(.55, 3135, 0),
     LEFT_AUTO(.55, 3135, 0),
+    TRENCH(.55, 3135, 0),
+    DUMP_BALLS(.2, 1140, 0),
     LAYUP(.55, 3135, 0);
 
     private double setPoint;
     private double rpm;
     private int hoodPosition;
+    private double bumpSetPoint;
 
     private Position(double sp, double rpm, int hp) {
         this.setPoint = sp;
         this.rpm = rpm;
         this.hoodPosition = hp;
+        this.bumpSetPoint = 0.1;
     }
 
     public double getSetPoint() {
