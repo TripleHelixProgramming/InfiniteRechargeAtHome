@@ -5,17 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.shooter.commands;
+package frc.robot.indexer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.indexer.Indexer;
+import frc.robot.magazine.Magazine.BallHandlingState;
 
-import frc.robot.shooter.Shooter;
+public class SetIndexerTo extends Command {
 
-public class StopShooter extends Command {
-  public StopShooter() {
+  BallHandlingState action;
+  public SetIndexerTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Shooter.getShooter());
+    requires(Indexer.getIndexer());
+    this.action = action;
   }
 
   // Called just before this Command runs the first time
@@ -26,13 +29,12 @@ public class StopShooter extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().setSetPoint(0.0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

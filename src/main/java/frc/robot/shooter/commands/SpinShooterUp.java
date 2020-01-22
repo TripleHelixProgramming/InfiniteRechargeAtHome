@@ -8,31 +8,54 @@
 package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 
-public class StopShooter extends Command {
-  public StopShooter() {
+public class SpinShooterUp extends Command {
+
+  Position position;
+  
+  public double rpm = 0.0;
+  public double setpoint = 0.0;
+  private static double RPM_DELTA = 10.0;
+
+  public SpinShooterUp(Position pos) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Shooter.getShooter());
+    this.position = pos;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+
+    // Get motor setpoint & expected rpm from position enum.
+    setpoint = position.getSetPoint();
+    rpm = position.getRPM();
+
+    //  if shooting from a unknown position. Use camera to get distance to
+    //  target, then calculate the setpoint and expected rpms for that distance.
+    if (position == Position.UNKNOWN) {
+      //  distance = GetTargetDistance();
+      //  setpoint = CalculateSetPoint(distance);
+      //  rpm = setpoint * Shooter.getShooter().getMAXRPM();
+    } 
+    Shooter.getShooter().setSetPoint(setpoint);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().setSetPoint(0.0);
+      
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    // Was looking for a PID controller method on the SPARK MAX that tells us it is at
+    // the setpoint, but could not find one, so doing it this way -   +/- a # of rpms
+    return (Math.abs(rpm - Shooter.getShooter().getRPM()) <= RPM_DELTA);
   }
 
   // Called once after isFinished returns true
