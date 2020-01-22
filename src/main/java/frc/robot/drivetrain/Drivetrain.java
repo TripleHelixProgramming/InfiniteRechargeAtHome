@@ -56,8 +56,17 @@ public class Drivetrain extends Subsystem {
   private final LeaderBobTalonSRX left = new LeaderBobTalonSRX(23, leftSlave1, leftSlave2);
   private final LeaderBobTalonSRX right = new LeaderBobTalonSRX(12, rightSlave1, rightSlave2);
 
+  // private final BobVictorSPX rightSlave1 = new BobVictorSPX(23);
+  // private final BobVictorSPX rightSlave2 = new BobVictorSPX(24);
+  // private final BobVictorSPX leftSlave1 = new BobVictorSPX(12);
+  // private final BobVictorSPX leftSlave2 = new BobVictorSPX(11);
+
+  // private final LeaderBobTalonSRX left = new LeaderBobTalonSRX(10, leftSlave1, leftSlave2);
+  // private final LeaderBobTalonSRX right = new LeaderBobTalonSRX(25, rightSlave1, rightSlave2);
+
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
   private final PigeonIMU pigeon = new PigeonIMU(rightSlave2);
+  // private final PigeonIMU pigeon = new PigeonIMU(30);
   private final Camera frontCamera = new Camera("limelight-front");
 
   private Drivetrain() {
