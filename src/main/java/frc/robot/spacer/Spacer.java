@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.spacer.commands.RunSpacer;
+import frc.robot.spacer.commands.SetSpacerTo;
 
 /**
  * Add your docs here.
@@ -51,6 +51,6 @@ public class Spacer extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new RunSpacer(BallHandlingState.STOP));
+    setDefaultCommand(new SetSpacerTo(BallHandlingState.STOP));
   }
 }

@@ -8,18 +8,16 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.commands.SetMagazineTo;
-import frc.robot.shooter.Position;
-import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.spacer.commands.SetSpacerTo;
 
-public class ShootLayUpCG extends CommandGroup {
+public class StopIntakeCG extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public ShootLayUpCG() {
+  public StopIntakeCG() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -36,19 +34,11 @@ public class ShootLayUpCG extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-
-    // Aim & Spin Shooter up to RPM for that postition.  Once shooter has reach necessary 
-    // the RPM (+/-3), the Shoot() command will finish and continue
-    // to the next commands.
-
-    // addParallel(new Aim());
-    addSequential(new SpinShooterUp(Position.LAYUP));
-    
-    // Shooter is at required RPM for position. Start feeding balls in.
-    addParallel(new SetMagazineTo(BallHandlingState.SHOOT));
-    addParallel(new SetSpacerTo(BallHandlingState.SHOOT));
-    addSequential(new SetIndexerTo(BallHandlingState.SHOOT));
+        // Run the ball handling subsystems in INTAKE mode.  Each subsystem will 
+    // look at the various beam breaks in the magazine to determine whether it
+    // should run or not.
+    addParallel(new SetMagazineTo(BallHandlingState.STOP));
+    addParallel(new SetSpacerTo(BallHandlingState.STOP));
+    addSequential(new SetIndexerTo(BallHandlingState.STOP));
   }
-
 }

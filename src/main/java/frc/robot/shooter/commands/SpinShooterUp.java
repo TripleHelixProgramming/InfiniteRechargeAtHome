@@ -15,7 +15,7 @@ public class SpinShooterUp extends Command {
 
   Position position;
 
-  private static double RPM_DELTA = 3.0;
+  private static double RPM_DELTA = 10.0;
 
   public SpinShooterUp(Position pos) {
     // Use requires() here to declare subsystem dependencies

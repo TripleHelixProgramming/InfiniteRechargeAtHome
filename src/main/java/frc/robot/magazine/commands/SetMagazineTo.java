@@ -5,19 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.indexer.commands;
+package frc.robot.magazine.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.indexer.Indexer;
+import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
 
-public class RunIndexer extends Command {
+public class SetMagazineTo extends Command {
 
-  BallHandlingState action;
-  public RunIndexer(BallHandlingState action) {
+  public BallHandlingState action;
+
+  private double SHOOT_SPEED = 0.4;
+  private double INTAKE_SPEED = 0.3;
+  private double STOP = 0.3;
+
+  public SetMagazineTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Indexer.getIndexer());
+    requires(Magazine.getMagazine());
     this.action = action;
   }
 
@@ -29,6 +34,26 @@ public class RunIndexer extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+
+    
+    Boolean ballAtShooter = Magazine.getMagazine().ballAtShooter();
+    Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
+
+    switch (action) {
+      case SHOOT:
+        if (Magazine.getMagazine().hasBalls()) {
+          Magazine.getMagazine().setPower(SHOOT_SPEED);
+        }
+        break;
+      case INTAKE:
+        if (!ballAtShooter && ballAtSpacer) {
+          Magazine.getMagazine().setPower(INTAKE_SPEED);
+        }
+        break;
+      default:
+        Magazine.getMagazine().setPower(STOP);
+        break;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

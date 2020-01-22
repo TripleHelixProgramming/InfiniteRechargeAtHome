@@ -8,7 +8,7 @@
 package frc.robot.indexer;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.indexer.commands.RunIndexer;
+import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.Magazine.BallHandlingState;
 
 /**
@@ -31,6 +31,6 @@ public class Indexer extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new RunIndexer(BallHandlingState.STOP));
+    setDefaultCommand(new SetIndexerTo(BallHandlingState.STOP));
   }
 }

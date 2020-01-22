@@ -5,24 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.magazine.commands;
+package frc.robot.spacer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.spacer.Spacer;
 
-public class RunMagazine extends Command {
+public class SetSpacerTo extends Command {
 
-  public BallHandlingState action;
-
-  private double SHOOT_SPEED = 0.4;
-  private double INTAKE_SPEED = 0.3;
-  private double STOP = 0.3;
-
-  public RunMagazine(BallHandlingState action) {
+  BallHandlingState action;
+  public SetSpacerTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Magazine.getMagazine());
+    requires(Spacer.getSpacer());
     this.action = action;
   }
 
@@ -35,23 +31,26 @@ public class RunMagazine extends Command {
   @Override
   protected void execute() {
 
-    
     Boolean ballAtShooter = Magazine.getMagazine().ballAtShooter();
     Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
     switch (action) {
       case SHOOT:
-        if (Magazine.getMagazine().hasBalls()) {
-          Magazine.getMagazine().setPower(SHOOT_SPEED);
-        }
         break;
       case INTAKE:
-        if (!ballAtShooter && ballAtSpacer) {
-          Magazine.getMagazine().setPower(INTAKE_SPEED);
+        if (!ballAtShooter && !ballAtSpacer) {
+          // No balls are present at the beginning of the magazine and it's not full yet
+          Spacer.getSpacer().setPower(.3);
+        } else if (!ballAtShooter && ballAtSpacer) {
+          Spacer.getSpacer().setPower(.3);
+        } else {
+          Spacer.getSpacer().setPower(0.0);
         }
         break;
+      case STOP: 
+      case FULL:
       default:
-        Magazine.getMagazine().setPower(STOP);
+        Spacer.getSpacer().setPower(0.0);
         break;
     }
   }

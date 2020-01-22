@@ -13,7 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.magazine.commands.RunMagazine;
+import frc.robot.magazine.commands.SetMagazineTo;
 
 public class Magazine extends Subsystem {
 
@@ -97,6 +97,6 @@ public class Magazine extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new RunMagazine(BallHandlingState.STOP));
+    setDefaultCommand(new SetMagazineTo(BallHandlingState.STOP));
   }
 }

@@ -13,7 +13,7 @@ package frc.robot.shooter;
  */
 public enum Position {
 
-    //  (motor percentage setpoint, rpms expected, hood position)
+    // POSITION(motor percentage setpoint, rpms expected, hood position)
     RIGHT_AUTO(.55, 3135, 0),
     CENTER_AUTO(.55, 3135, 0),
     LEFT_AUTO(.55, 3135, 0),

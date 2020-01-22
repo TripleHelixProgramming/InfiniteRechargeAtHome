@@ -5,20 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.spacer.commands;
+package frc.robot.indexer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.magazine.Magazine;
+import frc.robot.indexer.Indexer;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.spacer.Spacer;
 
-public class RunSpacer extends Command {
+public class SetIndexerTo extends Command {
 
   BallHandlingState action;
-  public RunSpacer(BallHandlingState action) {
+  public SetIndexerTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Spacer.getSpacer());
+    requires(Indexer.getIndexer());
     this.action = action;
   }
 
@@ -30,29 +29,6 @@ public class RunSpacer extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    Boolean ballAtShooter = Magazine.getMagazine().ballAtShooter();
-    Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
-
-    switch (action) {
-      case SHOOT:
-        break;
-      case INTAKE:
-        if (!ballAtShooter && !ballAtSpacer) {
-          // No balls are present at the beginning of the magazine and it's not full yet
-          Spacer.getSpacer().setPower(.3);
-        } else if (!ballAtShooter && ballAtSpacer) {
-          Spacer.getSpacer().setPower(.3);
-        } else {
-          Spacer.getSpacer().setPower(0.0);
-        }
-        break;
-      case STOP: 
-      case FULL:
-      default:
-        Spacer.getSpacer().setPower(0.0);
-        break;
-    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -8,6 +8,10 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.indexer.commands.SetIndexerTo;
+import frc.robot.magazine.commands.SetMagazineTo;
+import frc.robot.spacer.commands.SetSpacerTo;
 
 public class IntakeCG extends CommandGroup {
   /**
@@ -30,5 +34,12 @@ public class IntakeCG extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+
+    // Run the ball handling subsystems in INTAKE mode.  Each subsystem will 
+    // look at the various beam breaks in the magazine to determine whether it
+    // should run or not.
+    addParallel(new SetMagazineTo(BallHandlingState.INTAKE));
+    addParallel(new SetSpacerTo(BallHandlingState.INTAKE));
+    addSequential(new SetIndexerTo(BallHandlingState.INTAKE));
   }
 }

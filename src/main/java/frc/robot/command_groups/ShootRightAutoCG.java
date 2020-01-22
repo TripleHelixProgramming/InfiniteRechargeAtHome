@@ -8,12 +8,12 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.indexer.commands.RunIndexer;
+import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.magazine.commands.RunMagazine;
+import frc.robot.magazine.commands.SetMagazineTo;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
-import frc.robot.spacer.commands.RunSpacer;
+import frc.robot.spacer.commands.SetSpacerTo;
 
 public class ShootRightAutoCG extends CommandGroup {
   /**
@@ -46,8 +46,8 @@ public class ShootRightAutoCG extends CommandGroup {
     addSequential(new SpinShooterUp(Position.RIGHT_AUTO));
 
     // Shooter is at required RPM for position. Start feeding balls in.
-    addParallel(new RunMagazine(BallHandlingState.SHOOT));
-    addParallel(new RunSpacer(BallHandlingState.SHOOT));
-    addSequential(new RunIndexer(BallHandlingState.SHOOT));
+    addParallel(new SetMagazineTo(BallHandlingState.SHOOT));
+    addParallel(new SetSpacerTo(BallHandlingState.SHOOT));
+    addSequential(new SetIndexerTo(BallHandlingState.SHOOT));
   }
 }
