@@ -40,6 +40,11 @@ public abstract class AbstractVisionDriving extends Command {
   protected void execute() {
     final double angleToTarget = camera.getRotationalDegreesToTarget();
     controller.setReference(getDrivetrain().getHeading() + angleToTarget);
+    double cameraHeight = 42; //random value inches
+    double cameraElevation = 42; //random value degrees
+    double targetHeight = 81.25; //actual value inches
+    double ty = camera.getVerticalDegreesToTarget(); //actual value pixels
+    double tvert = camera.getHeightPixelsOfTarget(); //actual value pixels
   }
 
   @Override
@@ -61,5 +66,9 @@ public abstract class AbstractVisionDriving extends Command {
   private void calculate() {
     final double output = controller.calculate(getDrivetrain().getHeading());
     getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
+  }
+
+  private double calculateGroundDistanceToTarget() {
+    return (targetHeight - 15*(ty/tvert) - cameraHeight)/Math.tan(cameraElevation);
   }
 }
