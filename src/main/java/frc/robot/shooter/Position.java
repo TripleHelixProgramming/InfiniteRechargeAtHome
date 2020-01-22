@@ -19,7 +19,8 @@ public enum Position {
     LEFT_AUTO(.55, 3135, 0),
     TRENCH(.55, 3135, 0),
     DUMP_BALLS(.2, 1140, 0),
-    LAYUP(.55, 3135, 0);
+    LAYUP(.55, 3135, 0),
+    UNKNOWN(0.0, 0, 0);
 
     private double setPoint;
     private double rpm;

@@ -14,7 +14,9 @@ import frc.robot.shooter.Shooter;
 public class SpinShooterUp extends Command {
 
   Position position;
-
+  
+  public double rpm = 0.0;
+  public double setpoint = 0.0;
   private static double RPM_DELTA = 10.0;
 
   public SpinShooterUp(Position pos) {
@@ -27,7 +29,19 @@ public class SpinShooterUp extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Shooter.getShooter().setSetPoint(position.getSetPoint());
+
+    // Get motor setpoint & expected rpm from position enum.
+    setpoint = position.getSetPoint();
+    rpm = position.getRPM();
+
+    //  if shooting from a unknown position. Use camera to get distance to
+    //  target, then calculate the setpoint and expected rpms for that distance.
+    if (position == Position.UNKNOWN) {
+      //  distance = GetTargetDistance();
+      //  setpoint = CalculateSetPoint(distance);
+      //  rpm = setpoint * Shooter.getShooter().getMAXRPM();
+    } 
+    Shooter.getShooter().setSetPoint(setpoint);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -41,7 +55,7 @@ public class SpinShooterUp extends Command {
   protected boolean isFinished() {
     // Was looking for a PID controller method on the SPARK MAX that tells us it is at
     // the setpoint, but could not find one, so doing it this way -   +/- a # of rpms
-    return (Math.abs(position.getRPM() - Shooter.getShooter().getRPM()) <= RPM_DELTA);
+    return (Math.abs(rpm - Shooter.getShooter().getRPM()) <= RPM_DELTA);
   }
 
   // Called once after isFinished returns true
