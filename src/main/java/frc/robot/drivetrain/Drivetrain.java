@@ -96,6 +96,12 @@ public class Drivetrain extends Subsystem {
 
       // Riding solo on CAN
       pigeon = new PigeonIMU(30);
+
+      // Handles direction of motors and corrisponding encoders.
+      left.setSensorPhase(false);
+      right.setSensorPhase(false);
+      left.setInverted(false);
+      right.setInverted(true);
     }
     else // else unknown name, but could be an elseif for the programming bot name, and throw in an else
     {
@@ -110,14 +116,13 @@ public class Drivetrain extends Subsystem {
 
       // Riding on the slave controller.
       pigeon = new PigeonIMU((BobTalonSRX)rightSlave2);
-    }
 
-    // These are shared for now but may need to be moved up and made bot specific.
-    // TODO: It does seem like Bot1 needs these inverted.
-    left.setSensorPhase(false);
-    right.setSensorPhase(false);
-    left.setInverted(true);
-    right.setInverted(false);
+      // Handles direction of motors and corrisponding encoders.
+      left.setSensorPhase(false);
+      right.setSensorPhase(false);
+      left.setInverted(true);
+      right.setInverted(false);
+    }
   }
 
   @Override
