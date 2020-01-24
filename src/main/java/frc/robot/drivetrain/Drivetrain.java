@@ -27,7 +27,7 @@ import frc.robot.drivetrain.commands.SampleDrive;
 public class Drivetrain extends Subsystem {
 
   private static Drivetrain INSTANCE = null;
-
+  
   /**
    * @return the singleton instance of the Drivetrain subsystem
    */
