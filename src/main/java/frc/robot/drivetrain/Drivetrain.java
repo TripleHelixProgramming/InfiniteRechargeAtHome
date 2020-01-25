@@ -42,6 +42,7 @@ public class Drivetrain extends Subsystem {
     PERCENT_FULLPOWER, PERCENT_FULLSPEED, FPS, TICKSPER100MS
   }
 
+  
   // Items that could be put into a per-bot config file.
   private final double WHEEL_DIAMETER_IN_INCHES = 4;
   private final int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
