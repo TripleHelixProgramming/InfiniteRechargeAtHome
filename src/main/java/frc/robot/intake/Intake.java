@@ -20,14 +20,14 @@ public class Intake extends Subsystem {
     private static Intake INSTANCE = null;
 
     // TODO: Update solenoid IDs once robot is wired.
-    public static int INTAKE_EXTEND_ID= 4;
-    public static int INTAKE_RETRACT_ID= 5;
+    public static int INTAKE_RETRACT_ID= 4;
+    public static int INTAKE_DEPLOY_ID= 5;
 
    // TODO: Get CAN ID for the victor, see pinned #Software items for the 2020 Robot Worksheet.
-    public static int INTAKE_MOTOR_ID = 0;
+    public static int INTAKE_MOTOR_ID = 14;
 
     // The solenoid responsible for the cylinder that controls the intake arm.
-    private DoubleSolenoid solenoid = new DoubleSolenoid(INTAKE_EXTEND_ID, INTAKE_RETRACT_ID);
+    private DoubleSolenoid solenoid = new DoubleSolenoid(INTAKE_DEPLOY_ID, INTAKE_RETRACT_ID);
 
     // The controller for the motor that spins the intake roller.
     private VictorSPX motor = new VictorSPX(INTAKE_MOTOR_ID);

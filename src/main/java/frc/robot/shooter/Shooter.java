@@ -39,11 +39,12 @@ public class Shooter extends Subsystem {
     // Solenoid ids for hood position
     public static int HOOD_NEAR_SOLENOID= 12;
     public static int HOOD_FAR_SOLENOID= 13;    // Solenoid extended = far
-    private static final int SHOOTER_ID = 1;
+    private static final int SHOOTER_MASTER_ID = 18;
+    private static final int SHOOTER_SLAVE_ID = 19;
 
     public double MAX_RPM = 5700;
 
-    private final CANSparkMax motor;
+    private final CANSparkMax master, slave;
     private final CANPIDController pidController;
     private final CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
@@ -55,11 +56,13 @@ public class Shooter extends Subsystem {
     
     public Shooter() {
 
-        // initialize motor
-        motor = new CANSparkMax(SHOOTER_ID, MotorType.kBrushless);
-        motor.restoreFactoryDefaults();
-        pidController = motor.getPIDController();
-        encoder = motor.getEncoder();
+        // initialize master
+        master = new CANSparkMax(SHOOTER_MASTER_ID, MotorType.kBrushless);
+        slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
+        master.restoreFactoryDefaults();
+        slave.restoreFactoryDefaults();
+        pidController = master.getPIDController();
+        encoder = master.getEncoder();
 
         // PID coefficients
         kP = 10e-7;

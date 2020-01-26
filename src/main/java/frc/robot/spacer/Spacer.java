@@ -21,7 +21,7 @@ public class Spacer extends Subsystem {
 
   private static Spacer INSTANCE = null;
 
-  private static final int SPACER_ID = 1;
+  private static final int SPACER_ID = 15;
 
   private final CANSparkMax motor;
 
