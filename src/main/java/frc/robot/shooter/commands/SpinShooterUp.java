@@ -17,6 +17,7 @@ public class SpinShooterUp extends Command {
   
   public double rpm = 0.0;
   public double setpoint = 0.0;
+  public int hood_position = 0;
   private static double RPM_DELTA = 10.0;
 
   public SpinShooterUp(Position pos) {
@@ -33,6 +34,7 @@ public class SpinShooterUp extends Command {
     // Get motor setpoint & expected rpm from position enum.
     setpoint = position.getSetPoint();
     rpm = position.getRPM();
+    hood_position = position.getHoodPosition();
 
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
@@ -40,7 +42,10 @@ public class SpinShooterUp extends Command {
       //  distance = GetTargetDistance();
       //  setpoint = CalculateSetPoint(distance);
       //  rpm = setpoint * Shooter.getShooter().getMAXRPM();
+      //  hood_position = ???
     } 
+
+    Shooter.getShooter().setHoodPosition(hood_position);
     Shooter.getShooter().setSetPoint(setpoint);
   }
 

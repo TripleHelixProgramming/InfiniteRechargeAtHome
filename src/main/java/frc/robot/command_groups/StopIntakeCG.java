@@ -9,9 +9,7 @@ package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.indexer.commands.SetIndexerTo;
-import frc.robot.magazine.commands.SetMagazineTo;
-import frc.robot.spacer.commands.SetSpacerTo;
+import frc.robot.intake.commands.RetractIntake;
 
 public class StopIntakeCG extends CommandGroup {
   /**
@@ -37,8 +35,7 @@ public class StopIntakeCG extends CommandGroup {
         // Run the ball handling subsystems in INTAKE mode.  Each subsystem will 
     // look at the various beam breaks in the magazine to determine whether it
     // should run or not.
-    addParallel(new SetMagazineTo(BallHandlingState.STOP));
-    addParallel(new SetSpacerTo(BallHandlingState.STOP));
-    addSequential(new SetIndexerTo(BallHandlingState.STOP));
+    addParallel(new RetractIntake());
+    addParallel(new SetBallHandlingCG(BallHandlingState.STOP));
   }
 }

@@ -16,6 +16,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 import frc.robot.shooter.commands.StopShooter;
 import frc.robot.shooter.commands.TestWithController;
 
@@ -32,8 +35,12 @@ public class Shooter extends Subsystem {
       }
       return INSTANCE;
     }
-  
+
+    // Solenoid ids for hood position
+    public static int HOOD_NEAR_SOLENOID= 12;
+    public static int HOOD_FAR_SOLENOID= 13;    // Solenoid extended = far
     private static final int SHOOTER_ID = 1;
+
     public double MAX_RPM = 5700;
 
     private final CANSparkMax motor;
@@ -41,7 +48,11 @@ public class Shooter extends Subsystem {
     private final CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     public double setpoint = 0.0;
-     
+    public int ballCount = 0;
+    
+    // The solenoids responsible for raising & extending the climber.
+    private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
+    
     public Shooter() {
 
         // initialize motor
@@ -129,6 +140,24 @@ public class Shooter extends Subsystem {
 
     public double getMAXRPM(){
         return(MAX_RPM);
+    }
+
+    public void resetBallCount() {
+        ballCount = 0;
+    }
+
+    public void setHoodPosition(int hood_position) {
+        if (hood_position == 1) {
+            setHoodToFar();
+        } else setHoodToNear();
+    }
+
+    public void setHoodToFar() {
+        hood.set(Value.kForward);
+    }
+
+    public void setHoodToNear() {
+        hood.set(Value.kReverse);
     }
 
     public void setSetPoint(final double sp) {

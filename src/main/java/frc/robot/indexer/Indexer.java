@@ -7,6 +7,9 @@
 
 package frc.robot.indexer;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.Magazine.BallHandlingState;
@@ -17,6 +20,10 @@ import frc.robot.magazine.Magazine.BallHandlingState;
 public class Indexer extends Subsystem {
 
   private static Indexer INSTANCE = null;
+
+  private static final int INDEXER_ID = 27;
+  private final CANSparkMax motor;
+
   /**
    * @return the singleton instance of the Indexer subsystem
    */
@@ -25,6 +32,19 @@ public class Indexer extends Subsystem {
       INSTANCE = new Indexer();
     }
     return INSTANCE;
+  }
+
+  private Indexer() {
+   super();
+
+    // initialize motor
+    motor = new CANSparkMax(INDEXER_ID, MotorType.kBrushless);
+    motor.restoreFactoryDefaults();
+  }
+
+  public void setPower(double power) {
+    // set motors to power;
+    motor.set(power);
   }
 
   @Override

@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.RightTurn;
 import frc.paths.TwoFeetForward;
+import frc.robot.command_groups.AutoRoutines;
+import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.commands.AutoVisionDriving;
@@ -118,10 +120,19 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     getDrivetrain().resetHeading();
-    autonomousCommand = new PathFollower(new RightTurn());
-    // autonomousCommand = new PathFollower("90 Degrees", true);
-    // autonomousCommand = new AutoVisionDriving();
-    // schedule the autonomous command (example)
+
+    AutoMode mode;
+    
+    // GET THE AUTO MODE FROM THE HARDWARE SWITCH
+    // mode = AutoRoutines.getSelectedAutoMode();  
+
+    // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
+    // mode = AutoMode.TEST_RIGHT_TURN;
+    // mode = AutoMode.TEST_2FEET_FORWARD;
+    // mode = AutoMode.BASELINE_AUTO;
+    mode = AutoMode.NONE;     // No auto
+    autonomousCommand = AutoRoutines.getAutoRoutine(mode);
+
     if (autonomousCommand != null) {
       autonomousCommand.start();
     }

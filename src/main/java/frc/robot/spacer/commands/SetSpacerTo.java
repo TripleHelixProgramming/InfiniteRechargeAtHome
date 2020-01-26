@@ -14,6 +14,9 @@ import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
+  private double SHOOT_SPEED = 0.4;
+  private double INTAKE_SPEED = 0.3;
+
   BallHandlingState action;
   public SetSpacerTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
@@ -36,18 +39,21 @@ public class SetSpacerTo extends Command {
 
     switch (action) {
       case SHOOT:
+        Spacer.getSpacer().setPower(SHOOT_SPEED);
         break;
       case INTAKE:
         if (!ballAtShooter && !ballAtSpacer) {
           // No balls are present at the beginning of the magazine and it's not full yet
-          Spacer.getSpacer().setPower(.3);
+          Spacer.getSpacer().setPower(INTAKE_SPEED);
         } else if (!ballAtShooter && ballAtSpacer) {
-          Spacer.getSpacer().setPower(.3);
+          Spacer.getSpacer().setPower(INTAKE_SPEED);
         } else {
           Spacer.getSpacer().setPower(0.0);
         }
         break;
-      case STOP: 
+      case STOP:
+        Spacer.getSpacer().setPower(0.0);
+        break;
       case FULL:
       default:
         Spacer.getSpacer().setPower(0.0);

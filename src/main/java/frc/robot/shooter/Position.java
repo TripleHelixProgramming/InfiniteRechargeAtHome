@@ -15,7 +15,7 @@ public enum Position {
 
     // POSITION(motor percentage setpoint, rpms expected, hood position)
     RIGHT_AUTO(.55, 3135, 0),
-    CENTER_AUTO(.55, 3135, 0),
+    MIDDLE_AUTO(.55, 3135, 0),
     LEFT_AUTO(.55, 3135, 0),
     TRENCH(.55, 3135, 0),
     DUMP_BALLS(.2, 1140, 0),
@@ -42,7 +42,7 @@ public enum Position {
         return rpm;
     }
     
-    public double getHoodPosition() {
+    public int getHoodPosition() {
         return hoodPosition;
     }
 }

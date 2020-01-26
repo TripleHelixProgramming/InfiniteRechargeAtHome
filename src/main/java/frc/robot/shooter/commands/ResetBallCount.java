@@ -5,17 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.intake.commands;
+package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.intake.Intake;
-import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.shooter.Shooter;
 
-public class RunIntake extends Command {
-  public RunIntake(BallHandlingState mode) {
+public class ResetBallCount extends Command {
+  public ResetBallCount() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Intake.getIntake());
+    requires(Shooter.getShooter());
   }
 
   // Called just before this Command runs the first time
@@ -26,6 +25,7 @@ public class RunIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Shooter.getShooter().resetBallCount();
   }
 
   // Make this return true when this Command no longer needs to run execute()

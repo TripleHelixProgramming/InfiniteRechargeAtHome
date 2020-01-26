@@ -11,15 +11,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.magazine.commands.SetMagazineTo;
-import frc.robot.shooter.Position;
-import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.spacer.commands.SetSpacerTo;
 
-public class ShootTrenchCG extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-  public ShootTrenchCG() {
+public class SetBallHandlingCG extends CommandGroup {
+
+  public SetBallHandlingCG(BallHandlingState state) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -36,16 +32,9 @@ public class ShootTrenchCG extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-        // Aim & Spin Shooter up to RPM for that postition.  Once shooter has reach necessary 
-    // the RPM (+/-3), the Shoot() command will finish and continue
-    // to the next commands.
-
-    // addParallel(new Aim());
-    addSequential(new SpinShooterUp(Position.TRENCH));
-    
-    // Shooter is at required RPM for position. Start feeding balls in.
-    addParallel(new SetMagazineTo(BallHandlingState.SHOOT));
-    addParallel(new SetSpacerTo(BallHandlingState.SHOOT));
-    addSequential(new SetIndexerTo(BallHandlingState.SHOOT));
+        // Shooter is at required RPM for position. Start feeding balls in.
+    addParallel(new SetMagazineTo(state));
+    addParallel(new SetSpacerTo(state));
+    // addParallel(new SetIndexerTo(state));
   }
 }

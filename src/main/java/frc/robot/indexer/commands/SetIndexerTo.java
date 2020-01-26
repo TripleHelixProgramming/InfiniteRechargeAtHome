@@ -9,9 +9,13 @@ package frc.robot.indexer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.indexer.Indexer;
+import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
 
 public class SetIndexerTo extends Command {
+
+  private double SHOOT_SPEED = 0.4;
+  private double INTAKE_SPEED = 0.3;
 
   BallHandlingState action;
   public SetIndexerTo(BallHandlingState action) {
@@ -29,6 +33,27 @@ public class SetIndexerTo extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Boolean ballAtShooter = Magazine.getMagazine().ballAtShooter();
+    Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
+
+    switch (action) {
+      case SHOOT:
+        if (Magazine.getMagazine().hasBalls()) {
+          Indexer.getIndexer().setPower(SHOOT_SPEED);
+        }
+        break;
+      case INTAKE:
+        if (!ballAtShooter && ballAtSpacer) {
+          Indexer.getIndexer().setPower(INTAKE_SPEED);
+        }
+        break;
+      case STOP:
+        Indexer.getIndexer().setPower(0.0);
+        break;
+      default:
+        Indexer.getIndexer().setPower(0.0);
+        break;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

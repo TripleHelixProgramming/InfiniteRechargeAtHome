@@ -17,7 +17,6 @@ public class SetMagazineTo extends Command {
 
   private double SHOOT_SPEED = 0.4;
   private double INTAKE_SPEED = 0.3;
-  private double STOP = 0.3;
 
   public SetMagazineTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
@@ -50,11 +49,15 @@ public class SetMagazineTo extends Command {
           Magazine.getMagazine().setPower(INTAKE_SPEED);
         }
         break;
+      case STOP:
+        Magazine.getMagazine().setPower(0.0);
+        break;
       default:
-        Magazine.getMagazine().setPower(STOP);
+        Magazine.getMagazine().setPower(0.0);
         break;
     }
   }
+
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
