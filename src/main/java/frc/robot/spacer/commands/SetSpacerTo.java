@@ -14,8 +14,10 @@ import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
-  private double SHOOT_SPEED = 0.4;
-  private double INTAKE_SPEED = 0.3;
+  private double SHOOT_SPEED = 0.5;
+  private double INTAKE_SPEED = 0.5;
+
+  Boolean magazine_hand_off_complete= false;
 
   BallHandlingState action;
   public SetSpacerTo(BallHandlingState action) {
@@ -39,21 +41,28 @@ public class SetSpacerTo extends Command {
 
     switch (action) {
       case SHOOT:
-        Spacer.getSpacer().setPower(SHOOT_SPEED);
+        if (!ballAtSpacer) 
+          Spacer.getSpacer().setPower(SHOOT_SPEED);
+        else 
+          Spacer.getSpacer().setPower(0.0);
         break;
       case INTAKE:
         if (!ballAtShooter && !ballAtSpacer) {
           // No balls are present at the beginning of the magazine and it's not full yet
           Spacer.getSpacer().setPower(INTAKE_SPEED);
+          magazine_hand_off_complete = false;
         } else if (!ballAtShooter && ballAtSpacer) {
+          // Continue to at this speed until x number of spacer rotations
+          // vice time. Then speed goes to 0.0 for this case. Need to figure 
+          // out how to calculation rotations that have occurred since 
+          // ball at spacer.  And if number of rotations >= certain number
+          // then switch speed to 0.0
           Spacer.getSpacer().setPower(INTAKE_SPEED);
         } else {
           Spacer.getSpacer().setPower(0.0);
         }
         break;
       case STOP:
-        Spacer.getSpacer().setPower(0.0);
-        break;
       case FULL:
       default:
         Spacer.getSpacer().setPower(0.0);

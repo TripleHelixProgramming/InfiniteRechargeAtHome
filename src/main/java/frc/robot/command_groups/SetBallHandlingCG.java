@@ -32,9 +32,9 @@ public class SetBallHandlingCG extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-        // Shooter is at required RPM for position. Start feeding balls in.
-    addParallel(new SetMagazineTo(state));
+    // Shooter is at required RPM for position. Start feeding balls in.
     addParallel(new SetSpacerTo(state));
+    addParallel(new SetMagazineTo(state));
     // addParallel(new SetIndexerTo(state));
   }
 }
