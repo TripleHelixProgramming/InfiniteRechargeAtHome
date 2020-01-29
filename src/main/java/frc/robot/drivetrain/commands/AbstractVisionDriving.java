@@ -15,6 +15,7 @@ import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.Camera;
 
 public abstract class AbstractVisionDriving extends Command {
@@ -22,6 +23,12 @@ public abstract class AbstractVisionDriving extends Command {
   private final PIDController controller = new PIDController(0.05, 0, 0);
   private final Notifier notifier = new Notifier(this::calculate);
   private final Camera camera;
+
+  double cameraHeight = 42; //random value inches
+  double cameraElevation = 42; //random value degrees
+  double targetHeight = 81.25; //actual value inches
+  double ty = 42; //random value pixels
+  double tvert = 42; //random value pixels
 
   public AbstractVisionDriving() {
     requires(getDrivetrain());
@@ -40,11 +47,10 @@ public abstract class AbstractVisionDriving extends Command {
   protected void execute() {
     final double angleToTarget = camera.getRotationalDegreesToTarget();
     controller.setReference(getDrivetrain().getHeading() + angleToTarget);
-    double cameraHeight = 42; //random value inches
-    double cameraElevation = 42; //random value degrees
-    double targetHeight = 81.25; //actual value inches
-    double ty = camera.getVerticalDegreesToTarget(); //actual value pixels
-    double tvert = camera.getHeightPixelsOfTarget(); //actual value pixels
+    ty = camera.getVerticalDegreesToTarget(); //actual value pixels
+    tvert = camera.getHeightPixelsOfTarget(); //actual value pixels
+    SmartDashboard.putNumber("ty", ty);
+    SmartDashboard.putNumber("tx", angleToTarget);
   }
 
   @Override

@@ -65,6 +65,10 @@ public class Camera {
         return getDefault().getTable(name).getEntry("ty").getDouble(0);
     }
 
+    public double getHeightPixelsOfTarget() {
+        return getDefault().getTable(name).getEntry("tvert").getDouble(0);
+    }
+
     public double getAreaOfTarget() {
         return getDefault().getTable(name).getEntry("ta").getDouble(0);
     }

@@ -13,6 +13,7 @@ import static com.team2363.utilities.ControllerPatroller.getPatroller;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
 
@@ -43,7 +44,7 @@ public class OI {
   private Joystick operator = getPatroller().get(OPERATOR, OPERATOR_PORT);
 
   private OI() { 
-    new JoystickButton(driver, 3).whenPressed(new RampDown(3, 0));
+    new JoystickButton(driver, 3).whileHeld(new ManualVisionDriving());
     new JoystickButton(driver, 2).whenPressed(new VisionTakeOverGroup());
   }
 
