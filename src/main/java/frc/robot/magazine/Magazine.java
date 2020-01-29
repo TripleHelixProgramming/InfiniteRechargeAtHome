@@ -32,7 +32,7 @@ public class Magazine extends Subsystem {
   private DigitalInput turn_bb = new DigitalInput(TURN_BB_CHANNEL);
 
   // Number of balls currently in the system.
-  public int ball_count;
+  public int ball_count = 0;
 
   // Various states of the Ball Handling subsystems, which are the magazine,
   // spacer, indexer and intake. Each subsytem, based on the state given to
@@ -71,6 +71,14 @@ public class Magazine extends Subsystem {
 
   public Boolean hasBalls() {
     return (ball_count > 0);
+  }
+
+  public void IncreaseBallCount() {
+    ball_count++;
+  }
+  
+  public void ResetBallCount() {
+    ball_count = 0;
   }
 
   public Boolean ballAtShooter() {

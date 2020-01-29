@@ -49,7 +49,6 @@ public class Shooter extends Subsystem {
     private final CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     public double setpoint = 0.0;
-    public int ballCount = 0;
     
     // The solenoids responsible for raising & extending the climber.
     private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
@@ -143,10 +142,6 @@ public class Shooter extends Subsystem {
 
     public double getMAXRPM(){
         return(MAX_RPM);
-    }
-
-    public void resetBallCount() {
-        ballCount = 0;
     }
 
     public void setHoodPosition(int hood_position) {

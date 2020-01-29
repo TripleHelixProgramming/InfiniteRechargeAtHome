@@ -12,10 +12,9 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.aimInPlace;
-import frc.robot.intake.commands.DeployIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
-import frc.robot.shooter.commands.ResetBallCount;
+import frc.robot.magazine.commands.ResetBallCount;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 
