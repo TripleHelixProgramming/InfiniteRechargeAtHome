@@ -75,3 +75,4 @@ public abstract class AbstractVisionDriving extends Command {
   public double angle() {
     return camera.getRotationalDegreesToTarget();
   }
+}
