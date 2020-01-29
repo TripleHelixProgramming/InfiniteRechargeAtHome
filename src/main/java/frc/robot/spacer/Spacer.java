@@ -51,6 +51,6 @@ public class Spacer extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new SetSpacerTo(BallHandlingState.STOP));
+
   }
 }
