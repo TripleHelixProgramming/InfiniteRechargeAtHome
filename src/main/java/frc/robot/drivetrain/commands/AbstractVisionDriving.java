@@ -15,6 +15,7 @@ import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.Camera;
 
 public abstract class AbstractVisionDriving extends Command {
@@ -38,8 +39,16 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void execute() {
-    final double angleToTarget = camera.getRotationalDegreesToTarget();
-    controller.setReference(getDrivetrain().getHeading() + angleToTarget);
+    double h1 = 16;
+    double h2 = 39;
+    double a1 = 0;
+    double verticalAngleToTarget = camera.getVerticalDegreesToTarget();
+    double distanceToTarget = (h2 - h1) / Math.tan(a1 + verticalAngleToTarget);
+    double angleToTarget = camera.getRotationalDegreesToTarget();
+    
+    controller.setReference(0);
+    SmartDashboard.putNumber("Angle to target", verticalAngleToTarget);
+    SmartDashboard.putNumber("Distance to target", distanceToTarget);
   }
 
   @Override
@@ -59,7 +68,10 @@ public abstract class AbstractVisionDriving extends Command {
   }
 
   private void calculate() {
-    final double output = controller.calculate(getDrivetrain().getHeading());
-    getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
+    final double output = controller.calculate(camera.getRotationalDegreesToTarget());
+    getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
   }
-}
+
+  public double angle() {
+    return camera.getRotationalDegreesToTarget();
+  }
