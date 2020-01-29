@@ -58,17 +58,15 @@ public class AutoCG extends CommandGroup {
     addSequential(new WaitCommand(4.0));
     // Reset ball count back to zero
     addSequential(new ResetBallCount());
-    // Stop feeding balls
-    addParallel(new SetBallHandlingCG(BallHandlingState.STOP));
     // Stop the shooter
     addSequential(new StopShooter());
 
     // Re-orient Pigeon using pigeon offset for position.  Run path to get more balls
     // and deploy the Intake delay seconds along the path.
 
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
     addParallel(new IntakeDeployCG(delay));
     addSequential(new PathFollower(path));
+    addParallel(new StopIntakeCG());
 
     // Do we need a wait at the end of one path before starting the next??
     // addSequential(new WaitCommand(4.0));
@@ -95,7 +93,7 @@ public class AutoCG extends CommandGroup {
   private class IntakeDeployCG extends CommandGroup {
     public IntakeDeployCG(final double delay) {
       addSequential(new WaitCommand(delay));
-      addSequential(new DeployIntake());
+      addSequential(new StartIntakeCG());
     }
   }
 }
