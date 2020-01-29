@@ -5,16 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.shooter.commands;
+package frc.robot.magazine.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.shooter.Shooter;
+import frc.robot.magazine.*;
 
 public class ResetBallCount extends Command {
   public ResetBallCount() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Shooter.getShooter());
+    requires(Magazine.getMagazine());
   }
 
   // Called just before this Command runs the first time
@@ -25,7 +25,7 @@ public class ResetBallCount extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().resetBallCount();
+    Magazine.getMagazine().ResetBallCount();
   }
 
   // Make this return true when this Command no longer needs to run execute()
