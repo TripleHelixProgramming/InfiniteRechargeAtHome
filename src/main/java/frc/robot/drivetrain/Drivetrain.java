@@ -44,10 +44,10 @@ public class Drivetrain extends Subsystem {
 
   
   // Items that could be put into a per-bot config file.
-  private final double WHEEL_DIAMETER_IN_INCHES = 4;
-  private final int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
-  public static final double MAX_VELOCITY_IN_FPS = 10;
-  private static final int VELOCITY_CONTROL_SLOT = 0;
+  private double WHEEL_DIAMETER_IN_INCHES = 4;
+  private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+  public static double MAX_VELOCITY_IN_FPS = 10;
+  private static int VELOCITY_CONTROL_SLOT = 0;
 
   // Constructed in initMotorControllers:
   private LeaderBobTalonSRX left = null;
@@ -83,8 +83,14 @@ public class Drivetrain extends Subsystem {
 
     // Configure the controllers based on the name of the bot.
     String botName = frc.robot.Preferences.getPreferences().getRobotName();
-    if ("Bot1".equalsIgnoreCase(botName) == true)
-    {
+    if (("Bot1".equalsIgnoreCase(botName) == true) || 
+        ("Bot2".equalsIgnoreCase(botName) == true)) {
+
+      WHEEL_DIAMETER_IN_INCHES = 6;
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+      MAX_VELOCITY_IN_FPS = 10;
+      VELOCITY_CONTROL_SLOT = 0;
+      
       // Bot1 uses Victors as slaves.
       rightSlave1 = new BobVictorSPX(23);
       rightSlave2 = new BobVictorSPX(24);
@@ -102,9 +108,17 @@ public class Drivetrain extends Subsystem {
       right.setSensorPhase(false);
       left.setInverted(false);
       right.setInverted(true);
-    }
-    else // else unknown name, but could be an elseif for the programming bot name, and throw in an else
-    {
+
+    }  else {
+
+      // else unknown name, but could be an elseif for the programming bot name, 
+      // and throw in an else
+      
+      WHEEL_DIAMETER_IN_INCHES = 4;
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+      MAX_VELOCITY_IN_FPS = 10;
+      VELOCITY_CONTROL_SLOT = 0;
+
       // Programming bot uses Talons everywhere
       rightSlave1 = new BobTalonSRX(11);
       rightSlave2 = new BobTalonSRX(10);

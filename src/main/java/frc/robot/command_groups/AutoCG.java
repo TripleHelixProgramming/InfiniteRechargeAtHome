@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
-
+import frc.robot.drivetrain.commands.aimInPlace;
 import frc.robot.intake.commands.DeployIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
@@ -50,7 +50,7 @@ public class AutoCG extends CommandGroup {
   }
 
   public AutoCG(Path path, Position pos, double pigeon_offset, double delay, Path phase2) {
-    // addSequential(new Aim());
+    addSequential(new aimInPlace());
     addSequential(new SpinShooterUp(pos));
     addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
 
@@ -76,7 +76,7 @@ public class AutoCG extends CommandGroup {
       addSequential(new PathFollower(phase2));
     }
 
-    // addSequential(new Aim());
+    addSequential(new aimInPlace());
     addSequential(new SpinShooterUp(pos));
     addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
 
