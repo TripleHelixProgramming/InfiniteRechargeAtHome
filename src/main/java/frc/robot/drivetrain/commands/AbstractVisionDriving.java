@@ -24,8 +24,8 @@ public abstract class AbstractVisionDriving extends Command {
   private final Notifier notifier = new Notifier(this::calculate);
   private final Camera camera;
 
-  double cameraHeight = 42; //random value inches
-  double cameraElevation = 42; //random value degrees
+  double cameraHeight = 16; //random value inches
+  double cameraElevation = 0; //random value degrees
   double targetHeight = 81.25; //actual value inches
   double ty = 42; //random value pixels
   double tvert = 42; //random value pixels
@@ -48,9 +48,10 @@ public abstract class AbstractVisionDriving extends Command {
     final double angleToTarget = camera.getRotationalDegreesToTarget();
     controller.setReference(getDrivetrain().getHeading() + angleToTarget);
     ty = camera.getVerticalDegreesToTarget(); //actual value pixels
-    tvert = camera.getHeightPixelsOfTarget(); //actual value pixels
+    // tvert = camera.getHeightPixelsOfTarget(); 
     SmartDashboard.putNumber("ty", ty);
     SmartDashboard.putNumber("tx", angleToTarget);
+    SmartDashboard.putNumber("ground_distance",calculateDistanceToTarget());
   }
 
   @Override
@@ -74,7 +75,12 @@ public abstract class AbstractVisionDriving extends Command {
     getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
   }
 
-  private double calculateGroundDistanceToTarget() {
-    return (targetHeight - 15*(ty/tvert) - cameraHeight)/Math.tan(cameraElevation);
+  // private double calculateGroundDistanceToTarget() {
+  //   return (targetHeight - 15*(ty/tvert) - cameraHeight)/Math.tan(cameraElevation);
+  // }
+
+  private double calculateDistanceToTarget() {
+    return (56 - cameraHeight)/Math.tan(Math.toRadians(cameraElevation + ty));//89.75 is height in actual arena
+    // return (40 - cameraHeight)/Math.tan((cameraElevation + ty)*(pi/180)); 
   }
 }
