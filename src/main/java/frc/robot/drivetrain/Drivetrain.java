@@ -76,6 +76,7 @@ public class Drivetrain extends Subsystem {
    * bots) or run solo (newer bots).
    */
   private void initMotorControllers() {
+
     BaseMotorController rightSlave1 = null;
     BaseMotorController rightSlave2 = null;
     BaseMotorController leftSlave1 = null;
@@ -83,11 +84,10 @@ public class Drivetrain extends Subsystem {
 
     // Configure the controllers based on the name of the bot.
     String botName = frc.robot.Preferences.getPreferences().getRobotName();
-    if (("Bot1".equalsIgnoreCase(botName) == true) || 
-        ("Bot2".equalsIgnoreCase(botName) == true)) {
+    if ("Bot1".equalsIgnoreCase(botName) == true) {
 
       WHEEL_DIAMETER_IN_INCHES = 6;
-      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
       MAX_VELOCITY_IN_FPS = 10;
       VELOCITY_CONTROL_SLOT = 0;
       
@@ -104,15 +104,39 @@ public class Drivetrain extends Subsystem {
       pigeon = new PigeonIMU(30);
 
       // Handles direction of motors and corrisponding encoders.
-      left.setSensorPhase(false);
-      right.setSensorPhase(false);
+
+      // left.setSensorPhase(false);
+      // right.setSensorPhase(false);
       left.setInverted(false);
       right.setInverted(true);
 
-    }  else {
+    } else if ("Bot2".equalsIgnoreCase(botName) == true) {
 
-      // else unknown name, but could be an elseif for the programming bot name, 
-      // and throw in an else
+      WHEEL_DIAMETER_IN_INCHES = 6;
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
+      MAX_VELOCITY_IN_FPS = 10;
+      VELOCITY_CONTROL_SLOT = 0;
+      
+      // Bot1 uses Victors as slaves.
+      rightSlave1 = new BobVictorSPX(23);
+      rightSlave2 = new BobVictorSPX(24);
+      leftSlave1 = new BobVictorSPX(12);
+      leftSlave2 = new BobVictorSPX(11);
+
+      left = new LeaderBobTalonSRX(10, leftSlave1, leftSlave2);
+      right = new LeaderBobTalonSRX(25, rightSlave1, rightSlave2);
+
+      // Riding solo on CAN
+      pigeon = new PigeonIMU(30);
+
+      // Handles direction of motors and corrisponding encoders.
+      
+      // left.setSensorPhase(false);
+      // right.setSensorPhase(false);
+      left.setInverted(false);
+      right.setInverted(true);
+
+    }  else {   // Programming Bot or Unknown Bot
       
       WHEEL_DIAMETER_IN_INCHES = 4;
       ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
