@@ -42,7 +42,7 @@ public class SpinShooterUp extends Command {
       //  distance = GetTargetDistance();
       //  setpoint = CalculateSetPoint(distance);
       //  rpm = setpoint * Shooter.getShooter().getMAXRPM();
-      //  hood_position = ???
+      //  hood_position = probably 1???
     } 
 
     Shooter.getShooter().setHoodPosition(hood_position);

@@ -75,6 +75,7 @@ public class AutoCG extends CommandGroup {
       addSequential(new PathFollower(phase2));
     }
 
+    //  Turn to angle for position.
     addSequential(new aimInPlace());
     addSequential(new SpinShooterUp(pos));
     addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
