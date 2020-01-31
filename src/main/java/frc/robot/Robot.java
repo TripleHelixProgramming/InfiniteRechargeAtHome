@@ -27,6 +27,7 @@ import frc.paths.TwoFeetForward;
 import frc.robot.drivetrain.Camera;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.commands.AutoVisionDriving;
+import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 

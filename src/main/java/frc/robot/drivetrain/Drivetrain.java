@@ -109,7 +109,7 @@ public class Drivetrain extends Subsystem {
     }
   }
 
-  private void setPIDFValues() {
+  public void setPIDFValues() {
     final double kF = 1.25;
     final double kP = 1; // 5
     final double kI = 0.01;
@@ -122,6 +122,10 @@ public class Drivetrain extends Subsystem {
     right.config_IntegralZone(VELOCITY_CONTROL_SLOT,
         (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
   }
+
+  // private void setTeleOpPIDFValues() {
+
+  // }
 
   private void setupSensors() {
     left.configPrimaryFeedbackDevice(FeedbackDevice.QuadEncoder);

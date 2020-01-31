@@ -25,9 +25,9 @@ public abstract class AbstractVisionDriving extends Command {
   private final Camera camera;
 
   double cameraHeight = 16; //random value inches
-  double cameraElevation = 0; //random value degrees
+  double cameraElevation = 36.2; //random value degrees
   double targetHeight = 81.25; //actual value inches
-  double ty = 42; //random value pixels
+  double ty = 0; //random value pixels
   double tvert = 42; //random value pixels
 
   public AbstractVisionDriving() {
@@ -63,6 +63,7 @@ public abstract class AbstractVisionDriving extends Command {
   protected void end() {
     notifier.stop();
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Stopping Vision Driving");
+    getDrivetrain().setPIDFValues();
   }
 
   @Override
@@ -72,7 +73,7 @@ public abstract class AbstractVisionDriving extends Command {
 
   private void calculate() {
     final double output = controller.calculate(getDrivetrain().getHeading());
-    getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
+    // getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
   }
 
   // private double calculateGroundDistanceToTarget() {
@@ -80,7 +81,7 @@ public abstract class AbstractVisionDriving extends Command {
   // }
 
   private double calculateDistanceToTarget() {
-    return (56 - cameraHeight)/Math.tan(Math.toRadians(cameraElevation + ty));//89.75 is height in actual arena
-    // return (40 - cameraHeight)/Math.tan((cameraElevation + ty)*(pi/180)); 
+    return (74 - cameraHeight)/Math.tan(Math.toRadians(22.9));//89.75 is height in actual arena
+    // return (74 - cameraHeight)/(Math.tan((cameraElevation + ty)*(Math.PI/180))); 
   }
 }
