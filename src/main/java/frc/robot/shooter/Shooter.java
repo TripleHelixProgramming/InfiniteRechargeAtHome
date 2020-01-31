@@ -60,6 +60,7 @@ public class Shooter extends Subsystem {
         slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
+        slave.follow(master);
         pidController = master.getPIDController();
         encoder = master.getEncoder();
 
