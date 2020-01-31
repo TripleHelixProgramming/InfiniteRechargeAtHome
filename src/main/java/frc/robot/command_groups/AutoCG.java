@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.aimInPlace;
+import frc.robot.intake.commands.RetractIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.magazine.commands.ResetBallCount;
@@ -19,81 +20,82 @@ import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 
 public class AutoCG extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-
-  // Add Commands here:
-  // e.g. addSequential(new Command1());
+  // addSequential(new Command1());
   // addSequential(new Command2());
-  // these will run in order.
+  // The commands above will run in order.
 
-  // To run multiple commands at the same time,
-  // use addParallel()
-  // e.g. addParallel(new Command1());
+  // addParallel(new Command1());
   // addSequential(new Command2());
   // Command1 and Command2 will run in parallel.
 
-  // A command group will require all of the subsystems that each member
+  // A command group will require all of the subsystems that each command
   // would require.
-  // e.g. if Command1 requires chassis, and Command2 requires arm,
-  // a CommandGroup containing them would require both the chassis and the
-  // arm.
 
+  //  Auto Command Group to just run a path and that's it.
   public AutoCG(Path path){
     addSequential(new PathFollower(path));
   }
   
+  // Auto command group that shoots, then runs a path while collecting balls
+  // but does not run a path back to shoot the balls.
   public AutoCG(Path path, Position pos, double pigeon_offset, double delay) {
     this(path, pos, pigeon_offset, delay, null);
   }
 
+  //  Auto command group that shoots from a known positions, runs a path
+  //  to collect balls, reverses its path back to known position and 
+  //  shoots again.
   public AutoCG(Path path, Position pos, double pigeon_offset, double delay, Path phase2) {
-    addSequential(new aimInPlace());
-    addSequential(new SpinShooterUp(pos));
-    addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    
+    // Runs command group to shoot from a know position.
+    addSequential(new ShootCG(pos));
 
-    // Wait for time that it takes 5 balls to be shot
-    addSequential(new WaitCommand(4.0));
-    // Reset ball count back to zero
-    addSequential(new ResetBallCount());
-    // Stop the shooter
-    addSequential(new StopShooter());
-
-    // Re-orient Pigeon using pigeon offset for position.  Run path to get more balls
+    // Re-orient the robot before running path.  Run path to get more balls
     // and deploy the Intake delay seconds along the path.
-
+    // AddSequential(new TurnToAngle(??));
     addParallel(new IntakeDeployCG(delay));
     addSequential(new PathFollower(path));
-    addParallel(new StopIntakeCG());
+    addParallel(new RetractIntake());
 
-    // Do we need a wait at the end of one path before starting the next??
-    // addSequential(new WaitCommand(4.0));
+    // Do we need a wait here before reversing??
+    // addSequential(new WaitCommand(??)); 
 
-    // We have balls now, so run path back to shooting position.
+    // Run path back to shooting position, if 2nd path is not null.
     if (phase2 != null) {
       addSequential(new PathFollower(phase2));
     }
 
-    //  Turn to angle for position.
-    addSequential(new aimInPlace());
-    addSequential(new SpinShooterUp(pos));
-    addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    // Adjust angle & Shoot the balls we just picked up.
+    // AddSequential(new TurnToAngle(??));
+    addSequential(new ShootCG(pos));
 
-    // Wait for time that it takes 5 balls to be shot
-    addSequential(new WaitCommand(4.0));
-    // Reset ball count back to zero
-    addSequential(new ResetBallCount());
-    // Stop feeding balls
-    addParallel(new SetBallHandlingCG(BallHandlingState.STOP));
-    // Stop the shooter
-    addSequential(new StopShooter());
+    // Stop the ball handling system - magazine & spacer
+    addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
   }
 
+  // Deploys & runs the intake after "delay" seconds have passed.
   private class IntakeDeployCG extends CommandGroup {
     public IntakeDeployCG(final double delay) {
       addSequential(new WaitCommand(delay));
       addSequential(new StartIntakeCG());
+    }
+  }
+
+  private class ShootCG extends CommandGroup {
+    public ShootCG(Position pos) {
+      // Center on target --  this may need a timeout?
+      addSequential(new aimInPlace());  
+      // Spin shooter up to the expected rpms for that position.
+      addSequential(new SpinShooterUp(pos));
+      // Once shooter is at expected rpms, then start the magazine to 
+      // feed bals in.
+      addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
+      // Wait for time that it takes 5 balls to be shot
+      addSequential(new WaitCommand(4.0));
+      // Reset ball count back to zero
+      addSequential(new ResetBallCount());
+      // Stop the shooter
+      addSequential(new StopShooter());
     }
   }
 }
