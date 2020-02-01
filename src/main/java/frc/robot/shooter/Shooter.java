@@ -18,7 +18,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
+import frc.robot.Preferences;
 import frc.robot.shooter.commands.StopShooter;
 import frc.robot.shooter.commands.TestWithController;
 
@@ -36,6 +36,10 @@ public class Shooter extends Subsystem {
       return INSTANCE;
     }
 
+    // Bump direction
+    public static final int BUMP_UP = 1;
+    public static final int BUMP_DOWN = -1;
+
     // Solenoid ids for hood position
     public static int HOOD_NEAR_SOLENOID= 12;
     public static int HOOD_FAR_SOLENOID= 13;    // Solenoid extended = far
@@ -48,7 +52,13 @@ public class Shooter extends Subsystem {
     private final CANPIDController pidController;
     private final CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-    public double setpoint = 0.0;
+    public int rpm = 0;
+
+    private Position lastPosition = Position.UNKNOWN;
+    
+    // Live adjustment of the RPM
+    public int bumpRPM = 0; // the amount of RPM to change per tick
+    public int bumpTicks = 0; // how many ticks to adjust the rpm by bumpRPM
     
     // The solenoids responsible for raising & extending the climber.
     private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
@@ -72,7 +82,7 @@ public class Shooter extends Subsystem {
         kFF = 1;
         kMaxOutput = 1;
         kMinOutput = -1;
-        setpoint = 0.0;  // .55 is setpoint with the above PIDF to shoot from the trench
+        rpm = 0;
 
         // set PID coefficients
         pidController.setP(kP);
@@ -90,7 +100,7 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Feed Forward", kFF);
         SmartDashboard.putNumber("Max Output", kMaxOutput);
         SmartDashboard.putNumber("Min Output", kMinOutput);
-        SmartDashboard.putNumber("Set Point", setpoint);
+        SmartDashboard.putNumber("Set RPM", rpm);
     }
 
     @Override
@@ -104,7 +114,7 @@ public class Shooter extends Subsystem {
         final double ff = SmartDashboard.getNumber("Feed Forward", 0);
         final double max = SmartDashboard.getNumber("Max Output", 0);
         final double min = SmartDashboard.getNumber("Min Output", 0);
-        final double sp = SmartDashboard.getNumber("Set Point", 0);
+        final double sRPM = SmartDashboard.getNumber("Set RPM", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to
         // controller
@@ -133,10 +143,10 @@ public class Shooter extends Subsystem {
             kMinOutput = min;
             kMaxOutput = max;
         }
-        if ((sp != setpoint)) {
-            pidController.setReference(setpoint, ControlType.kVelocity);
-            setpoint = sp;
-            SmartDashboard.putNumber("Set Point", setpoint);
+        if ((sRPM != rpm)) {
+            pidController.setReference(rpm, ControlType.kVelocity);
+            rpm = (int)sRPM;
+            SmartDashboard.putNumber("Set RPM", rpm);
             SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
         }
     }
@@ -159,17 +169,52 @@ public class Shooter extends Subsystem {
         hood.set(Value.kReverse);
     }
 
-    public void setSetPoint(final double sp) {
-        setpoint = sp;
-        pidController.setReference(setpoint, ControlType.kVelocity);
+    public void setRPM(int rpm) {
+        this.rpm = rpm;
+        pidController.setReference(rpm, ControlType.kVelocity);
 
-        SmartDashboard.putNumber("Set Point", setpoint);
+        SmartDashboard.putNumber("Set RPM", rpm);
         SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
     }
 
     public double getRPM() {
         return encoder.getVelocity();
     }
+
+    // Doesn't alter any handling of the shooter but 
+    // allows the commands to know what the last position
+    // was so that when it's bumped we know which position
+    // is altered.
+    public void setPosition(Position pos) {
+        this.lastPosition = pos;
+        bumpTicks = Preferences.getPreferences().getPositionBumpTicks(lastPosition);
+    }
+    
+    // Gets the last position set with setPosition. 
+    // Defaults to to Position.UNKONWN
+    public Position getLastPosition() {
+        return lastPosition;
+    }
+    
+    // Gets the current number of bump ticks relative to the last position.
+    public void setBumpTicks(int direction)
+    {
+        switch (direction)
+        {
+            case Shooter.BUMP_UP:
+                ++bumpTicks;
+                break;
+            case Shooter.BUMP_DOWN:
+                --bumpTicks;
+                break;
+        }
+
+        Preferences.getPreferences().setPositionBumpTicks(lastPosition, bumpTicks);
+    }
+
+    public int getBumpTicks() {
+        return bumpTicks;
+    } 
 
     @Override
     protected void initDefaultCommand() {

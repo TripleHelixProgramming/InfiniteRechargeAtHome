@@ -14,35 +14,38 @@ package frc.robot.shooter;
 public enum Position {
 
     // POSITION(motor percentage setpoint, rpms expected, hood position)
-    RIGHT_AUTO(.55, 3135, 1),
-    MIDDLE_AUTO(.55, 3135, 1),
-    LEFT_AUTO(.55, 3135, 1),
-    TRENCH(.55, 3135, 1),
-    DUMP_BALLS(.2, 1140, 1),
-    LAYUP(.55, 3135, 0),
-    UNKNOWN(0.0, 0, 1);
+    RIGHT_AUTO(3135, 1),
+    MIDDLE_AUTO(3135, 1),
+    LEFT_AUTO(3135, 1),
+    TRENCH(3135, 1),
+    DUMP_BALLS(1140, 1),
+    LAYUP(3135, 0),
+    UNKNOWN(0, 1);
 
-    private double setPoint;
-    private double rpm;
+    private int rpm;
     private int hoodPosition;
-    private double bumpSetPoint;
+    private double bumpRPM;
 
-    private Position(double sp, double rpm, int hp) {
-        this.setPoint = sp;
+    // This changes the default global bump RPM.
+    // The enum is structured so that it could handle different
+    // bump rpm values per position but for now there's only the one.
+    public static final int DEFAULT_BUMP_RPM = 10;
+
+    private Position(int rpm, int hp) {
         this.rpm = rpm;
         this.hoodPosition = hp;
-        this.bumpSetPoint = 0.1;
+        this.bumpRPM = DEFAULT_BUMP_RPM;
     }
 
-    public double getSetPoint() {
-        return setPoint;
-    }
-
-    public double getRPM() {
+    public int getRPM() {
         return rpm;
     }
     
     public int getHoodPosition() {
         return hoodPosition;
+    }
+
+    public double getBumpRPM() {
+        return bumpRPM;
     }
 }
