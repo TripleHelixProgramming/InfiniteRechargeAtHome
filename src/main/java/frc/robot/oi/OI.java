@@ -10,6 +10,8 @@ package frc.robot.oi;
 import static com.team2363.utilities.ControllerMap.*;
 import static com.team2363.utilities.ControllerPatroller.getPatroller;
 
+import com.team2363.utilities.ControllerMap;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -18,6 +20,10 @@ import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
 import frc.robot.drivetrain.commands.aimInPlace;
+import frc.robot.intake.commands.DeployIntake;
+import frc.robot.intake.commands.RetractIntake;
+import frc.robot.magazine.commands.RunMagazine;
+import frc.robot.spacer.commands.SpacerCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -93,8 +99,14 @@ public class OI {
   private Joystick operator = getPatroller().get(OPERATOR, OPERATOR_PORT);
 
   private OI() { 
-    new JoystickButton(driver, 3).whileHeld(new CameraInfo());
-    new JoystickButton(driver, 2).whileHeld(new aimInPlace());
+   // new JoystickButton(driver, 3).whileHeld(new CameraInfo());
+   // new JoystickButton(driver, 2).whileHeld(new aimInPlace());
+
+    new JoystickButton(driver, ControllerMap.X_BOX_A).toggleWhenPressed(new DeployIntake());
+    
+    new JoystickButton(driver, ControllerMap.X_BOX_X).toggleWhenPressed(new SpacerCommand());
+    new JoystickButton(driver, ControllerMap.X_BOX_Y).toggleWhenPressed(new RunMagazine());
+
   }
 
   /**

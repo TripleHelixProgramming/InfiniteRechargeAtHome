@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.spacer.commands.SetSpacerTo;
 
 /**
  * Add your docs here.
@@ -21,14 +20,13 @@ public class Spacer extends Subsystem {
 
   private static Spacer INSTANCE = null;
 
-  private static final int SPACER_ID = 15;
+  private static final int SPACER_ID = 19;
 
-  private final CANSparkMax motor;
-
+  private CANSparkMax motor = new CANSparkMax(SPACER_ID, MotorType.kBrushless);
+  
   public Spacer() {
-
+    super();
     // initialize motor
-    motor = new CANSparkMax(SPACER_ID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
   }
 

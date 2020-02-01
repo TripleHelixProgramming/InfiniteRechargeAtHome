@@ -18,13 +18,13 @@ public class RetractIntake extends Command {
   @Override
   protected void initialize() {
     HelixEvents.getInstance().addEvent("INTAKE", "Starting RetractIntake");
+    Intake.getIntake().rollerOff();
+    Intake.getIntake().retract();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      Intake.getIntake().rollerOff();
-      // Intake.getIntake().retract();
   }
 
   // Make this return true when this Command no longer needs to run execute()
