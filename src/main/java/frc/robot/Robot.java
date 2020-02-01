@@ -29,6 +29,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.command_groups.AutoRoutines;
 import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
+
+import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain.commands.AutoVisionDriving;
+import frc.robot.drivetrain.commands.ManualVisionDriving;
+import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 
 /**
