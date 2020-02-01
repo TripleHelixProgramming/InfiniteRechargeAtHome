@@ -24,6 +24,11 @@ public abstract class AbstractVisionDriving extends Command {
   private final Notifier notifier = new Notifier(this::calculate);
   private final Camera camera;
 
+  double cameraHeight = 16; // (inches) currently the height on the programming bot
+  double middleTargetHeight = 74; // (inches) use 89.75 for actual arena height
+  double cameraElevation = 22.9; //(degrees) currently the angle on the programming bot
+  double ty = 0; //(degrees) vertical angle between crosshair and center of target
+
   public AbstractVisionDriving() {
     requires(getDrivetrain());
     camera = getDrivetrain().getFrontCamera();
@@ -39,16 +44,14 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void execute() {
-    double h1 = 16;
-    double h2 = 39;
-    double a1 = 0;
-    double verticalAngleToTarget = camera.getVerticalDegreesToTarget();
-    double distanceToTarget = (h2 - h1) / Math.tan(a1 + verticalAngleToTarget);
-    double angleToTarget = camera.getRotationalDegreesToTarget();
-    
-    controller.setReference(0);
-    SmartDashboard.putNumber("Angle to target", verticalAngleToTarget);
-    SmartDashboard.putNumber("Distance to target", distanceToTarget);
+
+    final double angleToTarget = camera.getRotationalDegreesToTarget();
+    controller.setReference(getDrivetrain().getHeading() + angleToTarget);
+    ty = camera.getVerticalDegreesToTarget();
+    SmartDashboard.putNumber("ty", ty);
+    SmartDashboard.putNumber("tx", angleToTarget);
+    SmartDashboard.putNumber("ground_distance",calculateDistanceToTarget());
+
   }
 
   @Override
@@ -60,6 +63,7 @@ public abstract class AbstractVisionDriving extends Command {
   protected void end() {
     notifier.stop();
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Stopping Vision Driving");
+    getDrivetrain().setPIDFValues();
   }
 
   @Override
@@ -74,5 +78,10 @@ public abstract class AbstractVisionDriving extends Command {
 
   public double angle() {
     return camera.getRotationalDegreesToTarget();
+  }
+
+  private double calculateDistanceToTarget() {
+    return (middleTargetHeight - cameraHeight)/Math.tan(Math.toRadians(cameraElevation + ty));
+    // calculates ground distane from robot to target, only accurate when tx = 0
   }
 }
