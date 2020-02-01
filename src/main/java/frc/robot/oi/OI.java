@@ -13,11 +13,19 @@ import static com.team2363.utilities.ControllerPatroller.getPatroller;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.climber.commands.Climb;
+import frc.robot.command_groups.StartIntakeCG;
+import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
 import frc.robot.drivetrain.commands.aimInPlace;
+import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.magazine.commands.SetMagazineTo;
+import frc.robot.shooter.Position;
+import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.shooter.commands.StopShooter;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -94,8 +102,21 @@ public class OI {
 
   private OI() { 
     new JoystickButton(driver, 3).whileHeld(new CameraInfo());
-    new JoystickButton(driver, 2).whileHeld(new aimInPlace());
-  }
+    new JoystickButton(driver, 5).whileHeld(new aimInPlace());
+    new JoystickButton(driver, 6).whenPressed(new SetMagazineTo(BallHandlingState.SHOOT));
+    new JoystickButton(driver, 6).whenReleased(new SetMagazineTo(BallHandlingState.STOP));
+    new JoystickButton(operator, 1).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
+    // new JoystickButton(operator, 1).whenReleased(new StopShooter());
+    new JoystickButton(operator, 2).whenPressed(new SpinShooterUp(Position.UNKNOWN));
+    // new JoystickButton(operator, 2).whenReleased(new StopShooter());
+    new JoystickButton(operator, 3).whenPressed(new SpinShooterUp(Position.TRENCH));
+    // new JoystickButton(operator, 3).whenReleased(new StopShooter());
+    new JoystickButton(operator, 4).whenPressed(new SpinShooterUp(Position.LAYUP));
+    // new JoystickButton(operator, 4).whenReleased(new StopShooter());
+    new JoystickButton(operator, 6).toggleWhenPressed(new StartIntakeCG());
+    new JoystickButton(operator, 6).toggleWhenActive(new StopIntakeCG());
+    new JoystickButton(operator, 11).whileHeld(new Climb());
+   }
 
   /**
    * @return the raw controller throttle
