@@ -21,15 +21,15 @@ import static frc.robot.oi.OI.getOI;
 import com.team2363.logger.HelixEvents;
 import com.team2363.logger.HelixLogger;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.paths.RightTurn;
-import frc.paths.TwoFeetForward;
 import frc.robot.command_groups.AutoRoutines;
 import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
+
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.commands.AutoVisionDriving;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
@@ -46,6 +46,7 @@ import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 public class Robot extends TimedRobot {
   Command autonomousCommand;
   Camera camera = new Camera("limelight-front");
+  private final Compressor compressor = new Compressor();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -71,8 +72,8 @@ public class Robot extends TimedRobot {
     // getClimber();
     // getControlPanel();
     // getShooter();
-    // getMagazine();
-    // getSpacer();
+    getMagazine();
+    getSpacer();
     // getIndexer();
 
   }

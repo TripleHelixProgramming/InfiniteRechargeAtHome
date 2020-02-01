@@ -105,8 +105,8 @@ public class Drivetrain extends Subsystem {
 
       // Handles direction of motors and corrisponding encoders.
 
-      // left.setSensorPhase(false);
-      // right.setSensorPhase(false);
+      left.setSensorPhase(false);
+      right.setSensorPhase(false);
       left.setInverted(false);
       right.setInverted(true);
 

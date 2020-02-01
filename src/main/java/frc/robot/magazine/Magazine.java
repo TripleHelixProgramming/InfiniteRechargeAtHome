@@ -19,7 +19,7 @@ public class Magazine extends Subsystem {
 
   private static Magazine INSTANCE = null;
 
-  private static final int MAGAZINE_ID = 16;
+  private static final int MAGAZINE_ID = 20;
 
   private final CANSparkMax motor;
 
