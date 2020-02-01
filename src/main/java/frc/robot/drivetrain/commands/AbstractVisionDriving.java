@@ -71,7 +71,7 @@ public abstract class AbstractVisionDriving extends Command {
 
   private void calculate() {
     final double output = controller.calculate(getDrivetrain().getHeading());
-    // getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
+    getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
   }
 
   private double calculateDistanceToTarget() {

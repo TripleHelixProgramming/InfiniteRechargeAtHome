@@ -123,10 +123,6 @@ public class Drivetrain extends Subsystem {
         (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
   }
 
-  // private void setTeleOpPIDFValues() {
-
-  // }
-
   private void setupSensors() {
     left.configPrimaryFeedbackDevice(FeedbackDevice.QuadEncoder);
     right.configPrimaryFeedbackDevice(FeedbackDevice.QuadEncoder);
