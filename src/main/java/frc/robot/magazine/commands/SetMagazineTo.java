@@ -5,17 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.shooter.commands;
+package frc.robot.magazine.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.magazine.Magazine;
+import frc.robot.magazine.Magazine.BallHandlingState;
 
-import frc.robot.shooter.Shooter;
+public class SetMagazineTo extends Command {
 
-public class StopShooter extends Command {
-  public StopShooter() {
+  public BallHandlingState action;
+
+  private double SHOOT_SPEED = 0.5;
+  private double INTAKE_SPEED = 0.5;
+  private double power = 0.0;
+
+  public SetMagazineTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Shooter.getShooter());
+    requires(Magazine.getMagazine());
+    this.action = action;
   }
 
   // Called just before this Command runs the first time
@@ -26,13 +34,37 @@ public class StopShooter extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().setSetPoint(0.0);
+
+    
+    Boolean ballAtShooter = Magazine.getMagazine().ballAtShooter();
+    Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
+
+    switch (action) {
+      case SHOOT:
+          power = SHOOT_SPEED;
+          if (ballAtShooter) {
+            power =0.0;
+          }
+          Magazine.getMagazine().setPower(power);
+        break;
+      case INTAKE:
+        power= 0.0;
+        if (!ballAtShooter && ballAtSpacer) {
+          power = INTAKE_SPEED;
+        }
+        Magazine.getMagazine().setPower(power);
+        break;
+      case STOP:
+      default:
+        Magazine.getMagazine().setPower(0.0);
+        break;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

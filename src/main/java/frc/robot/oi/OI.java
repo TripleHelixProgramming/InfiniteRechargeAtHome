@@ -13,14 +13,63 @@ import static com.team2363.utilities.ControllerPatroller.getPatroller;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
+import frc.robot.drivetrain.commands.aimInPlace;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
+ * 
+ * Here is the list of button names
+ * 
+   //XboxOne Joysticks
+    X_BOX_LEFT_STICK_X = 0;
+    X_BOX_LEFT_STICK_Y = 1;
+    X_BOX_LEFT_TRIGGER = 2;
+    X_BOX_RIGHT_TRIGGER = 3;
+    X_BOX_RIGHT_STICK_X = 4;
+    X_BOX_RIGHT_STICK_Y = 5;
+	
+	//XboxOne Buttons
+    X_BOX_A = 1;
+    X_BOX_B = 2;
+    X_BOX_X = 3;
+    X_BOX_Y = 4;
+    X_BOX_LB = 5;
+    X_BOX_RB = 6;
+    X_BOX_LOGO_LEFT = 7;
+    X_BOX_LOGO_RIGHT = 8;
+    X_BOX_LEFT_STICK_BUTTON = 9;
+    X_BOX_RIGHT_STICK_BUTTON = 10;
+
+	//PS4 joystick axis
+    PS4_LEFT_STICK_X = 0;
+    PS4_LEFT_STICK_Y = 1;
+    PS4_RIGHT_STICK_X = 2;
+    PS4_LEFT_TRIGGER = 3;
+    PS4_RIGHT_TRIGGER = 4;
+    PS4_RIGHT_STICK_Y = 5;
+		
+	//PS4 Buttons
+    PS4_SQUARE = 1;
+    PS4_X = 2;
+    PS4_CIRCLE = 3;
+    PS4_TRIANGLE = 4;
+    PS4_L1 = 5;
+    PS4_R1 = 6;
+    PS4_L2 = 7;
+    PS4_R2 = 8;
+    PS4_SHARE = 9;
+    PS4_OPTIONS = 10;
+    PS4_L3 = 11;
+    PS4_R3 = 12;
+    PS4_PS = 13;
+ * 
  */
+
 public class OI {
 
   private static OI INSTANCE;
@@ -44,8 +93,8 @@ public class OI {
   private Joystick operator = getPatroller().get(OPERATOR, OPERATOR_PORT);
 
   private OI() { 
-    new JoystickButton(driver, 3).whileHeld(new ManualVisionDriving());
-    new JoystickButton(driver, 2).whenPressed(new VisionTakeOverGroup());
+    new JoystickButton(driver, 3).whileHeld(new CameraInfo());
+    new JoystickButton(driver, 2).whileHeld(new aimInPlace());
   }
 
   /**

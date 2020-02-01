@@ -24,7 +24,7 @@ public class RetractIntake extends Command {
   @Override
   protected void execute() {
       Intake.getIntake().rollerOff();
-      Intake.getIntake().retract();
+      // Intake.getIntake().retract();
   }
 
   // Make this return true when this Command no longer needs to run execute()

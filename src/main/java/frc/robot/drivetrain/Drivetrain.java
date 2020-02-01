@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team2363.utilities.HelixMath;
 import com.team319.models.BobTalonSRX;
+import com.team319.models.BobVictorSPX;
 import com.team319.models.LeaderBobTalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -25,8 +26,8 @@ import frc.robot.drivetrain.commands.SampleDrive;
 
 public class Drivetrain extends Subsystem {
 
-  private static Drivetrain INSTANCE = new Drivetrain();
-
+  private static Drivetrain INSTANCE = null;
+  
   /**
    * @return the singleton instance of the Drivetrain subsystem
    */
@@ -41,35 +42,99 @@ public class Drivetrain extends Subsystem {
     PERCENT_FULLPOWER, PERCENT_FULLSPEED, FPS, TICKSPER100MS
   }
 
-  private final double WHEEL_DIAMETER_IN_INCHES = 4;
-  private final int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
-  public static final double MAX_VELOCITY_IN_FPS = 10;
+  
+  // Items that could be put into a per-bot config file.
+  private double WHEEL_DIAMETER_IN_INCHES = 4;
+  private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+  public static double MAX_VELOCITY_IN_FPS = 10;
+  private static int VELOCITY_CONTROL_SLOT = 0;
 
-  private static final int VELOCITY_CONTROL_SLOT = 0;
+  // Constructed in initMotorControllers:
+  private LeaderBobTalonSRX left = null;
+  private LeaderBobTalonSRX right = null;
 
-  //  Competition & Practice Bot  Talon Masters with Victors as Slaves.
-  private final BaseMotorController rightSlave1 = new BobTalonSRX(11);
-  private final BobTalonSRX rightSlave2 = new BobTalonSRX(10);
-  private final BaseMotorController leftSlave1 = new BobTalonSRX(24);
-  private final BaseMotorController leftSlave2 = new BobTalonSRX(25);
-
-  private final LeaderBobTalonSRX left = new LeaderBobTalonSRX(23, leftSlave1, leftSlave2);
-  private final LeaderBobTalonSRX right = new LeaderBobTalonSRX(12, rightSlave1, rightSlave2);
+  // Constructed in initMotorControllers... because it MAY
+  // be connected to one of the slave motor controllers.
+  private PigeonIMU pigeon = null;
 
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
-  private final PigeonIMU pigeon = new PigeonIMU(rightSlave2);
+
   private final Camera frontCamera = new Camera("limelight-front");
 
   private Drivetrain() {
+    initMotorControllers();
+
     setPIDFValues();
     setBrakeMode(Brake);
     setupSensors();
     setupLogs();
+  }
 
-    left.setSensorPhase(false);
-    right.setSensorPhase(false);
-    left.setInverted(true);
-    right.setInverted(false);
+  /**
+   * Initialize the motor controllers based on the name of the robot from preferences.
+   * Also initializes the pigeon since the pigeon can run off a slave controller (oler
+   * bots) or run solo (newer bots).
+   */
+  private void initMotorControllers() {
+
+    BaseMotorController rightSlave1 = null;
+    BaseMotorController rightSlave2 = null;
+    BaseMotorController leftSlave1 = null;
+    BaseMotorController leftSlave2 = null;
+
+    // Configure the controllers based on the name of the bot.
+    String botName = frc.robot.Preferences.getPreferences().getRobotName();
+    if (("Bot1".equalsIgnoreCase(botName) == true) || ("Bot2".equalsIgnoreCase(botName) == true)) {
+
+      WHEEL_DIAMETER_IN_INCHES = 6;
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
+      MAX_VELOCITY_IN_FPS = 10;
+      VELOCITY_CONTROL_SLOT = 0;
+      
+      // Bot1 uses Victors as slaves.
+      rightSlave1 = new BobVictorSPX(23);
+      rightSlave2 = new BobVictorSPX(24);
+      leftSlave1 = new BobVictorSPX(12);
+      leftSlave2 = new BobVictorSPX(11);
+
+      left = new LeaderBobTalonSRX(10, leftSlave1, leftSlave2);
+      right = new LeaderBobTalonSRX(25, rightSlave1, rightSlave2);
+
+      // Riding solo on CAN
+      pigeon = new PigeonIMU(30);
+
+      // Handles direction of motors and corrisponding encoders.
+
+      // left.setSensorPhase(false);
+      // right.setSensorPhase(false);
+      left.setInverted(false);
+      right.setInverted(true);
+
+    } else {   // Programming Bot or Unknown Bot
+      
+      WHEEL_DIAMETER_IN_INCHES = 4;
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+      MAX_VELOCITY_IN_FPS = 10;
+      VELOCITY_CONTROL_SLOT = 0;
+
+      // Programming bot uses Talons everywhere
+      rightSlave1 = new BobTalonSRX(11);
+      rightSlave2 = new BobTalonSRX(10);
+      leftSlave1 = new BobTalonSRX(24);
+      leftSlave2 = new BobTalonSRX(25);
+
+      left = new LeaderBobTalonSRX(23, leftSlave1, leftSlave2);
+      right = new LeaderBobTalonSRX(12, rightSlave1, rightSlave2);
+
+      // Riding on the slave controller.
+      pigeon = new PigeonIMU((BobTalonSRX)rightSlave2);
+
+      // Handles direction of motors and corrisponding encoders.
+      left.setSensorPhase(false);
+      right.setSensorPhase(false);
+      left.setInverted(true);
+      right.setInverted(false);
+    }
   }
 
   @Override

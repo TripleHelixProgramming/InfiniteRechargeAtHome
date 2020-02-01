@@ -30,7 +30,7 @@ public class TestWithController extends Command {
     double setPoint;
 
     setPoint = OI.getOI().getThrottle() * Shooter.getShooter().MAX_RPM;
-    Shooter.getShooter().setVelocity(setPoint);
+    Shooter.getShooter().setSetPoint(setPoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()

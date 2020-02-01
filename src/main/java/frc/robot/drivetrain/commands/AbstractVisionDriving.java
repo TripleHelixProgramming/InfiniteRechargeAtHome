@@ -44,12 +44,14 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void execute() {
+
     final double angleToTarget = camera.getRotationalDegreesToTarget();
     controller.setReference(getDrivetrain().getHeading() + angleToTarget);
     ty = camera.getVerticalDegreesToTarget();
     SmartDashboard.putNumber("ty", ty);
     SmartDashboard.putNumber("tx", angleToTarget);
     SmartDashboard.putNumber("ground_distance",calculateDistanceToTarget());
+
   }
 
   @Override
@@ -70,8 +72,12 @@ public abstract class AbstractVisionDriving extends Command {
   }
 
   private void calculate() {
-    final double output = controller.calculate(getDrivetrain().getHeading());
-    getDrivetrain().setSetpoint(FPS, getThrottle() + output, getThrottle() - output);
+    final double output = controller.calculate(camera.getRotationalDegreesToTarget());
+    getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
+  }
+
+  public double angle() {
+    return camera.getRotationalDegreesToTarget();
   }
 
   private double calculateDistanceToTarget() {

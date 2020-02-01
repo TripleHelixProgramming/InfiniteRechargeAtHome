@@ -12,6 +12,7 @@ import frc.robot.climber.commands.Climb;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -27,17 +28,19 @@ public class Climber extends Subsystem {
     private static Climber INSTANCE = null;
 
     // Solenoid ids for raising / lowering & extending / retracting
-    public static int CLIMBER_RAISE_SOLENOID= 0;
-    public static int CLIMBER_LOWER_SOLENOID= 1;
-    public static int CLIMBER_EXTEND_SOLENOID= 2;
-    public static int CLIMBER_RETRACT_SOLENOID= 3;
+    public static int CLIMBER_RAISE_SOLENOID= 4;
+    public static int CLIMBER_LOWER_SOLENOID= 5;
+    public static int CLIMBER_EXTEND_SOLENOID= 6;
+    public static int CLIMBER_RETRACT_SOLENOID= 7;
 
-    public static int CLIMBER_MASTER_ID= 14;
-    public static int CLIMBER_SLAVE_ID= 15;
+    public static int CLIMBER_MASTER_ID= 13;
+    public static int CLIMBER_SLAVE_ID= 22;
+    public static int CLIMBER_TELESCOPE_ID = 17;
 
     // 2 motors will be master / slave for the wench mechanism
     private TalonSRX master = new TalonSRX(CLIMBER_MASTER_ID);
-	private TalonSRX slave = new TalonSRX(CLIMBER_SLAVE_ID);
+    private VictorSPX slave = new VictorSPX(CLIMBER_SLAVE_ID);
+    private VictorSPX telescope = new VictorSPX(CLIMBER_TELESCOPE_ID);
 
     // The solenoids responsible for raising & extending the climber.
     private DoubleSolenoid raiseSolenoid = new DoubleSolenoid(CLIMBER_RAISE_SOLENOID, CLIMBER_LOWER_SOLENOID);
