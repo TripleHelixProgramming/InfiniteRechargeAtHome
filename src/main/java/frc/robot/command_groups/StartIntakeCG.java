@@ -37,6 +37,7 @@ public class StartIntakeCG extends CommandGroup {
     // look at the various beam breaks in the magazine to determine whether it
     // should run or not.
     addParallel(new DeployIntake());
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE_NO_LOGIC));
+    // addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
   }
 }

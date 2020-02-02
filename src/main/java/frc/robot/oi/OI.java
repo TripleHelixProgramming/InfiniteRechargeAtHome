@@ -16,75 +16,22 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.climber.commands.Climb;
+import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
-import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
 import frc.robot.drivetrain.commands.aimInPlace;
 
-import frc.robot.intake.commands.DeployIntake;
-import frc.robot.intake.commands.RetractIntake;
-import frc.robot.magazine.commands.RunMagazine;
-import frc.robot.spacer.commands.SpacerCommand;
-
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.magazine.commands.SetMagazineTo;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
-import frc.robot.shooter.commands.StopShooter;
 
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
- * 
- * Here is the list of button names
- * 
-   //XboxOne Joysticks
-    X_BOX_LEFT_STICK_X = 0;
-    X_BOX_LEFT_STICK_Y = 1;
-    X_BOX_LEFT_TRIGGER = 2;
-    X_BOX_RIGHT_TRIGGER = 3;
-    X_BOX_RIGHT_STICK_X = 4;
-    X_BOX_RIGHT_STICK_Y = 5;
-	
-	//XboxOne Buttons
-    X_BOX_A = 1;
-    X_BOX_B = 2;
-    X_BOX_X = 3;
-    X_BOX_Y = 4;
-    X_BOX_LB = 5;
-    X_BOX_RB = 6;
-    X_BOX_LOGO_LEFT = 7;
-    X_BOX_LOGO_RIGHT = 8;
-    X_BOX_LEFT_STICK_BUTTON = 9;
-    X_BOX_RIGHT_STICK_BUTTON = 10;
-
-	//PS4 joystick axis
-    PS4_LEFT_STICK_X = 0;
-    PS4_LEFT_STICK_Y = 1;
-    PS4_RIGHT_STICK_X = 2;
-    PS4_LEFT_TRIGGER = 3;
-    PS4_RIGHT_TRIGGER = 4;
-    PS4_RIGHT_STICK_Y = 5;
-		
-	//PS4 Buttons
-    PS4_SQUARE = 1;
-    PS4_X = 2;
-    PS4_CIRCLE = 3;
-    PS4_TRIANGLE = 4;
-    PS4_L1 = 5;
-    PS4_R1 = 6;
-    PS4_L2 = 7;
-    PS4_R2 = 8;
-    PS4_SHARE = 9;
-    PS4_OPTIONS = 10;
-    PS4_L3 = 11;
-    PS4_R3 = 12;
-    PS4_PS = 13;
- * 
  */
 
 public class OI {
@@ -110,31 +57,27 @@ public class OI {
   private Joystick operator = getPatroller().get(OPERATOR, OPERATOR_PORT);
 
   private OI() { 
-
-   // new JoystickButton(driver, 3).whileHeld(new CameraInfo());
-   // new JoystickButton(driver, 2).whileHeld(new aimInPlace());
-
-    new JoystickButton(driver, ControllerMap.X_BOX_A).toggleWhenPressed(new DeployIntake());
     
-    new JoystickButton(driver, ControllerMap.X_BOX_X).toggleWhenPressed(new SpacerCommand());
-    new JoystickButton(driver, ControllerMap.X_BOX_Y).toggleWhenPressed(new RunMagazine());
-/*
-    new JoystickButton(driver, 3).whileHeld(new CameraInfo());
-    new JoystickButton(driver, 5).whileHeld(new aimInPlace());
-    new JoystickButton(driver, 6).whenPressed(new SetMagazineTo(BallHandlingState.SHOOT));
-    new JoystickButton(driver, 6).whenReleased(new SetMagazineTo(BallHandlingState.STOP));
-    new JoystickButton(operator, 1).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    // new JoystickButton(operator, 1).whenReleased(new StopShooter());
-    new JoystickButton(operator, 2).whenPressed(new SpinShooterUp(Position.UNKNOWN));
-    // new JoystickButton(operator, 2).whenReleased(new StopShooter());
-    new JoystickButton(operator, 3).whenPressed(new SpinShooterUp(Position.TRENCH));
-    // new JoystickButton(operator, 3).whenReleased(new StopShooter());
-    new JoystickButton(operator, 4).whenPressed(new SpinShooterUp(Position.LAYUP));
-    // new JoystickButton(operator, 4).whenReleased(new StopShooter());
-    new JoystickButton(operator, 6).toggleWhenPressed(new StartIntakeCG());
-    new JoystickButton(operator, 6).toggleWhenActive(new StopIntakeCG());
-    new JoystickButton(operator, 11).whileHeld(new Climb());
-*/
+    // Starts the Intake and Ball Handling for intake.  When toggled off the command is taken
+    // off the scheduler. Then the default command for the intake subsystem starts which is 
+    // RetractIntake(), which pulls the intake in and stops the rollers.
+    new JoystickButton(operator, ControllerMap.PS4_R1).toggleWhenPressed(new StartIntakeCG());
+
+    // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
+    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
+    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinShooterUp(Position.UNKNOWN));
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
+    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
+
+    // Aiming is on a whileHeld reft button
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new aimInPlace());
+
+    // Shooting is on a whenPressed / whenReleased right button
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+     
+    // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
+   
   }
 
   /**

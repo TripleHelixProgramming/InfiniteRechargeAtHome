@@ -13,7 +13,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.magazine.commands.SetMagazineTo;
 
 public class Magazine extends Subsystem {
 
@@ -34,14 +33,13 @@ public class Magazine extends Subsystem {
   // Number of balls currently in the system.
   public int ball_count = 0;
 
-  // Various states of the Ball Handling subsystems, which are the magazine,
-  // spacer, indexer and intake. Each subsytem, based on the state given to
-  // it via the Run<> command, checks the necessary beam breaks and state value
-  // to know how to run itself. The beam breaks are in the magazine subsystem.
-  // The state is passed to each subsystem from controller action command groups
+  // The various states of the Ball Handling subsystems, which include the magazine,
+  // the spacer and the intake. Each subsytem, based on the state given to
+  // it via the SetBallHandlingTo() command.  The state is passed to each 
+  // subsystem from controller action command groups
   // like ShootCG, IntakeCG, etc.
   public enum BallHandlingState {
-    SHOOT, INTAKE, STOP, FULL
+    SHOOT, INTAKE, SHOOT_NO_LOGIC, INTAKE_NO_LOGIC, SHOOT_ONE, STOP
   };
 
   private Magazine() {

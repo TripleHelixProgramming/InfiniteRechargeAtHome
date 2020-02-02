@@ -4,7 +4,6 @@ package frc.robot.intake.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.intake.Intake;
 
 public class DeployIntake extends Command {
@@ -20,12 +19,13 @@ public class DeployIntake extends Command {
   protected void initialize() {
     HelixEvents.getInstance().addEvent("INTAKE", "Starting DeployIntake");
     Intake.getIntake().extend();
+    Intake.getIntake().rollerIn();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      Intake.getIntake().rollerIn();
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -44,7 +44,6 @@ public class DeployIntake extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Intake.getIntake().rollerOff();
-    Intake.getIntake().retract();
+
   }
 }

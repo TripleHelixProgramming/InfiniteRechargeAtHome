@@ -15,8 +15,8 @@ public class SetMagazineTo extends Command {
 
   public BallHandlingState action;
 
-  private double SHOOT_SPEED = 0.5;
-  private double INTAKE_SPEED = 0.5;
+  private double SHOOT_SPEED = 0.8;
+  private double INTAKE_SPEED = 0.8;
   private double power = 0.0;
 
   public SetMagazineTo(BallHandlingState action) {
@@ -40,6 +40,12 @@ public class SetMagazineTo extends Command {
     Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
     switch (action) {
+      case SHOOT_NO_LOGIC:   // For testing purposes before beam breaks.
+        Magazine.getMagazine().setPower(SHOOT_SPEED);
+        break;
+      case INTAKE_NO_LOGIC:  // For testing purposes before beam breaks.
+        Magazine.getMagazine().setPower(INTAKE_SPEED);
+        break;
       case SHOOT:
           power = SHOOT_SPEED;
           if (ballAtShooter) {
