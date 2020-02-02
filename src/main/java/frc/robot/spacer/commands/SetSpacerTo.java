@@ -10,6 +10,7 @@ package frc.robot.spacer.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.shooter.Shooter;
 import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
@@ -65,8 +66,10 @@ public class SetSpacerTo extends Command {
       case SHOOT:
         // Case for ball spacing logic when spacer is in SHOOT mode.
         power = 0.0;
-        if (!ballAtShooter || !ballAtSpacer) {
-          power = SHOOT_SPEED;
+        if (!Shooter.getShooter().isAtRPM()) {
+            if (!ballAtShooter) power = SHOOT_SPEED;
+        } else {
+            if (!ballAtSpacer) power = SHOOT_SPEED;
         }
         Spacer.getSpacer().setPower(power);
         break;

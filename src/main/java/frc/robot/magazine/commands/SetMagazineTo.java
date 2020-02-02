@@ -10,6 +10,7 @@ package frc.robot.magazine.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.shooter.Shooter;
 
 public class SetMagazineTo extends Command {
 
@@ -47,9 +48,9 @@ public class SetMagazineTo extends Command {
         Magazine.getMagazine().setPower(INTAKE_SPEED);
         break;
       case SHOOT:
-          power = SHOOT_SPEED;
-          if (ballAtShooter) {
-            power =0.0;
+          power = 0.0;
+          if (Shooter.getShooter().isAtRPM()) {
+            power = SHOOT_SPEED;
           }
           Magazine.getMagazine().setPower(power);
         break;
