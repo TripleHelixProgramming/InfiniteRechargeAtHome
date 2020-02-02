@@ -10,13 +10,14 @@ package frc.robot.magazine.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.shooter.Shooter;
 
 public class SetMagazineTo extends Command {
 
   public BallHandlingState action;
 
-  private double SHOOT_SPEED = 0.5;
-  private double INTAKE_SPEED = 0.5;
+  private double SHOOT_SPEED = 0.8;
+  private double INTAKE_SPEED = 0.8;
   private double power = 0.0;
 
   public SetMagazineTo(BallHandlingState action) {
@@ -40,10 +41,16 @@ public class SetMagazineTo extends Command {
     Boolean ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
     switch (action) {
+      case SHOOT_NO_LOGIC:   // For testing purposes before beam breaks.
+        Magazine.getMagazine().setPower(SHOOT_SPEED);
+        break;
+      case INTAKE_NO_LOGIC:  // For testing purposes before beam breaks.
+        Magazine.getMagazine().setPower(INTAKE_SPEED);
+        break;
       case SHOOT:
-          power = SHOOT_SPEED;
-          if (ballAtShooter) {
-            power =0.0;
+          power = 0.0;
+          if (Shooter.getShooter().isAtRPM()) {
+            power = SHOOT_SPEED;
           }
           Magazine.getMagazine().setPower(power);
         break;

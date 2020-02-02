@@ -8,6 +8,7 @@
 package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.oi.commands.RumbleController;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 
@@ -17,7 +18,8 @@ public class SpinShooterUp extends Command {
   
   public int rpm = 0;
   public int hood_position = 0;
-  private static double RPM_DELTA = 10.0;
+
+  Command rumbleCommand = new RumbleController();
 
   // Spin up with a position.
   public SpinShooterUp(Position pos) {
@@ -32,6 +34,7 @@ public class SpinShooterUp extends Command {
     requires(Shooter.getShooter());
     this.position = Shooter.getShooter().getLastPosition();
   }
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
@@ -69,12 +72,15 @@ public class SpinShooterUp extends Command {
   protected boolean isFinished() {
     // Was looking for a PID controller method on the SPARK MAX that tells us it is at
     // the setpoint, but could not find one, so doing it this way -   +/- a # of rpms
-    return (Math.abs(rpm - Shooter.getShooter().getRPM()) <= RPM_DELTA);
+    return (Shooter.getShooter().isAtRPM());
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+			if (!rumbleCommand.isRunning()) {
+				rumbleCommand.start();
+			}
   }
 
   // Called when another command which requires one or more of the same

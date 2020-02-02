@@ -10,8 +10,11 @@ package frc.robot.command_groups;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
-import frc.paths.TwoFeetForward;
+import frc.paths.ThreeFeetForward;
+import frc.paths.ThruTrenchToBaseLine;
+import frc.robot.shooter.Position;
 
 public class AutoRoutines {
 	
@@ -19,12 +22,12 @@ public class AutoRoutines {
 	public enum AutoMode {
         // Auto (delay for intake)
 		LEFT_AUTO(25.0, 1.5),
-		MIDDLE_AUTO(0.0, 3),
+		MIDDLE_AUTO(0.0, 2.0),
 		RIGHT_AUTO(30.0, 2.5),
-		BASELINE_AUTO(0.0, 0),
-		TEST_RIGHT_TURN(0.0, 0),
-		TEST_2FEET_FORWARD(0.0, 0),
-		NONE(0.0, 0);
+		BASELINE_AUTO(0.0, 0.0),
+		TEST_RIGHT_TURN(0.0, 0.0),
+		TEST_3FEET_FORWARD(0.0, 0.0),
+		NONE(0.0, 0.0);
 		
 		private double pigeon_offset;
 		private double delay;
@@ -50,7 +53,8 @@ public class AutoRoutines {
     private static DigitalInput left = new DigitalInput(0);
     private static DigitalInput middle = new DigitalInput(1);
 	private static DigitalInput right = new DigitalInput(2);
-	
+
+
 	/* 
 	 * Base onselectedAutoMode Robot Position on the alliance wall & plates states, determines 
 	 * which auto routine to run, gripper height, and whether left & right motion
@@ -72,14 +76,14 @@ public class AutoRoutines {
 		// 		mode.getDelay(),
 		// 		new LeftAutoPhase2() 
 		// 	);
-		// case MIDDLE_AUTO:
-		// 	return new AutoCG(
-		// 		new MiddleAuto(),
-		// 		Position.MIDDLE_AUTO,
-		// 		mode.getPigeonOffset(),
-		// 		mode.getDelay(),
-		// 		new MiddleAutoPhase2()
-		// 	);
+		case MIDDLE_AUTO:
+			return new AutoCG(
+				new BaseLineThruTrench(),
+				Position.MIDDLE_AUTO,
+				mode.getPigeonOffset(),
+				mode.getDelay(),
+				new ThruTrenchToBaseLine()
+			);
 		// case RIGHT_AUTO:
 		// 	return new AutoCG(
 		// 		new RightAuto(),
@@ -90,11 +94,10 @@ public class AutoRoutines {
 		// 	);
 		case TEST_RIGHT_TURN:
 			return new AutoCG(new RightTurn());
-		case TEST_2FEET_FORWARD:
-			return new AutoCG(new TwoFeetForward());
+		case TEST_3FEET_FORWARD:
+			return new AutoCG(new ThreeFeetForward());
 		case BASELINE_AUTO:   // Just get off the baseline
-			return new AutoCG(new TwoFeetForward());
-			// return new AutoCG(new GetOffBaseline());
+			return new AutoCG(new ThreeFeetForward());
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;
