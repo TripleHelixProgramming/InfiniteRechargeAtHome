@@ -7,11 +7,11 @@
 
 package frc.robot.spacer;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.magazine.Magazine.BallHandlingState;
 
 /**
  * Add your docs here.
@@ -23,11 +23,13 @@ public class Spacer extends Subsystem {
   private static final int SPACER_ID = 19;
 
   private CANSparkMax motor = new CANSparkMax(SPACER_ID, MotorType.kBrushless);
+  private final CANEncoder encoder;
   
   public Spacer() {
     super();
     // initialize motor
     motor.restoreFactoryDefaults();
+    encoder = motor.getEncoder();
   }
 
   /**
@@ -43,6 +45,10 @@ public class Spacer extends Subsystem {
   public void setPower(double power) {
     // set motors to power;
     motor.set(power);
+  }
+
+  public double getMotorPosition() {
+    return encoder.getPosition();
   }
 
   @Override

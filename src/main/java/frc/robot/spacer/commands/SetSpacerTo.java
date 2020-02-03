@@ -17,6 +17,20 @@ public class SetSpacerTo extends Command {
 
   private double SHOOT_SPEED = 0.8;
   private double INTAKE_SPEED = 0.8;
+
+  // From Robot Worksheet
+  private double SPACER_DIAMETER = 1.25;
+  private double INCHES_PER_SPACER_REV = SPACER_DIAMETER * 3.1416;  // inches
+
+  //  Gear ratio = Stage 1 * Stage 2 
+  private double GEAR_RATIO = 1/4 * 1/4;
+  private double SPACER_REVS_PER_MOTOR_REV = 1 * GEAR_RATIO;  // Currently .0625
+  private double INCHES_PER_MOTOR_REV = INCHES_PER_SPACER_REV * SPACER_REVS_PER_MOTOR_REV;
+
+  // When in a handoff, how far to travel before turning spacer off.
+  private double HANDOFF_DISTANCE = 4.0;     // Inches
+
+  private double startMotorPos = 0.0;
   private double power = 0.0;
 
   Boolean ballAtShooter = false;
@@ -50,6 +64,7 @@ public class SetSpacerTo extends Command {
       // Handing a ball off to the magazine
       Magazine.getMagazine().IncreaseBallCount();
       inHandOff = true;
+      startMotorPos = Spacer.getSpacer().getMotorPosition();
     } else {
       inHandOff = false;
     }
@@ -79,13 +94,9 @@ public class SetSpacerTo extends Command {
         if (ballAtShooter) { 
           power = 0.0;
         } else if (ballAtSpacer && !ballAtShooter) {
-          // Continue to at this speed until x number of spacer rotations
-          // vice time. Then speed goes to 0.0 for this case. Need to figure 
-          // out how to calculation rotations that have occurred since 
-          // ball at spacer.  And if number of rotations >= certain number
-          // then switch speed to 0.0
           if (inHandOff) {
-            //  handOffComplete = (some condition for time or rotation met)
+            // Let spacer roll the ball HANDOFF_DISTANCE inches, then turn it off
+            handOffComplete = (((Spacer.getSpacer().getMotorPosition() - startMotorPos) * INCHES_PER_MOTOR_REV) > HANDOFF_DISTANCE);
             if (handOffComplete) {
                 power = 0.0;
                 inHandOff = false;
