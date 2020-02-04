@@ -8,18 +8,28 @@ import frc.robot.intake.Intake;
 
 public class DeployIntake extends Command {
 
-  public DeployIntake() {
+  private Intake myIntake = null;
+  private boolean runRoller = false;
+
+  public DeployIntake(boolean runRoller) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myIntake = Intake.getIntake();
     requires(Intake.getIntake());
+    this.runRoller = runRoller;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     HelixEvents.getInstance().addEvent("INTAKE", "Starting DeployIntake");
-    Intake.getIntake().extend();
-    Intake.getIntake().rollerIn();
+
+    myIntake.extend();
+    if (runRoller) {
+      myIntake.rollerIn();
+    } else {
+      myIntake.rollerOff();
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -31,7 +41,7 @@ public class DeployIntake extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return false; // Never finish
   }
 
   // Called once after isFinished returns true
@@ -44,6 +54,6 @@ public class DeployIntake extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-
+    // Default Command will retract and stop Intake
   }
 }
