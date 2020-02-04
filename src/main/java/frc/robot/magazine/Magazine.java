@@ -7,6 +7,7 @@
 
 package frc.robot.magazine;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,6 +22,7 @@ public class Magazine extends Subsystem {
   private static final int MAGAZINE_ID = 20;
 
   private final CANSparkMax motor;
+  private final CANEncoder encoder;
 
   private int SHOOTER_BB_CHANNEL = 0;
   private int SPACER_BB_CHANNEL = 1;
@@ -48,6 +50,7 @@ public class Magazine extends Subsystem {
     // initialize motor
     motor = new CANSparkMax(MAGAZINE_ID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
+    encoder = motor.getEncoder();
 
     ball_count = 0;
   }
@@ -65,6 +68,10 @@ public class Magazine extends Subsystem {
   public void setPower(double power) {
     // set motors to power;
     motor.set(power);
+  }
+  
+  public double getMotorPosition() {
+    return encoder.getPosition();
   }
 
   public Boolean hasBalls() {
