@@ -63,7 +63,9 @@ public class SetMagazineTo extends Command {
     if (ballAtShooterLastTime && !ballAtShooter) {
       ballsShot++;
       ballShot = true;
-      // startPos = Magazine.getMagazine().getPosition();
+      startPos = Magazine.getMagazine().getMotorPosition();
+    } else {
+      ballShot = false;
     }
 
     switch (action) {
@@ -74,24 +76,20 @@ public class SetMagazineTo extends Command {
       Magazine.getMagazine().setPower(INTAKE_SPEED);
       break;
     case SHOOT_ONE:
-      // power = 0.0;
-      // // Roll magazine forware by one ball circumference.
-      // if (Shooter.getShooter().isAtRPM()) {
-      //    if (!ballShot) {
-      //     power = SHOOT_SPEED;
-      // } 
-      // if (((Magazine.getMagazine().getPosition()- startPos) * INCHES_PER_MOTOR_REV) >= BALL_CIRCUMFERENCE) {
-      //   power = 0.0;
-      // }
-      // Magazine.getMagazine().setPower(power);
-
-      //   if(ballShot) {
-      //     startPos = Magazine.getMagazine().getPosition();
-      //     newBall = false;
-      //   } else {
-
+      // power = SHOOT_SPEED;
+      // if (!Shooter.getShooter().isAtRPM()) {
+      //     power = 0.0;
+      // } else {
+      //     if (!ballShot) {
+      //       // Roll magazine forware by one ball circumference.
+      //       if (((Magazine.getMagazine().getMotorPosition()- startPos) * INCHES_PER_MOTOR_REV) >= BALL_CIRCUMFERENCE) {
+      //           // Roller has turn for 1 ball circumference.
+      //           ballShot = true;
+      //           power = 0.0;
+      //       }
       //   }
       // }
+      // Magazine.getMagazine().setPower(power);
       break;
     case SHOOT:
       power = 0.0;
