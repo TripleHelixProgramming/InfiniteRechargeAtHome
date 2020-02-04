@@ -9,6 +9,7 @@ package frc.robot.intake;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.intake.commands.RetractIntake;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
@@ -49,12 +50,12 @@ public class Intake extends Subsystem {
 
     // Spins the intake roller to bring balls/cells into the robot.
     public void rollerIn() {
-        motor.set(ControlMode.PercentOutput, -0.5);
+        motor.set(ControlMode.PercentOutput, -0.8);
     }
 
     // Spins the intake roller to eject balls/cells from the robot.
     public void rollerOut() {
-        motor.set(ControlMode.PercentOutput, 0.5);
+        motor.set(ControlMode.PercentOutput, 0.8);
     }
 
     // Stops the intake roller.
@@ -84,7 +85,7 @@ public class Intake extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        // setDefaultCommand(new SampleDrive());
+        setDefaultCommand(new RetractIntake());
     }
 
     @Override

@@ -77,7 +77,7 @@ public class AutoCG extends CommandGroup {
   private class IntakeDeployCG extends CommandGroup {
     public IntakeDeployCG(final double delay) {
       addSequential(new WaitCommand(delay));
-      addSequential(new StartIntakeCG());
+      addSequential(new StartIntakeCG(true));
     }
   }
 
