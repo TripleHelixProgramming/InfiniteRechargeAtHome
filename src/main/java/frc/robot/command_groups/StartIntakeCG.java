@@ -36,7 +36,10 @@ public class StartIntakeCG extends CommandGroup {
     // Run the ball handling subsystems in INTAKE mode.  Each subsystem will 
     // look at the various beam breaks in the magazine to determine whether it
     // should run or not.
+
     addParallel(new DeployIntake(runRoller));
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE_NO_LOGIC));
+    // addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+
   }
 }

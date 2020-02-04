@@ -8,7 +8,6 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.indexer.commands.SetIndexerTo;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.magazine.commands.SetMagazineTo;
 import frc.robot.spacer.commands.SetSpacerTo;
@@ -35,6 +34,5 @@ public class SetBallHandlingCG extends CommandGroup {
     // Shooter is at required RPM for position. Start feeding balls in.
     addParallel(new SetSpacerTo(state));
     addParallel(new SetMagazineTo(state));
-    // addParallel(new SetIndexerTo(state));
   }
 }

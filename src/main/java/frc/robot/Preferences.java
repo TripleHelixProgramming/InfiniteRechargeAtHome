@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import frc.robot.shooter.Position;
+
 public class Preferences {
 
     // singleton instance
@@ -21,6 +23,7 @@ public class Preferences {
     // These will be exposed in Shuffleboard NetworkTables Preferences list
     // so they should make sense to users of Shuffleboard.
     private static String RIO_PREF_KEY_ROBOT_NAME = "robotName";
+    private static String RIO_PREF_KEY_POSITION_BUMP = "posBumpTicks-"; // prefix per Position name
     //private static String RIO_PREF_KEY.... = "...";
 
     // The wpilibj Preference instance used to fetch preferences from.
@@ -50,6 +53,25 @@ public class Preferences {
      */
     public String getRobotName() {
         return this.getInitializedValue(RIO_PREF_KEY_ROBOT_NAME, "unkown");
+    }
+
+    public int getPositionBumpTicks(Position pos) {
+        String key = RIO_PREF_KEY_POSITION_BUMP + pos.name();
+        
+        String value = this.getInitializedValue(key, Integer.toString(0));
+        int ticks = 0;
+        try {
+            ticks = Integer.parseInt(value);
+        } catch (Exception ex) {
+            ticks = 0;
+        }
+
+        return ticks;
+    }
+
+    public void setPositionBumpTicks(Position pos, int ticks) {
+        String key = RIO_PREF_KEY_POSITION_BUMP + pos.name();
+        this.rioPrefs.putString(key, Integer.toString(ticks));
     }
 
     /**

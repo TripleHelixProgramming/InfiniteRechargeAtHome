@@ -10,12 +10,13 @@ package frc.robot.spacer.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.shooter.Shooter;
 import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
-  private double SHOOT_SPEED = 0.5;
-  private double INTAKE_SPEED = 0.5;
+  private double SHOOT_SPEED = 0.8;
+  private double INTAKE_SPEED = 0.8;
   private double power = 0.0;
 
   Boolean ballAtShooter = false;
@@ -54,14 +55,26 @@ public class SetSpacerTo extends Command {
     }
 
     switch (action) {
+      case SHOOT_NO_LOGIC:
+        //  Case for no ball spacing logic when spacer is in SHOOT mode.
+        Spacer.getSpacer().setPower(SHOOT_SPEED);
+        break;
+      case INTAKE_NO_LOGIC:
+        //  Case for no ball spacing logic when Spacer is in INTAKE mode.
+        Spacer.getSpacer().setPower(INTAKE_SPEED);
+        break;
       case SHOOT:
+        // Case for ball spacing logic when spacer is in SHOOT mode.
         power = 0.0;
-        if (!ballAtShooter || !ballAtSpacer) {
-          power = SHOOT_SPEED;
+        if (!Shooter.getShooter().isAtRPM()) {
+            if (!ballAtShooter) power = SHOOT_SPEED;
+        } else {
+            if (!ballAtSpacer) power = SHOOT_SPEED;
         }
         Spacer.getSpacer().setPower(power);
         break;
       case INTAKE:
+        // Case for ball spacing logic when spacer is in INTAKE mode.
         power = INTAKE_SPEED;
         if (ballAtShooter) { 
           power = 0.0;

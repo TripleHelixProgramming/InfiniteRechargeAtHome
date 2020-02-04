@@ -8,6 +8,7 @@
 package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.oi.commands.RumbleController;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 
@@ -15,11 +16,12 @@ public class SpinShooterUp extends Command {
 
   Position position;
   
-  public double rpm = 0.0;
-  public double setpoint = 0.0;
+  public int rpm = 0;
   public int hood_position = 0;
-  private static double RPM_DELTA = 10.0;
 
+  Command rumbleCommand = new RumbleController();
+
+  // Spin up with a position.
   public SpinShooterUp(Position pos) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -27,14 +29,23 @@ public class SpinShooterUp extends Command {
     this.position = pos;
   }
 
+  // This will use the last position.
+  public SpinShooterUp() {
+    requires(Shooter.getShooter());
+    this.position = Shooter.getShooter().getLastPosition();
+  }
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
 
     // Get motor setpoint & expected rpm from position enum.
-    setpoint = position.getSetPoint();
     rpm = position.getRPM();
     hood_position = position.getHoodPosition();
+
+    // Alter the rpm and bump_setpoint based on the number of ticks.
+    int rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
+    rpm += rpmDelta;
 
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
@@ -46,7 +57,8 @@ public class SpinShooterUp extends Command {
     } 
 
     Shooter.getShooter().setHoodPosition(hood_position);
-    Shooter.getShooter().setSetPoint(setpoint);
+ 
+    Shooter.getShooter().setRPM(rpm);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -60,12 +72,15 @@ public class SpinShooterUp extends Command {
   protected boolean isFinished() {
     // Was looking for a PID controller method on the SPARK MAX that tells us it is at
     // the setpoint, but could not find one, so doing it this way -   +/- a # of rpms
-    return (Math.abs(rpm - Shooter.getShooter().getRPM()) <= RPM_DELTA);
+    return (Shooter.getShooter().isAtRPM());
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+			if (!rumbleCommand.isRunning()) {
+				rumbleCommand.start();
+			}
   }
 
   // Called when another command which requires one or more of the same

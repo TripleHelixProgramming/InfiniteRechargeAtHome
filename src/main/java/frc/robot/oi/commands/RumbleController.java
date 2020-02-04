@@ -5,44 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.shooter.commands;
+package frc.robot.oi.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.oi.OI;
 
-import frc.robot.shooter.Shooter;
-
-public class StopShooter extends Command {
-  public StopShooter() {
+public class RumbleController extends Command {
+  public RumbleController() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Shooter.getShooter());
   }
 
   // Called just before this Command runs the first time
-  @Override
   protected void initialize() {
+    setTimeout(2);
   }
 
   // Called repeatedly when this Command is scheduled to run
-  @Override
   protected void execute() {
-    Shooter.getShooter().setRPM(0);
+    OI.getOI().setControllerRumble(true);
   }
 
   // Make this return true when this Command no longer needs to run execute()
-  @Override
   protected boolean isFinished() {
-    return true;
+    return isTimedOut();
   }
 
   // Called once after isFinished returns true
-  @Override
   protected void end() {
+    OI.getOI().setControllerRumble(false);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
-  @Override
   protected void interrupted() {
   }
 }

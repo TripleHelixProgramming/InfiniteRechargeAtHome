@@ -27,10 +27,10 @@ public class TestWithController extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double setPoint;
+    int rpm;
 
-    setPoint = OI.getOI().getThrottle() * Shooter.getShooter().MAX_RPM;
-    Shooter.getShooter().setSetPoint(setPoint);
+    rpm = (int)(OI.getOI().getThrottle() * Shooter.getShooter().MAX_RPM);
+    Shooter.getShooter().setRPM(rpm);
   }
 
   // Make this return true when this Command no longer needs to run execute()

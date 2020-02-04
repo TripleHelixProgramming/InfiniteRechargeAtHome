@@ -174,7 +174,7 @@ public class Drivetrain extends Subsystem {
     }
   }
 
-  private void setPIDFValues() {
+  public void setPIDFValues() {
     final double kF = 1.25;
     final double kP = 1; // 5
     final double kI = 0.01;
