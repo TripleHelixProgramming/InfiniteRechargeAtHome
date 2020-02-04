@@ -63,7 +63,7 @@ public class OI {
     // Starts the Intake and Ball Handling for intake.  When toggled off the command is taken
     // off the scheduler. Then the default command for the intake subsystem starts which is 
     // RetractIntake(), which pulls the intake in and stops the rollers.
-    new JoystickButton(operator, ControllerMap.PS4_R1).toggleWhenPressed(new StartIntakeCG());
+    new JoystickButton(operator, ControllerMap.PS4_R1).toggleWhenPressed(new StartIntakeCG(true));
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
