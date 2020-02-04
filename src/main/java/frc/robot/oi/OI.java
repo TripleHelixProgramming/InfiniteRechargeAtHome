@@ -26,8 +26,10 @@ import frc.robot.drivetrain.commands.aimInPlace;
 
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
+import frc.robot.shooter.Shooter;
+import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
-
+import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -78,48 +80,67 @@ public class OI {
      
     // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
    
+
+    // Bumping up and down
+
+    new Button() {
+
+    @Override
+    public boolean get() {
+      return (operator.getPOV() == 0);
+    }
+  }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
+
+  new Button() {
+
+  @Override
+  public boolean get() {
+    return (operator.getPOV() == 180);
   }
+  }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
+}
 
   /**
    * @return the raw controller throttle
    */
   public double getThrottle() {
-    return driver.getRawAxis(X_BOX_LEFT_STICK_Y); 
-	}
-  
+    return driver.getRawAxis(X_BOX_LEFT_STICK_Y);
+  }
+
   /**
    * @return the raw controller turn
    */
   public double getTurn() {
     return driver.getRawAxis(X_BOX_RIGHT_STICK_X);
   }
-  
+
   /**
-	 * Turns on and off the rumble function on the driver and operator controllers
-	 * @param set true to turn on rumble
-	 */
-	public void setControllerRumble(boolean rumble) {
-		if (rumble) {
-			setRumble(driver, 1);
-			setRumble(operator, 1);
-		} else {
-			setRumble(driver, 0);
-			setRumble(operator, 0);
-		}
-  }
-  
-  private void setRumble(Joystick controller, int state) {
-    controller.setRumble(RumbleType.kLeftRumble, state);
-		controller.setRumble(RumbleType.kRightRumble, state);
+   * Turns on and off the rumble function on the driver and operator controllers
+   * 
+   * @param set true to turn on rumble
+   */
+  public void setControllerRumble(boolean rumble) {
+    if (rumble) {
+      setRumble(driver, 1);
+      setRumble(operator, 1);
+    } else {
+      setRumble(driver, 0);
+      setRumble(operator, 0);
+    }
   }
 
-  //Get Climber power from operator controller right joystick y-axis
-	public double getClimberPower() {
-		double stick = -operator.getRawAxis( PS4_RIGHT_STICK_Y);
-		stick *= Math.abs(stick);
-		if (Math.abs(stick) < 0.05) {
-			stick = 0;
-		}
-		return stick;
-	}
+  private void setRumble(Joystick controller, int state) {
+    controller.setRumble(RumbleType.kLeftRumble, state);
+    controller.setRumble(RumbleType.kRightRumble, state);
+  }
+
+  // Get Climber power from operator controller right joystick y-axis
+  public double getClimberPower() {
+    double stick = -operator.getRawAxis(PS4_RIGHT_STICK_Y);
+    stick *= Math.abs(stick);
+    if (Math.abs(stick) < 0.05) {
+      stick = 0;
+    }
+    return stick;
+  }
 }
