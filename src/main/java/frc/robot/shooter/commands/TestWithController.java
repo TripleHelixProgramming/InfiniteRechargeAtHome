@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.oi.OI;
 import frc.robot.shooter.Shooter;
+import frc.robot.shooter.Shooter.ShooterState;
 
 public class TestWithController extends Command {
   public TestWithController() {
@@ -30,7 +31,7 @@ public class TestWithController extends Command {
     int rpm;
 
     rpm = (int)(OI.getOI().getThrottle() * Shooter.getShooter().MAX_RPM);
-    Shooter.getShooter().setRPM(rpm);
+    Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
   }
 
   // Make this return true when this Command no longer needs to run execute()

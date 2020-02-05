@@ -44,26 +44,32 @@ public class Shooter extends Subsystem {
     // Solenoid ids for hood position
     public static int HOOD_NEAR_SOLENOID= 12;
     public static int HOOD_FAR_SOLENOID= 13;    // Solenoid extended = far
-    private static final int SHOOTER_MASTER_ID = 18;
-    private static final int SHOOTER_SLAVE_ID = 19;
+    private static final int SHOOTER_MASTER_ID = 13;
+    private static final int SHOOTER_SLAVE_ID = 22;
 
     public double MAX_RPM = 5700;
+    public double CLIMB_RPM = 3000;
 
     private final CANSparkMax master, slave;
     private final CANPIDController pidController;
     private final CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-    public int rpm = 0;
 
     private Position lastPosition = Position.UNKNOWN;
     
     // Live adjustment of the RPM
-    public int bumpRPM = 0; // the amount of RPM to change per tick
+    public double bumpRPM = 0; // the amount of RPM to change per tick
     public int bumpTicks = 0; // how many ticks to adjust the rpm by bumpRPM
     
     // The solenoids responsible for raising & extending the climber.
     private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
     
+    public enum ShooterState {
+        SHOOT, CLIMB, STOP
+    };
+    public ShooterState currentState = ShooterState.STOP;
+    private double currentRPM = 0.0;
+
     public Shooter() {
 
         // initialize master
@@ -71,9 +77,19 @@ public class Shooter extends Subsystem {
         slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
+
+        // master.setInverted(false);
+        // slave.setInverted(true);
         slave.follow(master);
-        pidController = master.getPIDController();
+
         encoder = master.getEncoder();
+        encoder.setInverted(false);
+        // Mayy also need to set slave encoder inversion.
+
+        pidController = master.getPIDController();
+
+        // Set Shooter to stop state.
+        Stop();
 
         // PID coefficients
         kP = 10e-7;
@@ -83,7 +99,7 @@ public class Shooter extends Subsystem {
         kFF = 1;
         kMaxOutput = 1;
         kMinOutput = -1;
-        rpm = 0;
+        currentRPM = 0;
 
         // set PID coefficients
         pidController.setP(kP);
@@ -93,15 +109,7 @@ public class Shooter extends Subsystem {
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-        // display PID coefficients on SmartDashboard
-        SmartDashboard.putNumber("P Gain", kP);
-        SmartDashboard.putNumber("I Gain", kI);
-        SmartDashboard.putNumber("D Gain", kD);
-        SmartDashboard.putNumber("I Zone", kIz);
-        SmartDashboard.putNumber("Feed Forward", kFF);
-        SmartDashboard.putNumber("Max Output", kMaxOutput);
-        SmartDashboard.putNumber("Min Output", kMinOutput);
-        SmartDashboard.putNumber("Set RPM", rpm);
+        PutSmartDash();
     }
 
     @Override
@@ -144,12 +152,27 @@ public class Shooter extends Subsystem {
             kMinOutput = min;
             kMaxOutput = max;
         }
-        if ((sRPM != rpm)) {
-            pidController.setReference(rpm, ControlType.kVelocity);
-            rpm = (int)sRPM;
-            SmartDashboard.putNumber("Set RPM", rpm);
-            SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
+        if ((sRPM != currentRPM)) {
+            pidController.setReference(sRPM, ControlType.kVelocity);
+            currentRPM = (int)sRPM;
         }
+
+        PutSmartDash();
+    }
+
+    public void PutSmartDash() {
+        // display PID coefficients on SmartDashboard
+        SmartDashboard.putNumber("P Gain", kP);
+        SmartDashboard.putNumber("I Gain", kI);
+        SmartDashboard.putNumber("D Gain", kD);
+        SmartDashboard.putNumber("I Zone", kIz);
+        SmartDashboard.putNumber("Feed Forward", kFF);
+        SmartDashboard.putNumber("Max Output", kMaxOutput);
+        SmartDashboard.putNumber("Min Output", kMinOutput);
+
+        SmartDashboard.putString("Shooter State", currentState.toString());
+        SmartDashboard.putNumber("Shooter RPM", currentRPM);
+        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
     }
 
     public double getMAXRPM(){
@@ -170,20 +193,26 @@ public class Shooter extends Subsystem {
         hood.set(Value.kReverse);
     }
 
-    public void setRPM(int rpm) {
-        this.rpm = rpm;
-        pidController.setReference(rpm, ControlType.kVelocity);
+    public void setRPM(ShooterState state, double rpm) {
 
-        SmartDashboard.putNumber("Set RPM", rpm);
-        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
+        if (state == ShooterState.CLIMB) currentRPM = -rpm;
+        
+        currentRPM = rpm;
+        currentState = state;
+
+        pidController.setReference(currentRPM, ControlType.kVelocity);
     }
 
     public double getRPM() {
         return encoder.getVelocity();
     }
 
+    public void Stop() {
+        setRPM(ShooterState.SHOOT, 0.0);
+    }
+
     public boolean isAtRPM() {
-        return (Math.abs(rpm - getRPM()) <= RPM_DELTA);
+        return (Math.abs(currentRPM - getRPM()) <= RPM_DELTA);
     }
 
     // Doesn't alter any handling of the shooter but 
@@ -223,7 +252,7 @@ public class Shooter extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        // setDefaultCommand(new TestWithController());
-        // setDefaultCommand(new StopShooter());
+        // The shooter is PID Controlled.  It will keep going at it's last setpoint. All
+        // SpinUpShooter Commands are on toggle button with StopShooter().  
     }
 }

@@ -8,12 +8,12 @@
 package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import frc.robot.oi.OI;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.Shooter.ShooterState;
 
-public class StopShooter extends Command {
-  public StopShooter() {
+public class Climb extends Command {
+  public Climb() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Shooter.getShooter());
@@ -27,13 +27,14 @@ public class StopShooter extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().Stop();
+    double rpm = OI.getOI().getClimberPower() * Shooter.getShooter().getMAXRPM();
+    Shooter.getShooter().setRPM(ShooterState.CLIMB, rpm);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

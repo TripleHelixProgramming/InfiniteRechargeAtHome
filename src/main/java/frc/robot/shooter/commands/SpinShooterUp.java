@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.oi.commands.RumbleController;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
+import frc.robot.shooter.Shooter.ShooterState;
 
 public class SpinShooterUp extends Command {
 
@@ -53,12 +54,12 @@ public class SpinShooterUp extends Command {
       //  distance = GetTargetDistance();
       //  setpoint = CalculateSetPoint(distance);
       //  rpm = setpoint * Shooter.getShooter().getMAXRPM();
-      //  hood_position = probably 1???
+      //  hood_position = probably 1??? 
     } 
 
     Shooter.getShooter().setHoodPosition(hood_position);
  
-    Shooter.getShooter().setRPM(rpm);
+    Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
   }
 
   // Called repeatedly when this Command is scheduled to run
