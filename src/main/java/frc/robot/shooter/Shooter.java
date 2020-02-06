@@ -19,8 +19,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Preferences;
-import frc.robot.shooter.commands.StopShooter;
-import frc.robot.shooter.commands.TestWithController;
 
 public class Shooter extends Subsystem {
 
@@ -41,18 +39,23 @@ public class Shooter extends Subsystem {
     public static final int BUMP_DOWN = -1;
     private static double RPM_DELTA = 10.0;
 
-    // Solenoid ids for hood position
-    public static int HOOD_NEAR_SOLENOID= 12;
-    public static int HOOD_FAR_SOLENOID= 13;    // Solenoid extended = far
-    private static final int SHOOTER_MASTER_ID = 13;
-    private static final int SHOOTER_SLAVE_ID = 22;
+    // Solenoid ids for hood position & climber
+    public static int HOOD_NEAR_SOLENOID= 2;
+    public static int HOOD_FAR_SOLENOID= 3;    // Solenoid extended = far
+    public static int CLIMBER_RAISE_SOLENOID= 4;
+    public static int CLIMBER_LOWER_SOLENOID= 5;
+
+    // Master & Slave motor CAN IDs
+    private static final int SHOOTER_MASTER_ID = 22;
+    private static final int SHOOTER_SLAVE_ID = 13;
+    public static int CLIMBER_TELESCOPE_ID = 17;
 
     public double MAX_RPM = 5700;
-    public double CLIMB_RPM = 3000;
 
-    private final CANSparkMax master, slave;
-    private final CANPIDController pidController;
-    private final CANEncoder encoder;
+    private CANSparkMax master, slave, telescope;
+ 
+    private CANPIDController pidController;
+    private CANEncoder encoder, telescopeEncoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
     private Position lastPosition = Position.UNKNOWN;
@@ -63,7 +66,14 @@ public class Shooter extends Subsystem {
     
     // The solenoids responsible for raising & extending the climber.
     private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
-    
+
+    // The solenoids responsible for raising & lowering the climber.
+    private DoubleSolenoid raiseSolenoid = new DoubleSolenoid(CLIMBER_RAISE_SOLENOID, CLIMBER_LOWER_SOLENOID);
+   
+    // Various states for the Shooter, since shooter motors are also used for climbing. 
+    // SHOOT is positive velocity (rpms) of motors.  
+    // CLIMB is negative velocity (rpms) of motors.
+    // STOP is 0.0 rpms.
     public enum ShooterState {
         SHOOT, CLIMB, STOP
     };
@@ -72,24 +82,41 @@ public class Shooter extends Subsystem {
 
     public Shooter() {
 
-        // initialize master
-        master = new CANSparkMax(SHOOTER_MASTER_ID, MotorType.kBrushless);
-        slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
-        master.restoreFactoryDefaults();
-        slave.restoreFactoryDefaults();
-
-        // master.setInverted(false);
-        // slave.setInverted(true);
-        slave.follow(master);
-
-        encoder = master.getEncoder();
-        encoder.setInverted(false);
-        // Mayy also need to set slave encoder inversion.
-
-        pidController = master.getPIDController();
+        setUpMotors();
+        setUpPIDF();
 
         // Set Shooter to stop state.
         Stop();
+
+        PutSmartDash();
+    }
+
+    public void setUpMotors() {
+
+        // initialize master
+        master = new CANSparkMax(SHOOTER_MASTER_ID, MotorType.kBrushless);
+        slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
+        telescope = new CANSparkMax(CLIMBER_TELESCOPE_ID, MotorType.kBrushless);
+       
+        master.restoreFactoryDefaults();
+        slave.restoreFactoryDefaults();
+        telescope.restoreFactoryDefaults();
+       
+        // master.setInverted(false);
+        // slave.setInverted(true);
+        slave.follow(master);
+       
+        encoder = master.getEncoder();
+        encoder.setInverted(false);
+        // May also need to set slave encoder inversion???
+       
+        telescopeEncoder = telescope.getEncoder();
+        // telescopeEncoder.setInverted(false);
+    }
+
+    public void setUpPIDF() {
+
+        pidController = master.getPIDController();
 
         // PID coefficients
         kP = 10e-7;
@@ -108,8 +135,6 @@ public class Shooter extends Subsystem {
         pidController.setIZone(kIz);
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
-
-        PutSmartDash();
     }
 
     @Override
@@ -160,8 +185,9 @@ public class Shooter extends Subsystem {
         PutSmartDash();
     }
 
+    // Called in the periodic() and other times to display info on the SmartDashboard.
     public void PutSmartDash() {
-        // display PID coefficients on SmartDashboard
+
         SmartDashboard.putNumber("P Gain", kP);
         SmartDashboard.putNumber("I Gain", kI);
         SmartDashboard.putNumber("D Gain", kD);
@@ -175,22 +201,18 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
     }
 
+    // returns the max velocity (in RPMs) of the CAN SPark Max/NEOs  5700
     public double getMAXRPM(){
         return(MAX_RPM);
     }
 
-    public void setHoodPosition(int hood_position) {
-        if (hood_position == 1) {
-            setHoodToFar();
-        } else setHoodToNear();
+    // Get the current shooter velocity from the encoder (in RPMs)
+    public double getRPM() {
+        return encoder.getVelocity();
     }
 
-    public void setHoodToFar() {
-        hood.set(Value.kForward);
-    }
-
-    public void setHoodToNear() {
-        hood.set(Value.kReverse);
+    public boolean isAtRPM() {
+        return (Math.abs(currentRPM - getRPM()) <= RPM_DELTA);
     }
 
     public void setRPM(ShooterState state, double rpm) {
@@ -203,16 +225,8 @@ public class Shooter extends Subsystem {
         pidController.setReference(currentRPM, ControlType.kVelocity);
     }
 
-    public double getRPM() {
-        return encoder.getVelocity();
-    }
-
     public void Stop() {
         setRPM(ShooterState.SHOOT, 0.0);
-    }
-
-    public boolean isAtRPM() {
-        return (Math.abs(currentRPM - getRPM()) <= RPM_DELTA);
     }
 
     // Doesn't alter any handling of the shooter but 
@@ -249,6 +263,40 @@ public class Shooter extends Subsystem {
     public int getBumpTicks() {
         return bumpTicks;
     } 
+
+    public void setHoodPosition(int hood_position) {
+        if (hood_position == 1) {
+            setHoodToFar();
+        } else setHoodToNear();
+    }
+
+    public void setHoodToFar() {
+        hood.set(Value.kForward);
+    }
+
+    public void setHoodToNear() {
+        hood.set(Value.kReverse);
+    }
+
+    // Raise the climber mechanism from horizontal to vertical position
+    public void raiseClimber() {
+        raiseSolenoid.set(Value.kForward);
+    }
+
+    // Lower the climber mechanism to horizontal position
+    public void lowerClimber() {
+        raiseSolenoid.set(Value.kForward);
+    }
+
+    // Is climber mechanism vertical
+    public boolean isClimberRaised() {
+        return raiseSolenoid.get() == Value.kForward;
+    }
+
+    // Is climber mechanism horizontal
+    public boolean isClimberLowered() {
+        return raiseSolenoid.get() == Value.kReverse;
+    }
 
     @Override
     protected void initDefaultCommand() {
