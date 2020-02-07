@@ -16,8 +16,8 @@ public class SetMagazineTo extends Command {
 
   public BallHandlingState action;
 
-  private double SHOOT_SPEED = 0.8;
-  private double INTAKE_SPEED = 0.8;
+  private double SHOOT_SPEED = -0.8;
+  private double INTAKE_SPEED = -0.8;
 
   // From Robot Worksheet
   private double MAGAZINE_ROLLER_DIAMETER = 1.44;

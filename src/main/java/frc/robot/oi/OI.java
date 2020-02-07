@@ -83,21 +83,21 @@ public class OI {
 
     // Bumping up and down
 
-    new Button() {
+  //   new Button() {
 
-    @Override
-    public boolean get() {
-      return (operator.getPOV() == 0);
-    }
-  }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
+  //   @Override
+  //   public boolean get() {
+  //     return (operator.getPOV() == 0);
+  //   }
+  // }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
 
-  new Button() {
+  // new Button() {
 
-  @Override
-  public boolean get() {
-    return (operator.getPOV() == 180);
-  }
-  }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
+  // @Override
+  // public boolean get() {
+  //   return (operator.getPOV() == 180);
+  // }
+  // }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
 }
 
   /**

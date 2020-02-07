@@ -68,7 +68,7 @@ public class Shooter extends Subsystem {
     private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
 
     // The solenoids responsible for raising & lowering the climber.
-    private DoubleSolenoid raiseSolenoid = new DoubleSolenoid(CLIMBER_RAISE_SOLENOID, CLIMBER_LOWER_SOLENOID);
+    // private DoubleSolenoid raiseSolenoid = new DoubleSolenoid(CLIMBER_RAISE_SOLENOID, CLIMBER_LOWER_SOLENOID);
    
     // Various states for the Shooter, since shooter motors are also used for climbing. 
     // SHOOT is positive velocity (rpms) of motors.  
@@ -96,22 +96,19 @@ public class Shooter extends Subsystem {
         // initialize master
         master = new CANSparkMax(SHOOTER_MASTER_ID, MotorType.kBrushless);
         slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
-        telescope = new CANSparkMax(CLIMBER_TELESCOPE_ID, MotorType.kBrushless);
+        // telescope = new CANSparkMax(CLIMBER_TELESCOPE_ID, MotorType.kBrushless);
        
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
-        telescope.restoreFactoryDefaults();
+        // telescope.restoreFactoryDefaults();
        
-        // master.setInverted(false);
-        // slave.setInverted(true);
+        master.setInverted(true);
+        slave.setInverted(false);
         slave.follow(master);
        
         encoder = master.getEncoder();
-        encoder.setInverted(false);
-        // May also need to set slave encoder inversion???
-       
-        telescopeEncoder = telescope.getEncoder();
-        // telescopeEncoder.setInverted(false);
+        // telescopeEncoder = telescope.getEncoder();
+
     }
 
     public void setUpPIDF() {
@@ -124,8 +121,8 @@ public class Shooter extends Subsystem {
         kD = 0.0;
         kIz = 0.0;
         kFF = 1;
-        kMaxOutput = 1;
-        kMinOutput = -1;
+        kMaxOutput = MAX_RPM;
+        kMinOutput = -MAX_RPM;
         currentRPM = 0;
 
         // set PID coefficients
@@ -197,7 +194,7 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Min Output", kMinOutput);
 
         SmartDashboard.putString("Shooter State", currentState.toString());
-        SmartDashboard.putNumber("Shooter RPM", currentRPM);
+        SmartDashboard.putNumber("Set RPM", currentRPM);
         SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
     }
 
@@ -226,7 +223,7 @@ public class Shooter extends Subsystem {
     }
 
     public void Stop() {
-        setRPM(ShooterState.SHOOT, 0.0);
+        setRPM(ShooterState.STOP, 0.0);
     }
 
     // Doesn't alter any handling of the shooter but 
@@ -279,24 +276,24 @@ public class Shooter extends Subsystem {
     }
 
     // Raise the climber mechanism from horizontal to vertical position
-    public void raiseClimber() {
-        raiseSolenoid.set(Value.kForward);
-    }
+    // public void raiseClimber() {
+    //     raiseSolenoid.set(Value.kForward);
+    // }
 
-    // Lower the climber mechanism to horizontal position
-    public void lowerClimber() {
-        raiseSolenoid.set(Value.kForward);
-    }
+    // // Lower the climber mechanism to horizontal position
+    // public void lowerClimber() {
+    //     raiseSolenoid.set(Value.kForward);
+    // }
 
-    // Is climber mechanism vertical
-    public boolean isClimberRaised() {
-        return raiseSolenoid.get() == Value.kForward;
-    }
+    // // Is climber mechanism vertical
+    // public boolean isClimberRaised() {
+    //     return raiseSolenoid.get() == Value.kForward;
+    // }
 
-    // Is climber mechanism horizontal
-    public boolean isClimberLowered() {
-        return raiseSolenoid.get() == Value.kReverse;
-    }
+    // // Is climber mechanism horizontal
+    // public boolean isClimberLowered() {
+    //     return raiseSolenoid.get() == Value.kReverse;
+    // }
 
     @Override
     protected void initDefaultCommand() {

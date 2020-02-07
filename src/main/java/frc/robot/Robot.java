@@ -68,12 +68,12 @@ public class Robot extends TimedRobot {
     getIntake();
     getSpacer();
     getMagazine();
+    getShooter();
 
     // TODO: Commented since hardware not ready yet.
     // Don't enable until tesed, CAN/PCM ids are set, etc.
     // getClimber();
     // getControlPanel();
-    // getShooter();
     // getIndexer();
 
   }

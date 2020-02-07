@@ -15,8 +15,8 @@ import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
-  private double SHOOT_SPEED = 0.8;
-  private double INTAKE_SPEED = 0.8;
+  private double SHOOT_SPEED = -0.8;
+  private double INTAKE_SPEED = -0.8;
 
   // From Robot Worksheet
   private double SPACER_DIAMETER = 1.25;
