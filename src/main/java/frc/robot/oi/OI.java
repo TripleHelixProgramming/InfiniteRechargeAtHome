@@ -64,12 +64,14 @@ public class OI {
     // off the scheduler. Then the default command for the intake subsystem starts which is 
     // RetractIntake(), which pulls the intake in and stops the rollers.
     new JoystickButton(operator, ControllerMap.PS4_R1).toggleWhenPressed(new StartIntakeCG(true));
+    new JoystickButton(operator, ControllerMap.PS4_L1).toggleWhenPressed(new StartIntakeCG(false));
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinShooterUp(Position.UNKNOWN));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
-    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
+    // new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
+    // new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinShooterUp(Position.UNKNOWN));
+    // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
+    // new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new aimInPlace());

@@ -6,17 +6,18 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.drivetrain.commands;
-
-import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.drivetrain.Drivetrain;
 
 public class aimInPlace extends AbstractVisionDriving {
+ 
   @Override
   public double getThrottle() {
     return 0;
   }
+
   @Override
   protected boolean isFinished() {
-    if (Math.abs(angle()) < 1) {
+    if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 1) {
       return true;
     }
     return false;
