@@ -40,13 +40,10 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void execute() {
-
-    angleToTarget = camera.getRotationalDegreesToTarget();
-    controller.setReference(getDrivetrain().getHeading() + angleToTarget);
-    SmartDashboard.putNumber("ty", camera.getVerticalDegreesToTarget());
-    SmartDashboard.putNumber("tx", angleToTarget);
+    controller.setReference(0);
+    SmartDashboard.putNumber("tx", camera.getRotationalDegreesToTarget());
     SmartDashboard.putNumber("ground_distance",camera.calculateDistanceToTarget());
-
+    SmartDashboard.putNumber("calculated RPM", camera.calculateRPM());
   }
 
   @Override
