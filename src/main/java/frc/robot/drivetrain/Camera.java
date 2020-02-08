@@ -17,9 +17,8 @@ public class Camera {
     private double cameraAlignment;
 
     static double cameraHeight = 16; // (inches) currently the height on the programming bot
-    static double middleTargetHeight = 85.25; // (inches) use 89.75 for actual arena height
+    static double bottomTargetHeight = 85.25; // (inches) use 89.75 for actual arena height
     static double cameraElevation = 20.18; //(degrees) currently the angle on the programming bot
-    static double ty = 0; //(degrees) vertical angle between crosshair and center of target
 
     static double g = 386.4;
     static double h = 44;
@@ -88,7 +87,7 @@ public class Camera {
     }
 
     public double calculateDistanceToTarget() {
-        return (middleTargetHeight - cameraHeight)/Math.tan(Math.toRadians(cameraElevation + ty));
+        return (bottomTargetHeight - cameraHeight)/Math.tan(Math.toRadians(cameraElevation + getVerticalDegreesToTarget()));
         // calculates ground distane from robot to target, only accurate when tx = 0
     }
 

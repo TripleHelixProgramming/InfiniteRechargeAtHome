@@ -21,6 +21,8 @@ public class SpinShooterUp extends Command {
   public int rpm = 0;
   public int hood_position = 0;
 
+  private int rpmDelta;
+
   Command rumbleCommand = new RumbleController();
 
   // Spin up with a position.
@@ -47,10 +49,10 @@ public class SpinShooterUp extends Command {
     hood_position = position.getHoodPosition();
 
     // Alter the rpm and bump_setpoint based on the number of ticks.
-    int rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
+    rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
     rpm += rpmDelta;
 
-    Shooter.getShooter().setHoodPosition(hood_position);
+    // Shooter.getShooter().setHoodPosition(hood_position);
     Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
   }
 
@@ -61,7 +63,8 @@ public class SpinShooterUp extends Command {
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
     if (position == Position.UNKNOWN) {
-      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM();
+      rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
+      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + rpmDelta;
       Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
     } 
   }
