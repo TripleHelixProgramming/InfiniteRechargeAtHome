@@ -34,8 +34,7 @@ public class SpinShooterUp extends Command {
 
   // This will use the last position.
   public SpinShooterUp() {
-    requires(Shooter.getShooter());
-    position = Shooter.getShooter().getCurrentPosition();
+    this(Shooter.getShooter().getCurrentPosition());
   }
 
   // Called just before this Command runs the first time
@@ -50,7 +49,7 @@ public class SpinShooterUp extends Command {
     int rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
     rpm += rpmDelta;
 
-    Shooter.getShooter().setHoodPosition(hood_position);
+//    Shooter.getShooter().setHoodPosition(hood_position);
     Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
   }
 

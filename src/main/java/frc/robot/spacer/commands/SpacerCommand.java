@@ -1,21 +1,24 @@
 package frc.robot.spacer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.spacer.Spacer;
 
 public class SpacerCommand extends Command {
 
+    Spacer m_spacer;
     public SpacerCommand(){
-        requires(Spacer.getSpacer());
+        m_spacer = Spacer.getSpacer();
+        requires(m_spacer);
     }
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Spacer.getSpacer().setPower(-0.10);
+       // Spacer.getSpacer().setPower(-0.10);
     }
 
     @Override
-    protected void execute() {
+    protected void execute() {        
     }
 
     @Override
@@ -25,7 +28,7 @@ public class SpacerCommand extends Command {
 
     @Override
     protected void interrupted() {
-        Spacer.getSpacer().setPower(0.0);
+        m_spacer.setPower(0.0);
     }
 
 }

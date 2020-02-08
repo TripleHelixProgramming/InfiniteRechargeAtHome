@@ -23,7 +23,7 @@ import frc.robot.shooter.commands.TestWithController;
 
 public class Shooter extends Subsystem {
 
-    private static Shooter INSTANCE = new Shooter();
+    private static Shooter INSTANCE;
 
     /**
      * @return the singleton instance of the Drivetrain subsystem
@@ -38,7 +38,7 @@ public class Shooter extends Subsystem {
     // Bump direction
     public static final int BUMP_UP = 1;
     public static final int BUMP_DOWN = -1;
-    private static double RPM_DELTA = 10.0;
+    private static double RPM_DELTA = 1000.0;
 
     // Solenoid ids for hood position & climber
     private static int HOOD_NEAR_SOLENOID = 2;
@@ -47,8 +47,8 @@ public class Shooter extends Subsystem {
     private static int CLIMBER_LOWER_SOLENOID = 5;
 
     // Master & Slave motor CAN IDs
-    private static final int SHOOTER_MASTER_ID = 22;
-    private static final int SHOOTER_SLAVE_ID = 13;
+    private static final int SHOOTER_MASTER_ID = 13;
+    private static final int SHOOTER_SLAVE_ID = 22;
     private static int CLIMBER_TELESCOPE_ID = 17;
 
     public double MAX_RPM = 5700;
@@ -60,7 +60,7 @@ public class Shooter extends Subsystem {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
     // The solenoids responsible for raising & extending the climber.
-    private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
+//    private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
 
     // The solenoids responsible for raising & lowering the climber.
     // private DoubleSolenoid raiseSolenoid = new DoubleSolenoid(CLIMBER_RAISE_SOLENOID, CLIMBER_LOWER_SOLENOID);
@@ -99,9 +99,9 @@ public class Shooter extends Subsystem {
         slave.restoreFactoryDefaults();
         // telescope.restoreFactoryDefaults();
 
-        master.setInverted(true);
-        slave.setInverted(false);
-        slave.follow(master);
+        // master.setInverted(true);
+        // slave.setInverted(true);
+        slave.follow(master, true);
 
         encoder = master.getEncoder();
         // telescopeEncoder = telescope.getEncoder();
@@ -113,13 +113,23 @@ public class Shooter extends Subsystem {
         pidController = master.getPIDController();
 
         // PID coefficients
-        kP = 1e-6;
+        kP = 6e-5;
         kI = 0.0;
         kD = 0.0;
         kIz = 0.0;
-        kFF = 1;
+        kFF = 0.00015;
         kMaxOutput = 1;
         kMinOutput = -1;
+
+    // PID coefficients
+    // kP = 6e-5; 
+    // kI = 0;
+    // kD = 0; 
+    // kIz = 0; 
+    // kFF = 0.000015; 
+    // kMaxOutput = 1; 
+    // kMinOutput = -1;
+
         currentRPM = 0;
 
         // set PID coefficients
@@ -130,7 +140,7 @@ public class Shooter extends Subsystem {
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-        PutSmartDash();
+        putSmartDash();
     }
 
     @Override
@@ -178,11 +188,11 @@ public class Shooter extends Subsystem {
             currentRPM = sRPM;
         }
 
-        PutSmartDash();
+        putSmartDash();
     }
 
     // Called in the periodic() and other times to display info on the SmartDashboard.
-    public void PutSmartDash() {
+    public void putSmartDash() {
 
         SmartDashboard.putNumber("P Gain", kP);
         SmartDashboard.putNumber("I Gain", kI);
@@ -201,7 +211,7 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Bumped RPM", currentRPM);
         SmartDashboard.putNumber("Bumped Increment", currentPosition.getBumpRPM());
         SmartDashboard.putNumber("Bump Ticks", bumpTicks);
-        SmartDashboard.putString("Hood Position", getHoodPosition());
+//        SmartDashboard.putString("Hood Position", getHoodPosition());
     }
 
     // returns the max velocity (in RPMs) of the CAN SPark Max/NEOs  5700
@@ -230,7 +240,7 @@ public class Shooter extends Subsystem {
 
         // DO NOT REMOVE PutSmartDash() -- needed to update rpm in SmartDash and be
         // changeable from the smartDashboard for tuning.
-        PutSmartDash();
+        putSmartDash();
     }
 
     public void Stop() {
@@ -269,7 +279,7 @@ public class Shooter extends Subsystem {
     public int getBumpTicks() {
         return bumpTicks;
     }
-
+/**
     public void setHoodPosition(int hood_position) {
         if (hood_position == 1) {
             setHoodToFar();
@@ -292,6 +302,7 @@ public class Shooter extends Subsystem {
         hood.set(Value.kReverse);
     }
 
+    */
     // Raise the climber mechanism from horizontal to vertical position
     // public void raiseClimber() {
     // raiseSolenoid.set(Value.kForward);

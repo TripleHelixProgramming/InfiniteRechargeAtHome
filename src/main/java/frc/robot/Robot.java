@@ -35,6 +35,8 @@ import frc.robot.drivetrain.commands.AutoVisionDriving;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
+import frc.robot.magazine.Magazine;
+import frc.robot.spacer.Spacer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -106,6 +108,9 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
     SmartDashboard.putNumber("Target Skew", camera.getTargetSkew());
+
+    SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
+    SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
   }
 
   /**

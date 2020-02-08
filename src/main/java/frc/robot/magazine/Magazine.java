@@ -9,11 +9,14 @@ package frc.robot.magazine;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.spacer.Spacer;
 
 public class Magazine extends Subsystem {
 
@@ -27,10 +30,6 @@ public class Magazine extends Subsystem {
   private int SHOOTER_BB_CHANNEL = 0;
   private int SPACER_BB_CHANNEL = 1;
   private int TURN_BB_CHANNEL = 2;
-
-  private DigitalInput shooter_bb = new DigitalInput(SHOOTER_BB_CHANNEL);
-  private DigitalInput spacer_bb = new DigitalInput(SPACER_BB_CHANNEL);
-  private DigitalInput turn_bb = new DigitalInput(TURN_BB_CHANNEL);
 
   // Number of balls currently in the system.
   public int ball_count = 0;
@@ -50,6 +49,7 @@ public class Magazine extends Subsystem {
     // initialize motor
     motor = new CANSparkMax(MAGAZINE_ID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
+    motor.setIdleMode(IdleMode.kBrake);
     encoder = motor.getEncoder();
 
     ball_count = 0;
@@ -87,15 +87,12 @@ public class Magazine extends Subsystem {
   }
 
   public Boolean ballAtShooter() {
-    return !shooter_bb.get();
-  }
-
-  public Boolean ballAtTurn() {
-    return !turn_bb.get();
+    return motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
+    // return(false);
   }
 
   public Boolean ballAtSpacer() {
-    return !spacer_bb.get();
+    return Spacer.getSpacer().isBallPresent();
   }
 
   @Override
