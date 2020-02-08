@@ -118,8 +118,8 @@ public class Shooter extends Subsystem {
         kD = 0.0;
         kIz = 0.0;
         kFF = 1;
-        kMaxOutput = MAX_RPM;
-        kMinOutput = -MAX_RPM;
+        kMaxOutput = 1;
+        kMinOutput = -1;
         currentRPM = 0;
 
         // set PID coefficients
