@@ -12,10 +12,8 @@ import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
 import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.intake.Intake.getIntake;
-import static frc.robot.climber.Climber.getClimber;
 import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
-import static frc.robot.indexer.Indexer.getIndexer;
 import static frc.robot.oi.OI.getOI;
 
 import com.team2363.logger.HelixEvents;
@@ -36,7 +34,6 @@ import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 import frc.robot.magazine.Magazine;
-import frc.robot.spacer.Spacer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -76,7 +73,6 @@ public class Robot extends TimedRobot {
     // Don't enable until tesed, CAN/PCM ids are set, etc.
     // getClimber();
     // getControlPanel();
-    // getIndexer();
 
   }
 

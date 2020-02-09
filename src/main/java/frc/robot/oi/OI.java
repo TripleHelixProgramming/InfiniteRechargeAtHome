@@ -15,7 +15,6 @@ import com.team2363.utilities.ControllerMap;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.climber.commands.Climb;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.drivetrain.commands.CameraInfo;
