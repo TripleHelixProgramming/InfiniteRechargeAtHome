@@ -90,17 +90,17 @@ public class Shooter extends Subsystem {
 
     public void setUpMotors() {
 
-        // initialize master
+        // Initialize motors
         master = new CANSparkMax(SHOOTER_MASTER_ID, MotorType.kBrushless);
         slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
         // telescope = new CANSparkMax(CLIMBER_TELESCOPE_ID, MotorType.kBrushless);
 
+        // Set all motors to factory defaults.
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
         // telescope.restoreFactoryDefaults();
 
-        // master.setInverted(true);
-        // slave.setInverted(true);
+        // Tell the slave to follow the master and invert it since on opposite side.
         slave.follow(master, true);
 
         encoder = master.getEncoder();
@@ -120,16 +120,6 @@ public class Shooter extends Subsystem {
         kFF = 0.00015;
         kMaxOutput = 1;
         kMinOutput = -1;
-
-    // PID coefficients
-    // kP = 6e-5; 
-    // kI = 0;
-    // kD = 0; 
-    // kIz = 0; 
-    // kFF = 0.000015; 
-    // kMaxOutput = 1; 
-    // kMinOutput = -1;
-
         currentRPM = 0;
 
         // set PID coefficients
@@ -226,7 +216,6 @@ public class Shooter extends Subsystem {
 
     public boolean isAtRPM() {
         return (Math.abs(currentRPM - getRPM()) <= RPM_DELTA);
-        // return (true);
     }
 
     public void setRPM(ShooterState state, double rpm) {
