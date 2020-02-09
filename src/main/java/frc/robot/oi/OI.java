@@ -15,7 +15,6 @@ import com.team2363.utilities.ControllerMap;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.climber.commands.Climb;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.drivetrain.commands.CameraInfo;
@@ -29,6 +28,7 @@ import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.spacer.commands.SpacerCommand;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
@@ -64,20 +64,23 @@ public class OI {
     // off the scheduler. Then the default command for the intake subsystem starts which is 
     // RetractIntake(), which pulls the intake in and stops the rollers.
     new JoystickButton(operator, ControllerMap.PS4_R1).toggleWhenPressed(new StartIntakeCG(true));
+    new JoystickButton(operator, ControllerMap.PS4_L1).toggleWhenPressed(new StartIntakeCG(false));
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinShooterUp(Position.UNKNOWN));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
-    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
+    // new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
+    // new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinShooterUp(Position.UNKNOWN));
+    // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
+    // new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new aimInPlace());
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.INTAKE));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
-     
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
     // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
    
 

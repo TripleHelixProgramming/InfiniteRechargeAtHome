@@ -38,8 +38,7 @@ public class StartIntakeCG extends CommandGroup {
     // should run or not.
 
     addParallel(new DeployIntake(runRoller));
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE_NO_LOGIC));
-    // addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
-
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+  
   }
 }

@@ -5,21 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.drivetrain.commands;
-import frc.robot.drivetrain.Drivetrain;
+package frc.robot.command_groups;
 
-public class aimInPlace extends AbstractVisionDriving {
- 
-  @Override
-  public double getThrottle() {
-    return 0;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+
+import frc.robot.drivetrain.commands.aimInPlace;
+import frc.robot.shooter.commands.SpinShooterUp;
+
+
+public class AimAndSpinCG extends CommandGroup {
+  public AimAndSpinCG() {
+    addParallel(new aimInPlace());
+    addSequential(new SpinShooterUp());
   }
-
-  // @Override
-  // protected boolean isFinished() {
-  //   if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 1) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 }

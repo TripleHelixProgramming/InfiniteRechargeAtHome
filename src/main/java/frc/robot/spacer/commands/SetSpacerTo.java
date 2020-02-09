@@ -15,8 +15,8 @@ import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
-  private double SHOOT_SPEED = -0.8;
-  private double INTAKE_SPEED = -0.8;
+  private double SHOOT_SPEED = -0.6;
+  private double INTAKE_SPEED = -0.6;
 
   // From Robot Worksheet
   private double SPACER_DIAMETER = 1.25;
@@ -28,7 +28,7 @@ public class SetSpacerTo extends Command {
   private double INCHES_PER_MOTOR_REV = INCHES_PER_SPACER_REV * SPACER_REVS_PER_MOTOR_REV;
 
   // When in a handoff, how far to travel before turning spacer off.
-  private double HANDOFF_DISTANCE = 4.0;     // Inches
+  private double HANDOFF_DISTANCE = 7.0;     // Inches
 
   private double startMotorPos = 0.0;
   private double power = 0.0;
@@ -60,14 +60,16 @@ public class SetSpacerTo extends Command {
     ballAtShooter = Magazine.getMagazine().ballAtShooter();
     ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
-    if (!ballAtSpacerLastTime && ballAtSpacer) {
-      // Handing a ball off to the magazine
-      Magazine.getMagazine().IncreaseBallCount();
-      inHandOff = true;
-      startMotorPos = Spacer.getSpacer().getMotorPosition();
-    } else {
-      inHandOff = false;
-    }
+    // if (!ballAtSpacerLastTime && ballAtSpacer) {
+    //   // Handing a ball off to the magazine
+    //   Magazine.getMagazine().IncreaseBallCount();
+    //   inHandOff = true;
+    //   startMotorPos = Spacer.getSpacer().getMotorPosition();
+    // } else {
+    //   inHandOff = false;
+    // }
+
+    inHandOff = false;
 
     switch (action) {
       case SHOOT_NO_LOGIC:
@@ -81,11 +83,9 @@ public class SetSpacerTo extends Command {
       case SHOOT:
         // Case for ball spacing logic when spacer is in SHOOT mode.
         power = 0.0;
-        if (!Shooter.getShooter().isAtRPM()) {
-            if (!ballAtShooter) power = SHOOT_SPEED;
-        } else {
-            if (!ballAtSpacer) power = SHOOT_SPEED;
-        }
+        if (Shooter.getShooter().isAtRPM()) {
+            power = SHOOT_SPEED;
+        } 
         Spacer.getSpacer().setPower(power);
         break;
       case INTAKE:

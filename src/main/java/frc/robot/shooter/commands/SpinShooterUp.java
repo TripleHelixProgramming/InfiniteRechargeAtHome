@@ -8,6 +8,7 @@
 package frc.robot.shooter.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.drivetrain.Drivetrain;
 import frc.robot.oi.commands.RumbleController;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
@@ -20,6 +21,8 @@ public class SpinShooterUp extends Command {
   public int rpm = 0;
   public int hood_position = 0;
 
+  private int rpmDelta;
+
   Command rumbleCommand = new RumbleController();
 
   // Spin up with a position.
@@ -27,13 +30,13 @@ public class SpinShooterUp extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Shooter.getShooter());
-    this.position = pos;
+    position = pos;
+    Shooter.getShooter().setCurrentPosition(position);
   }
 
   // This will use the last position.
   public SpinShooterUp() {
-    requires(Shooter.getShooter());
-    this.position = Shooter.getShooter().getLastPosition();
+    this(Shooter.getShooter().getCurrentPosition());
   }
 
   // Called just before this Command runs the first time
@@ -45,27 +48,25 @@ public class SpinShooterUp extends Command {
     hood_position = position.getHoodPosition();
 
     // Alter the rpm and bump_setpoint based on the number of ticks.
-    int rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
+    rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
     rpm += rpmDelta;
 
-    //  if shooting from a unknown position. Use camera to get distance to
-    //  target, then calculate the setpoint and expected rpms for that distance.
-    if (position == Position.UNKNOWN) {
-      //  distance = GetTargetDistance();
-      //  setpoint = CalculateSetPoint(distance);
-      //  rpm = setpoint * Shooter.getShooter().getMAXRPM();
-      //  hood_position = probably 1??? 
-    } 
+//  Shooter.getShooter().setHoodPosition(hood_position);
 
-    Shooter.getShooter().setHoodPosition(hood_position);
- 
     Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      
+
+    //  if shooting from a unknown position. Use camera to get distance to
+    //  target, then calculate the setpoint and expected rpms for that distance.
+    if (position == Position.UNKNOWN) {
+      rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
+      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + rpmDelta;
+      Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
+    } 
   }
 
   // Make this return true when this Command no longer needs to run execute()
