@@ -5,6 +5,7 @@ import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.telescope.Telescope;
+import frc.robot.telescope.Telescope.TelescopeState;
 
 public class DeployTelescope extends Command {
 
@@ -22,6 +23,7 @@ public class DeployTelescope extends Command {
   protected void initialize() {
     HelixEvents.getInstance().addEvent("TELESCOPE", "Starting DeployTelescope");
     myTelescope.deploy();
+    myTelescope.setState(TelescopeState.TRANSITION);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -32,13 +34,12 @@ public class DeployTelescope extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return myTelescope.isDeployed();
+    return false; // never finishes
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    HelixEvents.getInstance().addEvent("TELESCOPE", "Ending DeployTelescope");
   }
 
   // Called when another command which requires one or more of the same
@@ -46,5 +47,6 @@ public class DeployTelescope extends Command {
   @Override
   protected void interrupted() {
     HelixEvents.getInstance().addEvent("TELESCOPE", "DeployTelescope interrupted");
+    myTelescope.setState(TelescopeState.DEPLOYED);
   }
 }

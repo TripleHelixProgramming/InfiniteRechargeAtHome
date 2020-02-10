@@ -33,9 +33,9 @@ public class ClimbCG extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addSequential(new DeployTelescope());
+    addSequential(new DeployTelescope(), 1.0);
     addSequential(new ExtendTelescope());
-    addSequential(new StowTelescope());
+    addSequential(new StowTelescope(), 1.0);
     addSequential(new Climb());
   }
 }
