@@ -10,7 +10,7 @@ public class DeployTelescope extends Command {
 
   private Telescope myTelescope = null;
 
-  public DeployTelescope(double rotations) {
+  public DeployTelescope() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     myTelescope = Telescope.getTelescope();
@@ -21,27 +21,18 @@ public class DeployTelescope extends Command {
   @Override
   protected void initialize() {
     HelixEvents.getInstance().addEvent("TELESCOPE", "Starting DeployTelescope");
-
-    if (!myTelescope.isRaised()) {
-      myTelescope.raise();
-    }
+    myTelescope.deploy();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if myTelescope.isRaised() {
-      rotations = getPosition() + rotations;
-      myTelescope.setRotations(rotations);
-    } else {
-      return;
-    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false; // Never finish
+    return myTelescope.isDeployed();
   }
 
   // Called once after isFinished returns true
@@ -54,6 +45,6 @@ public class DeployTelescope extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    HelixEvents.getInstance().addEvent("TELESCOPE", "Ending DeployTelescope");
+    HelixEvents.getInstance().addEvent("TELESCOPE", "DeployTelescope interrupted");
   }
 }

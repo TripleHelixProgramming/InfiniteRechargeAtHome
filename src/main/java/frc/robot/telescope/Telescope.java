@@ -43,13 +43,13 @@ public class Telescope extends Subsystem {
     private CANPIDController pidController;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
-    private Timer raiseTimer, lowerTimer;
+    private Timer deployTimer, stowTimer;
 
-    public enum deployStates {
-        RAISED, LOWERED
+    public enum TelescopeState {
+        DEPLOYED, STOWED, TRANSITION
       }
 
-    private int deployState;
+    private TelescopeState currentState = TelescopeState.STOWED;
     
     private Telescope() {
         super();
@@ -79,10 +79,8 @@ public class Telescope extends Subsystem {
         pidController.setFF(kFF);
         pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-        raiseTimer.reset();
-        lowerTimer.reset();
-
-        deployState = LOWERED;
+        deployTimer.reset();
+        stowTimer.reset();
     }
 
     /**
@@ -106,20 +104,27 @@ public class Telescope extends Subsystem {
       }
 
     // Tilts up the telescope.
-    public void raise() {
+    public void deploy() {
         solenoid.set(Value.kForward);
-        raiseTimer.start();
+        currentState = TelescopeState.TRANSITION;
+        deployTimer.start();
     }
 
     // Tilts down the telescope.
-    public void lower() {
+    public void stow() {
         solenoid.set(Value.kReverse);
-        lowerTimer.start();
+        currentState = TelescopeState.TRANSITION;
+        stowTimer.start();
     }
 
     // Status of the telescope's extended state.
-    public boolean isRaised() {
-        return deployState == RAISED;
+    public boolean isDeployed() {
+        return currentState == TelescopeState.DEPLOYED;
+    }
+    
+    // Status of the telescope's stowed state.
+    public boolean isStowed() {
+        return currentState == TelescopeState.STOWED;
     }
 
     @Override
@@ -129,13 +134,13 @@ public class Telescope extends Subsystem {
 
     @Override
     public void periodic() {
-        if raiseTimer.hasPeriodPassed(1.0) {
-            deployState = RAISED;
-            raiseTimer.reset();
+        if (this.deployTimer.hasPeriodPassed(1.0)) {
+            currentState = TelescopeState.DEPLOYED;
+            deployTimer.reset();
         }
-        if lowerTimer.hasPeriodPassed(1.0) {
-            deployState = LOWERED;
-            lowerTimer.reset();
+        if (this.stowTimer.hasPeriodPassed(1.0)) {
+            currentState = TelescopeState.STOWED;
+            stowTimer.reset();
         }
     }
 
