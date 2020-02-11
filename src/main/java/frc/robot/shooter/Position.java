@@ -17,7 +17,7 @@ public enum Position {
     RIGHT_AUTO(3135, 1),
     MIDDLE_AUTO(3135, 1),
     LEFT_AUTO(3135, 1),
-    TRENCH(3135, 1),
+    TRENCH(3300, 1),
     DUMP_BALLS(1000, 1),
     LAYUP(3135, 0),
     UNKNOWN(0, 1);

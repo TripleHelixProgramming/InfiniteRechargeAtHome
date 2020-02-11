@@ -68,19 +68,18 @@ public class OI {
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    // new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
     // new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinShooterUp(Position.UNKNOWN));
-    // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
     // new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new aimInPlace());
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
     // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
    
 
