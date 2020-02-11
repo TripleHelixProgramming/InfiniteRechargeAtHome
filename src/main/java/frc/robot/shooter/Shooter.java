@@ -100,6 +100,8 @@ public class Shooter extends Subsystem {
         slave.restoreFactoryDefaults();
         // telescope.restoreFactoryDefaults();
 
+        master.setClosedLoopRampRate(2.0);
+
         // Tell the slave to follow the master and invert it since on opposite side.
         slave.follow(master, true);
 
@@ -113,11 +115,11 @@ public class Shooter extends Subsystem {
         pidController = master.getPIDController();
 
         // PID coefficients
-        kP = 6e-5;
+        kP = 0.0001;
         kI = 0.0;
-        kD = 0.0;
+        kD = 0.005;
         kIz = 0.0;
-        kFF = 0.00015;
+        kFF = 0.000175;
         kMaxOutput = 1;
         kMinOutput = -1;
         currentRPM = 0;
