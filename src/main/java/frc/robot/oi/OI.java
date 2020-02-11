@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
+import frc.robot.command_groups.ClimbCG;
 import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
@@ -81,7 +82,8 @@ public class OI {
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
     // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
-   
+
+    new ClimbTrigger().whenActive(new ClimbCG());
 
     // Bumping up and down
 
@@ -139,10 +141,10 @@ public class OI {
   // Get Climber power from operator controller right joystick y-axis
   public double getClimberPower() {
     double stick = -operator.getRawAxis(PS4_RIGHT_STICK_Y);
-    stick *= Math.abs(stick);
-    if (Math.abs(stick) < 0.05) {
-      stick = 0;
-    }
+    // stick *= Math.abs(stick);
+    // if (Math.abs(stick) < 0.05) {
+    //   stick = 0;
+    // }
     return stick;
   }
 }
