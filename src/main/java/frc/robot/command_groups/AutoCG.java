@@ -38,14 +38,14 @@ public class AutoCG extends CommandGroup {
   
   // Auto command group that shoots, then runs a path while collecting balls
   // but does not run a path back to shoot the balls.
-  public AutoCG(Path path, Position pos, double pigeon_offset, double delay) {
-    this(path, pos, pigeon_offset, delay, null);
+  public AutoCG(Position pos, double pigeon_offset, double delay, Path path) {
+    this(pos, pigeon_offset, delay, path, null);
   }
 
   //  Auto command group that shoots from a known positions, runs a path
   //  to collect balls, reverses its path back to known position and 
   //  shoots again.
-  public AutoCG(Path path, Position pos, double pigeon_offset, double delay, Path phase2) {
+  public AutoCG(Position pos, double pigeon_offset, double delay, Path path,  Path phase2) {
     
     // Runs command group to shoot from a know position.
     addSequential(new ShootCG(pos));
@@ -61,7 +61,11 @@ public class AutoCG extends CommandGroup {
     // addSequential(new WaitCommand(??)); 
 
     // Run path back to shooting position, if 2nd path is not null.
-    if (phase2 != null) {
+    if (phase2 == null) {
+      // Just reverse the first path.
+      addSequential(new PathFollower(path).reverse());
+    } else {
+      // Run a different path as phase 2.
       addSequential(new PathFollower(phase2));
     }
 

@@ -21,10 +21,11 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoMode {
         // Auto (delay for intake)
-		LEFT_AUTO(25.0, 1.5),
+		LEFT_AUTO(25.0, 0.5),
 		MIDDLE_AUTO(0.0, 2.0),
 		RIGHT_AUTO(30.0, 2.5),
 		BASELINE_AUTO(0.0, 0.0),
+		TEST_AUTO_CG(0.0, 0.5),
 		TEST_RIGHT_TURN(0.0, 0.0),
 		TEST_3FEET_FORWARD(0.0, 0.0),
 		NONE(0.0, 0.0);
@@ -70,28 +71,35 @@ public class AutoRoutines {
 		switch (mode) {
 		// case LEFT_AUTO:
 		// 	return new AutoCG(
-		// 		new LeftAuto(),
 		// 		Position.LEFT_AUTO,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
-		// 		new LeftAutoPhase2() 
+		// 		new ThreeFeetBackward(),
+		// 		new ThreeFeetForward() 
 		// 	);
 		case MIDDLE_AUTO:
 			return new AutoCG(
-				new BaseLineThruTrench(),
 				Position.MIDDLE_AUTO,
 				mode.getPigeonOffset(),
 				mode.getDelay(),
+				new BaseLineThruTrench(),
 				new ThruTrenchToBaseLine()
 			);
 		// case RIGHT_AUTO:
 		// 	return new AutoCG(
-		// 		new RightAuto(),
 		// 		Position.RIGHT_AUTO,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
+		// 		new RightAuto(),
 		// 		new RightAutoPhase2() 
 		// 	);
+		// case TEST_AUTO_CG:
+			// return new AutoCG(
+			// 	Position.DUMP_BALLS,
+			// 	mode.getPigeonOffset(),
+			// 	mode.getDelay(),
+			// 	new ThreeFeetBackwards()
+			// );
 		case TEST_RIGHT_TURN:
 			return new AutoCG(new RightTurn());
 		case TEST_3FEET_FORWARD:
@@ -120,5 +128,4 @@ public class AutoRoutines {
 	private static void putSmartDash(AutoMode mode) {
 		SmartDashboard.putString("AUTO MODE:", mode.toString());
 	}	
-
 }
