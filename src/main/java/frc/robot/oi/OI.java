@@ -30,7 +30,6 @@ import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
-import frc.robot.spacer.commands.SpacerCommand;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
@@ -80,10 +79,11 @@ public class OI {
     // Shooting is on a whenPressed / whenReleased right button
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
+    // new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
-
-    new ClimbTrigger().whenActive(new ClimbCG());
+    // new ClimbTrigger().whenActive(new ClimbCG());
 
     // Bumping up and down
 

@@ -13,9 +13,9 @@ import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Preferences;
 import frc.robot.spacer.Spacer;
 
 public class Magazine extends Subsystem {
@@ -27,12 +27,9 @@ public class Magazine extends Subsystem {
   private final CANSparkMax motor;
   private final CANEncoder encoder;
 
-  private int SHOOTER_BB_CHANNEL = 0;
-  private int SPACER_BB_CHANNEL = 1;
-  private int TURN_BB_CHANNEL = 2;
-
   // Number of balls currently in the system.
   public int ball_count = 0;
+  public int balls_processed = 0;
 
   // The various states of the Ball Handling subsystems, which include the magazine,
   // the spacer and the intake. Each subsytem, based on the state given to
@@ -40,7 +37,7 @@ public class Magazine extends Subsystem {
   // subsystem from controller action command groups
   // like ShootCG, IntakeCG, etc.
   public enum BallHandlingState {
-    SHOOT, INTAKE, SHOOT_NO_LOGIC, INTAKE_NO_LOGIC, SHOOT_ONE, STOP
+    SHOOT, INTAKE, SHOOT_NO_LOGIC, INTAKE_NO_LOGIC, SHOOT_ONE, ADVANCE, STOP
   };
 
   private Magazine() {
@@ -53,6 +50,7 @@ public class Magazine extends Subsystem {
     encoder = motor.getEncoder();
 
     ball_count = 0;
+    balls_processed = Preferences.getPreferences().getBallsProcessed();
   }
 
   /**
@@ -74,12 +72,16 @@ public class Magazine extends Subsystem {
     return encoder.getPosition();
   }
 
-  public Boolean hasBalls() {
-    return (ball_count > 0);
-  }
-
+  //  ball_count - total number of balls currently in the magazine.
+  //  balls_processed - total number of balls brought into the robot EVER.
   public void IncreaseBallCount() {
     ball_count++;
+    balls_processed++;
+    Preferences.getPreferences().setBallsProcessed(balls_processed);
+  }
+
+  public void DecreaseBallCount() {
+    ball_count--;
   }
   
   public void ResetBallCount() {

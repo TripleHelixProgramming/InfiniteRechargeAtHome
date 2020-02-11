@@ -24,6 +24,7 @@ public class Preferences {
     // so they should make sense to users of Shuffleboard.
     private static String RIO_PREF_KEY_ROBOT_NAME = "robotName";
     private static String RIO_PREF_KEY_POSITION_BUMP = "posBumpTicks-"; // prefix per Position name
+    private static String RIO_STATS_TOTAL_BALLS = "Total Balls: "; 
     //private static String RIO_PREF_KEY.... = "...";
 
     // The wpilibj Preference instance used to fetch preferences from.
@@ -74,6 +75,24 @@ public class Preferences {
         this.rioPrefs.putString(key, Integer.toString(ticks));
     }
 
+    public int getBallsProcessed() {
+        String key = RIO_STATS_TOTAL_BALLS;
+        
+        String value = this.getInitializedValue(key, Integer.toString(0));
+        int balls = 0;
+        try {
+            balls = Integer.parseInt(value);
+        } catch (Exception ex) {
+            balls = 0;
+        }
+
+        return balls;
+    }
+
+    public void setBallsProcessed(int balls) {
+        String key = RIO_STATS_TOTAL_BALLS;
+        this.rioPrefs.putString(key, Integer.toString(balls));
+    }
     /**
      * This method will fetch the preference with the specified key and if
      * not currently set will set it to the initializedValue.  Use this to
