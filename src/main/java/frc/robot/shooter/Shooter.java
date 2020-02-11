@@ -19,7 +19,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Preferences;
-import frc.robot.shooter.commands.TestWithController;
 
 public class Shooter extends Subsystem {
 
@@ -43,27 +42,21 @@ public class Shooter extends Subsystem {
     // Solenoid ids for hood position & climber
     private static int HOOD_NEAR_SOLENOID = 2;
     private static int HOOD_FAR_SOLENOID = 3; // Solenoid extended = far
-    private static int CLIMBER_RAISE_SOLENOID = 4;
-    private static int CLIMBER_LOWER_SOLENOID = 5;
 
     // Master & Slave motor CAN IDs
     private static final int SHOOTER_MASTER_ID = 13;
     private static final int SHOOTER_SLAVE_ID = 22;
-    private static int CLIMBER_TELESCOPE_ID = 17;
 
     public double MAX_RPM = 5700;
 
-    private CANSparkMax master, slave, telescope;
+    private CANSparkMax master, slave;
 
     private CANPIDController pidController;
-    private CANEncoder encoder, telescopeEncoder;
+    private CANEncoder encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
     // The solenoids responsible for raising & extending the climber.
-//    private DoubleSolenoid hood = new DoubleSolenoid(HOOD_NEAR_SOLENOID, HOOD_FAR_SOLENOID);
-
-    // The solenoids responsible for raising & lowering the climber.
-    // private DoubleSolenoid raiseSolenoid = new DoubleSolenoid(CLIMBER_RAISE_SOLENOID, CLIMBER_LOWER_SOLENOID);
+    private DoubleSolenoid hood = new DoubleSolenoid(HOOD_FAR_SOLENOID, HOOD_NEAR_SOLENOID);
 
     // Various states for the Shooter, since shooter motors are also used for climbing.
     // SHOOT is positive velocity (rpms) of motors.
@@ -93,20 +86,18 @@ public class Shooter extends Subsystem {
         // Initialize motors
         master = new CANSparkMax(SHOOTER_MASTER_ID, MotorType.kBrushless);
         slave = new CANSparkMax(SHOOTER_SLAVE_ID, MotorType.kBrushless);
-        // telescope = new CANSparkMax(CLIMBER_TELESCOPE_ID, MotorType.kBrushless);
 
         // Set all motors to factory defaults.
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
-        // telescope.restoreFactoryDefaults();
 
+        // Keeps the motor from slamming to a hault when STOP mode is set.
         master.setClosedLoopRampRate(2.0);
 
         // Tell the slave to follow the master and invert it since on opposite side.
         slave.follow(master, true);
 
         encoder = master.getEncoder();
-        // telescopeEncoder = telescope.getEncoder();
 
     }
 
@@ -222,11 +213,11 @@ public class Shooter extends Subsystem {
 
     public void setRPM(ShooterState state, double rpm) {
 
-        if (state == ShooterState.CLIMB) currentRPM = -rpm;
-
-        currentRPM = rpm;
         currentState = state;
+        currentRPM = rpm;
 
+        if (state == ShooterState.CLIMB) currentRPM = -rpm;
+        
         pidController.setReference(currentRPM, ControlType.kVelocity);
 
         // DO NOT REMOVE PutSmartDash() -- needed to update rpm in SmartDash and be
@@ -270,7 +261,7 @@ public class Shooter extends Subsystem {
     public int getBumpTicks() {
         return bumpTicks;
     }
-/**
+
     public void setHoodPosition(int hood_position) {
         if (hood_position == 1) {
             setHoodToFar();
@@ -292,27 +283,6 @@ public class Shooter extends Subsystem {
     public void setHoodToNear() {
         hood.set(Value.kReverse);
     }
-
-    */
-    // Raise the climber mechanism from horizontal to vertical position
-    // public void raiseClimber() {
-    // raiseSolenoid.set(Value.kForward);
-    // }
-
-    // // Lower the climber mechanism to horizontal position
-    // public void lowerClimber() {
-    // raiseSolenoid.set(Value.kForward);
-    // }
-
-    // // Is climber mechanism vertical
-    // public boolean isClimberRaised() {
-    // return raiseSolenoid.get() == Value.kForward;
-    // }
-
-    // // Is climber mechanism horizontal
-    // public boolean isClimberLowered() {
-    // return raiseSolenoid.get() == Value.kReverse;
-    // }
 
     @Override
     protected void initDefaultCommand() {
