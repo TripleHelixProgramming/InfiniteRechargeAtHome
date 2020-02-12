@@ -42,10 +42,12 @@ public class Drivetrain extends Subsystem {
     PERCENT_FULLPOWER, PERCENT_FULLSPEED, FPS, TICKSPER100MS
   }
 
-  
+  // PIDF for drivetrain.
+  public double kP, kI, kD, kF;  
+
   // Items that could be put into a per-bot config file.
-  private double WHEEL_DIAMETER_IN_INCHES = 4;
-  private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 42.0/48.0);
+  private double WHEEL_DIAMETER_IN_INCHES = 6;
+  private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
   public static double MAX_VELOCITY_IN_FPS = 10;
   private static int VELOCITY_CONTROL_SLOT = 0;
 
@@ -163,6 +165,10 @@ public class Drivetrain extends Subsystem {
               ENCODER_TICKS_PER_REVOLUTION),
           HelixMath.convertFromFpsToTicksPer100Ms(right * MAX_VELOCITY_IN_FPS, WHEEL_DIAMETER_IN_INCHES,
               ENCODER_TICKS_PER_REVOLUTION));
+          SmartDashboard.putNumber("Left Velocity SetPoint (FPS)", left * MAX_VELOCITY_IN_FPS);
+          SmartDashboard.putNumber("Right Velocity SetPoint (FPS)", right * MAX_VELOCITY_IN_FPS);
+          SmartDashboard.putNumber("Left Velocity Error", getLeftVelocity() - (left * MAX_VELOCITY_IN_FPS));
+          SmartDashboard.putNumber("Right Velocity Error", getRightVelocity() - (right * MAX_VELOCITY_IN_FPS));
       break;
     case FPS:
       setVelocityOutput(
@@ -175,10 +181,12 @@ public class Drivetrain extends Subsystem {
   }
 
   public void setPIDFValues() {
-    final double kF = 1.25;
-    final double kP = 1; // 5
-    final double kI = 0.01;
-    final double kD = 0;
+
+    kF = 1.25;
+    kP = 1;
+    kI = 0.01;
+    kD = 0;
+
     left.configPIDF(VELOCITY_CONTROL_SLOT, kP, kI, kD, kF);
     right.configPIDF(VELOCITY_CONTROL_SLOT, kP, kI, kD, kF);
 
@@ -186,6 +194,19 @@ public class Drivetrain extends Subsystem {
         (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
     right.config_IntegralZone(VELOCITY_CONTROL_SLOT,
         (int) HelixMath.convertFromFpsToTicksPer100Ms(1, WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION));
+    
+    // Keep this putPIDFSmartDash call so can tune through Shuffleboard.
+    putPIDFSmartDash();
+
+  }
+
+  // Called in the periodic() and other times to display info on the SmartDashboard.
+  public void putPIDFSmartDash() {
+
+        SmartDashboard.putNumber("DriveTrain P Gain", kP);
+        SmartDashboard.putNumber("DriveTrain I Gain", kI);
+        SmartDashboard.putNumber("DriveTrain D Gain", kD);
+        SmartDashboard.putNumber("DriveTrain Feed Forward", kF);
   }
 
   private void setupSensors() {
@@ -266,10 +287,37 @@ public class Drivetrain extends Subsystem {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Pigeon Yaw", getHeading());
-    SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
-    SmartDashboard.putNumber("Right Velocity", getRightVelocity());
-    SmartDashboard.putNumber("Left Distance", getLeftPosition());
-    SmartDashboard.putNumber("Right Distance", getRightPosition());
+
+    // read PID coefficients from SmartDashboard
+    final double p = SmartDashboard.getNumber("DriveTrain P Gain", 0);
+    final double d = SmartDashboard.getNumber("DriveTrain D Gain", 0);
+    final double ff = SmartDashboard.getNumber("DriveTrain Feed Forward", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to
+    // controller
+      if ((p != kP)) {
+          left.config_kP(VELOCITY_CONTROL_SLOT, p);
+          right.config_kP(VELOCITY_CONTROL_SLOT, p);
+          kP = p;
+      }
+      if ((d != kD)) {
+          left.config_kP(VELOCITY_CONTROL_SLOT, d);
+          right.config_kP(VELOCITY_CONTROL_SLOT, d);
+          kD = d;
+      }
+      if ((ff != kF)) {
+          left.config_kP(VELOCITY_CONTROL_SLOT, ff);
+          right.config_kP(VELOCITY_CONTROL_SLOT, ff);
+          kF = ff;
+      }
+
+      // Keep this putPIDFSmartDash call so can tune through Shuffleboard.
+      putPIDFSmartDash();
+
+      SmartDashboard.putNumber("Pigeon Yaw", getHeading());
+      SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
+      SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+      SmartDashboard.putNumber("Left Distance", getLeftPosition());
+      SmartDashboard.putNumber("Right Distance", getRightPosition());
   }
 }
