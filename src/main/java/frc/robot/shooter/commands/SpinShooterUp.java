@@ -51,9 +51,9 @@ public class SpinShooterUp extends Command {
     rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
     rpm += rpmDelta;
 
-//  Shooter.getShooter().setHoodPosition(hood_position);
-
+    Shooter.getShooter().setHoodPosition(hood_position);
     Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
+    
   }
 
   // Called repeatedly when this Command is scheduled to run

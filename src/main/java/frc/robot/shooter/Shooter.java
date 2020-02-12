@@ -194,7 +194,7 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Bumped RPM", currentRPM);
         SmartDashboard.putNumber("Bumped Increment", currentPosition.getBumpRPM());
         SmartDashboard.putNumber("Bump Ticks", bumpTicks);
-//        SmartDashboard.putString("Hood Position", getHoodPosition());
+        SmartDashboard.putString("Hood Position", getHoodPosition());
     }
 
     // returns the max velocity (in RPMs) of the CAN SPark Max/NEOs  5700
