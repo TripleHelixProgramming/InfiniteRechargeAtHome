@@ -83,7 +83,7 @@ public class OI {
 
     // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
 
-    new ClimbTrigger().whenActive(new ClimbCG());
+    // new ClimbTrigger().whenActive(new ClimbCG()); 
 
     // Bumping up and down
 
