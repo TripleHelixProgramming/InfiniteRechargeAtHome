@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
+import frc.paths.ThreeFeetBackwards;
 import frc.paths.ThreeFeetForward;
 import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
@@ -93,13 +94,13 @@ public class AutoRoutines {
 		// 		new RightAuto(),
 		// 		new RightAutoPhase2() 
 		// 	);
-		// case TEST_AUTO_CG:
-			// return new AutoCG(
-			// 	Position.DUMP_BALLS,
-			// 	mode.getPigeonOffset(),
-			// 	mode.getDelay(),
-			// 	new ThreeFeetBackwards()
-			// );
+		case TEST_AUTO_CG:
+			return new AutoCG(
+				Position.DUMP_BALLS,
+				mode.getPigeonOffset(),
+				mode.getDelay(),
+				new ThreeFeetBackwards()
+			);
 		case TEST_RIGHT_TURN:
 			return new AutoCG(new RightTurn());
 		case TEST_3FEET_FORWARD:
