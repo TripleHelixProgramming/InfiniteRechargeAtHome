@@ -22,6 +22,7 @@ import frc.robot.command_groups.ClimbCG;
 import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
+import frc.robot.drivetrain.commands.TuneDrivetrain;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
 import frc.robot.drivetrain.commands.aimInPlace;
 
@@ -81,7 +82,8 @@ public class OI {
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    // new JoystickButton(operator, ControllerMap.PS4_L3).whileHeld(new Climb());
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new TuneDrivetrain(5.0));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new TuneDrivetrain(0.0));
 
     // new ClimbTrigger().whenActive(new ClimbCG()); 
 
