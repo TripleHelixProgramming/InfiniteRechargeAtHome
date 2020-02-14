@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
+import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
 import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
@@ -22,7 +23,7 @@ public class AutoRoutines {
 	public enum AutoMode {
         // Auto (delay for intake)
 		LEFT_AUTO(25.0, 1.5),
-		MIDDLE_AUTO(0.0, 2.0),
+		MIDDLE_AUTO(0.0, 0.5),
 		RIGHT_AUTO(30.0, 2.5),
 		BASELINE_AUTO(0.0, 0.0),
 		TEST_RIGHT_TURN(0.0, 0.0),
@@ -78,11 +79,11 @@ public class AutoRoutines {
 		// 	);
 		case MIDDLE_AUTO:
 			return new AutoCG(
-				new BaseLineThruTrench(),
+				new ThreeFeetBackward(),
 				Position.MIDDLE_AUTO,
 				mode.getPigeonOffset(),
 				mode.getDelay(),
-				new ThruTrenchToBaseLine()
+				new ThreeFeetForward()
 			);
 		// case RIGHT_AUTO:
 		// 	return new AutoCG(
