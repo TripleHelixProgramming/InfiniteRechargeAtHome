@@ -22,9 +22,9 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoMode {
         // Auto (delay for intake)
-		LEFT_AUTO(25.0, 0.5),					// Midfield Auto
-		RIGHT_AUTO(30.0, 2.5),					// Our Trench auto
-		SUPER_AUTO(0.0, 1.0),					// Our Crazy Auto
+		MIDFIELD_AUTO(25.0, 0.5),				// Midfield Auto
+		TRENCH_AUTO(30.0, 2.5),					// Our Trench auto
+		SUPER_AUTO(0.0, 1.0),					// Our Super Auto
 		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
 		TEST_AUTO_CG(0.0, 0.5),					// Simple test for autoCG() call
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
@@ -70,21 +70,21 @@ public class AutoRoutines {
 		// TO DO:  Uncomment the logic below after paths have been created.
 
 		switch (mode) {
-		// case LEFT_AUTO:
+		// case MIDFIELD_AUTO:
 		// 	return new AutoCG(
 		// 		Position.MIDFIELD_SHOOT,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
-		// 		new LeftAuto(),
-		// 		new LeftAutoPhase2() 
+		// 		new MidFieldAuto(),
+		// 		new MidFieldAutoPhase2() 
 		// 	);
-		// case RIGHT_AUTO:
+		// case TRENCH_AUTO:
 		// 	return new AutoCG(
 		// 		Position.TRENCH_SHOOT,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
 		// 		new ThruTrench(),
-		// 		new ThruTrenchToShootPos() 
+		// 		new ThruTrenchToTrenchShoot() 
 		// 	);
 		// case SUPER_AUTO:
 		// 	return new SuperAutoCG(
@@ -95,7 +95,7 @@ public class AutoRoutines {
 		// 		new OpponentTrench(),
 		// 		new OppTrenchToMidField().
 		//		new MidFieldThruOurTrench(),
-		//		new ThruTrenchToShootPos()
+		//		new ThruTrenchToTrenchShoot()
 		// 	);
 		case TEST_AUTO_CG:
 			return new AutoCG(
@@ -122,11 +122,11 @@ public class AutoRoutines {
 	public static AutoMode getSelectedAutoMode() {
 
 		if (!left.get()) {
-			return AutoMode.LEFT_AUTO;
-		} else if (!right.get()) {  // Our Side only auto
-			return AutoMode.RIGHT_AUTO;
-		} else if (!middle.get()) { 
 			return AutoMode.SUPER_AUTO;
+		} else if (!right.get()) {  // Our Side only auto
+			return AutoMode.TRENCH_AUTO;
+		} else if (!middle.get()) { 
+			return AutoMode.MIDFIELD_AUTO;
         } else {
             return AutoMode.BASELINE_AUTO;
         }
