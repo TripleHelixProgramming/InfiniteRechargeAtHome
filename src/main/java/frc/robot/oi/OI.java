@@ -71,7 +71,7 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));  
     new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
 
-    // Return to Default command
+    // Return to Default Command
     new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new RetractIntake());
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
 
@@ -81,6 +81,7 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
     new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new AimAndSpinCG());
 
+    // Return to Default Command
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
     new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
