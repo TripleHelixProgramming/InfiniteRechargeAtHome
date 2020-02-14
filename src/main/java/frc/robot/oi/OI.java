@@ -18,18 +18,22 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
+import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.command_groups.ClimbCG;
 import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
+import frc.robot.drivetrain.commands.SampleDrive;
 import frc.robot.drivetrain.commands.VisionTakeOverGroup;
-import frc.robot.drivetrain.commands.aimInPlace;
-
+import frc.robot.drivetrain.commands.AimInPlace;
+import frc.robot.intake.Intake;
+import frc.robot.intake.commands.RetractIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.shooter.commands.StopShooter;
 import frc.robot.spacer.commands.SpacerCommand;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -62,11 +66,14 @@ public class OI {
 
   private OI() { 
     
-    // Starts the Intake and Ball Handling for intake.  When toggled off the command is taken
-    // off the scheduler. Then the default command for the intake subsystem starts which is 
+    // Starts the Intake and Ball Handling for intake.  When released runs the command  
     // RetractIntake(), which pulls the intake in and stops the rollers.
-    new JoystickButton(operator, ControllerMap.PS4_R1).toggleWhenPressed(new StartIntakeCG(true));
-    new JoystickButton(operator, ControllerMap.PS4_L1).toggleWhenPressed(new StartIntakeCG(false));
+    new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));  
+    new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
+
+    // Return to Default command
+    new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new RetractIntake());
+    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
@@ -74,8 +81,14 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
     new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new AimAndSpinCG());
 
+    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
+    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
+    new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
+
     // Aiming is on a whileHeld reft button
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new aimInPlace());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new AimInPlace());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new SampleDrive()); // The Drivetrain's Default
 
     // Shooting is on a whenPressed / whenReleased right button
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
