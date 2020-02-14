@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.TEST_RIGHT_TURN;
     // mode = AutoMode.TEST_2FEET_FORWARD;
     // mode = AutoMode.BASELINE_AUTO;
-    mode = AutoMode.NONE;     // No auto
+    mode = AutoMode.MIDDLE_AUTO;     // No auto
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {
