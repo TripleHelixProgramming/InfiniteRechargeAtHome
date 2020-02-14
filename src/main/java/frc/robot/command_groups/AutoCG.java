@@ -20,16 +20,6 @@ import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 
 public class AutoCG extends CommandGroup {
-  // addSequential(new Command1());
-  // addSequential(new Command2());
-  // The commands above will run in order.
-
-  // addParallel(new Command1());
-  // addSequential(new Command2());
-  // Command1 and Command2 will run in parallel.
-
-  // A command group will require all of the subsystems that each command
-  // would require.
 
   //  Auto Command Group to just run a path and that's it.
   public AutoCG(Path path){
@@ -87,17 +77,19 @@ public class AutoCG extends CommandGroup {
 
   private class ShootCG extends CommandGroup {
     public ShootCG(Position pos) {
+
       // Center on target --  this may need a timeout?
-      addSequential(new aimInPlace());  
+      // addSequential(new aimInPlace());  
+      
       // Spin shooter up to the expected rpms for that position.
       addSequential(new SpinShooterUp(pos));
+
       // Once shooter is at expected rpms, then start the magazine to 
       // feed bals in.
-      addParallel(new SetBallHandlingCG(BallHandlingState.SHOOT));
-      // Wait for time that it takes 5 balls to be shot
-      addSequential(new WaitCommand(4.0));
+      addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
+
       // Reset ball count back to zero
-      addSequential(new ResetBallCount());
+      // addSequential(new ResetBallCount());
       // Stop the shooter
       addSequential(new StopShooter());
     }

@@ -19,8 +19,8 @@ public class PathFollower extends HelixFollower {
 
     private final Drivetrain drivetrain = Drivetrain.getDrivetrain();
 
-    private final PIDController headingController = new PIDController(15, 0, 0, 0.001);
-    private final PIDController distanceController = new PIDController(10, 0, 0, 0.001);
+    private final PIDController headingController = new PIDController(15, 0, 0, 0.01);
+    private final PIDController distanceController = new PIDController(1, 0, 0, 0.01);
 
     public PathFollower(final Path path) {
         super(path);

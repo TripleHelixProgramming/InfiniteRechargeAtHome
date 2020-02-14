@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
-import frc.paths.ThreeFeetBackwards;
+import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
 import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
@@ -23,8 +23,8 @@ public class AutoRoutines {
 	public enum AutoMode {
         // Auto (delay for intake)
 		LEFT_AUTO(25.0, 0.5),
-		MIDDLE_AUTO(0.0, 2.0),
 		RIGHT_AUTO(30.0, 2.5),
+		SUPER_AUTO(0.0, 1.0),
 		BASELINE_AUTO(0.0, 0.0),
 		TEST_AUTO_CG(0.0, 0.5),
 		TEST_RIGHT_TURN(0.0, 0.0),
@@ -78,14 +78,6 @@ public class AutoRoutines {
 		// 		new ThreeFeetBackward(),
 		// 		new ThreeFeetForward() 
 		// 	);
-		case MIDDLE_AUTO:
-			return new AutoCG(
-				Position.MIDDLE_AUTO,
-				mode.getPigeonOffset(),
-				mode.getDelay(),
-				new BaseLineThruTrench(),
-				new ThruTrenchToBaseLine()
-			);
 		// case RIGHT_AUTO:
 		// 	return new AutoCG(
 		// 		Position.RIGHT_AUTO,
@@ -94,19 +86,30 @@ public class AutoRoutines {
 		// 		new RightAuto(),
 		// 		new RightAutoPhase2() 
 		// 	);
+		// case SUPER_AUTO:
+		// 	return new AutoCG(
+		// 		Position.LEFT_AUTO,
+		// 		mode.getPigeonOffset(),
+		// 		mode.getDelay(),
+		// 		new ThreeFeetBackward(),
+		// 		new ThreeFeetForward() 
+		// 	);
 		case TEST_AUTO_CG:
 			return new AutoCG(
 				Position.DUMP_BALLS,
 				mode.getPigeonOffset(),
 				mode.getDelay(),
-				new ThreeFeetBackwards()
+				new ThreeFeetBackward()
 			);
 		case TEST_RIGHT_TURN:
+			// Tuning Auto
 			return new AutoCG(new RightTurn());
 		case TEST_3FEET_FORWARD:
+			// Tuning Auto
 			return new AutoCG(new ThreeFeetForward());
-		case BASELINE_AUTO:   // Just get off the baseline
-			return new AutoCG(new ThreeFeetForward());
+		case BASELINE_AUTO:   
+			// Just get off the baseline
+			return new AutoCG(new ThreeFeetBackward());
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;
@@ -120,7 +123,7 @@ public class AutoRoutines {
 		} else if (!right.get()) {  // Our Side only auto
 			return AutoMode.RIGHT_AUTO;
 		} else if (!middle.get()) { 
-			return AutoMode.MIDDLE_AUTO;
+			return AutoMode.SUPER_AUTO;
         } else {
             return AutoMode.BASELINE_AUTO;
         }
