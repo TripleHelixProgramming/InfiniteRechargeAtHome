@@ -82,10 +82,12 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new AimAndSpinCG());
 
     // Return to Default Command
+    /* The SpinShooterUps should latch. Shooting (see below) will STOP when released.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
     new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
+    */
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new AimInPlace());
