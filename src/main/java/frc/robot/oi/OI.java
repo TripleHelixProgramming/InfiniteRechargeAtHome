@@ -79,10 +79,10 @@ public class OI {
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new aimInPlace());
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new TuneDrivetrain(5.0));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whileHeld(new TuneDrivetrain(0.5));
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new TuneDrivetrain(0.0));
 
     // new ClimbTrigger().whenActive(new ClimbCG()); 

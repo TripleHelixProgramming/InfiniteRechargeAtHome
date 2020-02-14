@@ -47,8 +47,9 @@ public class Drivetrain extends Subsystem {
 
   // Items that could be put into a per-bot config file.
   private double WHEEL_DIAMETER_IN_INCHES = 6;
-  private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
-  public static double MAX_VELOCITY_IN_FPS = 10;
+  // private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
+  private int ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 56.0/28.0);
+  public static double MAX_VELOCITY_IN_FPS = 10.0;
   private static int VELOCITY_CONTROL_SLOT = 0;
 
   // Constructed in initMotorControllers:
@@ -89,7 +90,7 @@ public class Drivetrain extends Subsystem {
     if (("Bot1".equalsIgnoreCase(botName) == true) || ("Bot2".equalsIgnoreCase(botName) == true)) {
 
       WHEEL_DIAMETER_IN_INCHES = 6;
-      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 28.0/56.0);
+      ENCODER_TICKS_PER_REVOLUTION = (int) (480 * 56.0/28.0);
       MAX_VELOCITY_IN_FPS = 10;
       VELOCITY_CONTROL_SLOT = 0;
       
