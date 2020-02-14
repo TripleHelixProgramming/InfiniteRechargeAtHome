@@ -22,14 +22,14 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoMode {
         // Auto (delay for intake)
-		LEFT_AUTO(25.0, 0.5),
-		RIGHT_AUTO(30.0, 2.5),
-		SUPER_AUTO(0.0, 1.0),
-		BASELINE_AUTO(0.0, 0.0),
-		TEST_AUTO_CG(0.0, 0.5),
-		TEST_RIGHT_TURN(0.0, 0.0),
-		TEST_3FEET_FORWARD(0.0, 0.0),
-		NONE(0.0, 0.0);
+		LEFT_AUTO(25.0, 0.5),					// Midfield Auto
+		RIGHT_AUTO(30.0, 2.5),					// Our Trench auto
+		SUPER_AUTO(0.0, 1.0),					// Our Crazy Auto
+		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
+		TEST_AUTO_CG(0.0, 0.5),					// Simple test for autoCG() call
+		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
+		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
+		NONE(0.0, 0.0);							// Don't run any auto
 		
 		private double pigeon_offset;
 		private double delay;
@@ -72,27 +72,30 @@ public class AutoRoutines {
 		switch (mode) {
 		// case LEFT_AUTO:
 		// 	return new AutoCG(
-		// 		Position.LEFT_AUTO,
+		// 		Position.MIDFIELD_SHOOT,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
-		// 		new ThreeFeetBackward(),
-		// 		new ThreeFeetForward() 
+		// 		new LeftAuto(),
+		// 		new LeftAutoPhase2() 
 		// 	);
 		// case RIGHT_AUTO:
 		// 	return new AutoCG(
-		// 		Position.RIGHT_AUTO,
+		// 		Position.TRENCH_SHOOT,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
-		// 		new RightAuto(),
-		// 		new RightAutoPhase2() 
+		// 		new ThruTrench(),
+		// 		new ThruTrenchToShootPos() 
 		// 	);
 		// case SUPER_AUTO:
-		// 	return new AutoCG(
-		// 		Position.LEFT_AUTO,
-		// 		mode.getPigeonOffset(),
-		// 		mode.getDelay(),
-		// 		new ThreeFeetBackward(),
-		// 		new ThreeFeetForward() 
+		// 	return new SuperAutoCG(
+		// 		Position.MIDFIELD_SHOOT,
+		//		Position.TRENCH_SHOOT,
+		// 		mode.getDelay(),     	// delay 1
+		//		2.0,					// delay 2
+		// 		new OpponentTrench(),
+		// 		new OppTrenchToMidField().
+		//		new MidFieldThruOurTrench(),
+		//		new ThruTrenchToShootPos()
 		// 	);
 		case TEST_AUTO_CG:
 			return new AutoCG(
