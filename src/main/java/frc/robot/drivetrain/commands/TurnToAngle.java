@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class TurnToAngle extends Command {
 
-  private final PIDController controller = new PIDController(0.04, 0.003, 0.002);
+  private final PIDController controller = new PIDController(0.027, 0.0, 0.0);
   private final Notifier notifier = new Notifier(this::calculate);
   private double angle;
 
