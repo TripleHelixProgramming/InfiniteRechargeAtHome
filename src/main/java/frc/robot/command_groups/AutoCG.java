@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
-import frc.robot.drivetrain.commands.aimInPlace;
+import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
@@ -84,7 +84,7 @@ public class AutoCG extends CommandGroup {
   private class ShootCG extends CommandGroup {
     public ShootCG(Position pos) {
       // Center on target --  this may need a timeout?
-      // addSequential(new aimInPlace());  
+      // addSequential(new AimInPlace());  
       // Spin shooter up to the expected rpms for that position.
       addSequential(new SpinShooterUp(pos));
       // Once shooter is at expected rpms, then start the magazine to 

@@ -85,7 +85,7 @@ public class Shooter extends Subsystem {
         setUpPIDF();
 
         // Set Shooter to stop state.
-        Stop();
+        stop();
     }
 
     public void setUpMotors() {
@@ -234,7 +234,7 @@ public class Shooter extends Subsystem {
         putSmartDash();
     }
 
-    public void Stop() {
+    public void stop() {
         setRPM(ShooterState.STOP, 0.0);
     }
 
