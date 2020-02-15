@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
+import frc.robot.drivetrain.commands.StopDrivetrain;
+import frc.robot.drivetrain.commands.TurnToAngle;
 import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
@@ -44,23 +46,24 @@ public class AutoCG extends CommandGroup {
     // and deploy the Intake delay seconds along the path.
     // AddSequential(new TurnToAngle(??));
     addParallel(new IntakeDeployCG(delay));
-    addSequential(new PathFollower(path));
-    addParallel(new RetractIntake());
-
+    addSequential(new PathFollower(path).reverse());
+  
     // Do we need a wait here before reversing??
-    addSequential(new WaitCommand(0.25)); 
+    addSequential(new WaitCommand(0.25));
+    addParallel(new RetractIntake());
 
     // Run path back to shooting position, if 2nd path is not null.
     if (phase2 == null) {
       // Just reverse the first path.
-      addSequential(new PathFollower(path).reverse());
+      addSequential(new PathFollower(path));
     } else {
       // Run a different path as phase 2.
       addSequential(new PathFollower(phase2));
     }
 
     // Adjust angle & Shoot the balls we just picked up.
-    // AddSequential(new TurnToAngle(??));
+    // addSequential(new TurnToAngle(-30));
+    addSequential(new StopDrivetrain());
     addSequential(new ShootCG(pos));
 
     // Stop the ball handling system - magazine & spacer
@@ -87,7 +90,7 @@ public class AutoCG extends CommandGroup {
       addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
 
       // Reset ball count back to zero
-      addSequential(new ResetBallCount());
+      addParallel(new ResetBallCount());
 
       // Stop the shooter
       addSequential(new StopShooter());

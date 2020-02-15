@@ -7,38 +7,61 @@
 
 package frc.robot.drivetrain.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
 
-public class CarsonDrive extends Command {
+import com.team2363.commands.HelixDrive;
+import com.team2363.utilities.RollingAverager;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.drivetrain.Drivetrain;
+import frc.robot.oi.OI;
+
+public class CarsonDrive extends HelixDrive {
+
+  double deadZone = 0.05;
+
+  private final RollingAverager throttle = new RollingAverager(7);
+
   public CarsonDrive() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Drivetrain.getDrivetrain());
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    super.initialize();
+    for (int i = 0; i < 7; i++) {
+        throttle.getNewAverage(0);
+    }
   }
 
-  // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
+  protected double getThrottle() {
+      double newThrottle = OI.getOI().getThrottle();
+      if (Math.abs(newThrottle) < deadZone) {
+          return 0;
+      }
+      return -regraphDeadzone(OI.getOI().getThrottle());
   }
 
-  // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
-    return false;
+  protected double getTurn() {
+      if (Math.abs(OI.getOI().getTurn()) < deadZone) {
+          return 0;
+      }
+      return regraphDeadzone(OI.getOI().getTurn()) * 0.5;
   }
 
-  // Called once after isFinished returns true
   @Override
-  protected void end() {
+  protected void useOutputs(final double left, final double right) {
+      Drivetrain.getDrivetrain().setSetpoint(PERCENT_FULLSPEED, left, right);
   }
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  private double regraphDeadzone(double throttleInput) {
+    double absThrottle = Math.abs(throttleInput);
+    double termOne = absThrottle / throttleInput;
+    double termTwo = 1/(1 - deadZone);
+    double termThree = absThrottle - deadZone;
+    return (termOne * termTwo * termThree);
   }
 }

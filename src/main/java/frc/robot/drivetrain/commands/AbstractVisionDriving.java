@@ -56,10 +56,12 @@ public abstract class AbstractVisionDriving extends Command {
     notifier.stop();
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Stopping Vision Driving");
     getDrivetrain().setPIDFValues();
+
   }
 
   @Override
   protected void interrupted() {
+    camera.setDriverMode();
     end();
   }
 

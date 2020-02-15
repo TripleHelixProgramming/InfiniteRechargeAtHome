@@ -15,11 +15,14 @@ public class AimInPlace extends AbstractVisionDriving {
     return 0;
   }
 
-  @Override
-  protected boolean isFinished() {
-    if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 1) {
-      return true;
-    }
-    return false;
-  }
+  // @Override
+  // protected boolean isFinished() {
+  //   if (Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget() != 0) {
+  //     if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 1 ) {
+  //       Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 }

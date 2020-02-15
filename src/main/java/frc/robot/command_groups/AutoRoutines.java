@@ -14,6 +14,7 @@ import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
 import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
+import frc.paths.Biggie;
 import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
 
@@ -26,7 +27,7 @@ public class AutoRoutines {
 		TRENCH_AUTO(30.0, 2.5),					// Our Trench auto
 		SUPER_AUTO(0.0, 1.0),					// Our Super Auto
 		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
-		TEST_AUTO_CG(0.0, 0.5),					// Simple test for autoCG() call
+		TEST_AUTO_CG(0.0, 0.0),					// Simple test for autoCG() call
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
 		NONE(0.0, 0.0);							// Don't run any auto
@@ -99,10 +100,10 @@ public class AutoRoutines {
 		// 	);
 		case TEST_AUTO_CG:
 			return new AutoCG(
-				Position.DUMP_BALLS,
+				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
 				mode.getDelay(),
-				new ThreeFeetBackward()
+				new ThreeFeetForward()
 			);
 		case TEST_RIGHT_TURN:
 			// Tuning Auto
@@ -112,7 +113,7 @@ public class AutoRoutines {
 			return new AutoCG(new ThreeFeetForward());
 		case BASELINE_AUTO:   
 			// Just get off the baseline
-			return new AutoCG(new ThreeFeetBackward());
+			return new AutoCG(new Biggie());
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;

@@ -37,7 +37,7 @@ public class Shooter extends Subsystem {
     // Bump direction
     public static final int BUMP_UP = 1;
     public static final int BUMP_DOWN = -1;
-    private static double RPM_DELTA = 500.0;
+    private static double RPM_DELTA = 250.0;
 
     // Solenoid ids for hood position & climber
     private static int HOOD_NEAR_SOLENOID = 2;
@@ -270,7 +270,7 @@ public class Shooter extends Subsystem {
     }
 
     public String getHoodPosition() {
-        if (hood.get() == Value.kForward) 
+        if (hood.get() == Value.kReverse) 
             return ("FAR");
         else
             return ("NEAR");

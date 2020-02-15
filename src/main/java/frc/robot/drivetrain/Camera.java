@@ -44,15 +44,22 @@ public class Camera {
     }
     
     public void setDockingMode() {
-        getDefault().getTable(name).getEntry("pipeline").setNumber(3);
-        getDefault().getTable(name).getEntry("ledMode").setNumber(0);
+        getDefault().getTable(name).getEntry("pipeline").setNumber(1);
+        getDefault().getTable(name).getEntry("ledMode").setNumber(3);
         // NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(1);
         getDefault().getTable(name).getEntry("stream").setNumber(0);
     }
 
-    public void setMiddleDockingMode() {
-        getDefault().getTable(name).getEntry("pipeline").setNumber(2);
-        getDefault().getTable(name).getEntry("ledMode").setNumber(0);
+    // public void setMiddleDockingMode() {
+    //     getDefault().getTable(name).getEntry("pipeline").setNumber(2);
+    //     getDefault().getTable(name).getEntry("ledMode").setNumber(0);
+    //     NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(2);
+    //     getDefault().getTable(name).getEntry("stream").setNumber(0);
+    // }
+
+    public void setDriverMode() {
+        getDefault().getTable(name).getEntry("pipeline").setNumber(0);
+        getDefault().getTable(name).getEntry("ledMode").setNumber(1);
         // NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(2);
         getDefault().getTable(name).getEntry("stream").setNumber(0);
     }
