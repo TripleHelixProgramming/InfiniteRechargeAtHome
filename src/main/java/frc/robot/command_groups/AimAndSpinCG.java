@@ -9,14 +9,14 @@ package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-import frc.robot.drivetrain.commands.aimInPlace;
+import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
 
 
 public class AimAndSpinCG extends CommandGroup {
   public AimAndSpinCG() {
-    addParallel(new aimInPlace());
+    addParallel(new AimInPlace());
     addSequential(new SpinShooterUp(Position.UNKNOWN));
   }
 }

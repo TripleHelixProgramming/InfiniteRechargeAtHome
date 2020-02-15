@@ -8,7 +8,7 @@
 package frc.robot.drivetrain.commands;
 import frc.robot.drivetrain.Drivetrain;
 
-public class aimInPlace extends AbstractVisionDriving {
+public class AimInPlace extends AbstractVisionDriving {
  
   @Override
   public double getThrottle() {
