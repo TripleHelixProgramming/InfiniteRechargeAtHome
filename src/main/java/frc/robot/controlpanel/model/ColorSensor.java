@@ -10,6 +10,7 @@ package frc.robot.controlpanel.model;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.controlpanel.ControlPanel;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
@@ -46,6 +47,8 @@ public class ColorSensor {
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
   private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
+  public int currentColor = ControlPanel.COLOR_UNKNOWN;
+
   /**
    * Creates a new ColorSensor.
    */
@@ -80,14 +83,19 @@ public class ColorSensor {
     final ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kBlueTarget) {
+      currentColor = ControlPanel.COLOR_BLUE;
       colorString = "Blue";
     } else if (match.color == kRedTarget) {
+      currentColor = ControlPanel.COLOR_RED;
       colorString = "Red";
     } else if (match.color == kGreenTarget) {
+      currentColor = ControlPanel.COLOR_GREEN;
       colorString = "Green";
     } else if (match.color == kYellowTarget) {
+      currentColor = ControlPanel.COLOR_YELLOW;
       colorString = "Yellow";
     } else {
+      currentColor = ControlPanel.COLOR_UNKNOWN;
       colorString = "Unknown";
     }
 
@@ -106,4 +114,7 @@ public class ColorSensor {
     this.colorSensorPeriodic();
   }
 
+  public int getCurrentColor() {
+    return currentColor;
+  }
 }
