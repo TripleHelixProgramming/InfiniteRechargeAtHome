@@ -84,7 +84,7 @@ public class AutoCG extends CommandGroup {
   private class ShootCG extends CommandGroup {
     public ShootCG(Position pos) {
       // Center on target --  this may need a timeout?
-      addSequential(new AimInPlace());  
+      // addSequential(new AimInPlace());  
       // Spin shooter up to the expected rpms for that position.
       addSequential(new SpinShooterUp(pos));
       // Once shooter is at expected rpms, then start the magazine to 
@@ -93,7 +93,7 @@ public class AutoCG extends CommandGroup {
       // Wait for time that it takes 5 balls to be shot
       addSequential(new WaitCommand(4.0));
       // Reset ball count back to zero
-      addSequential(new ResetBallCount());
+      // addSequential(new ResetBallCount());
       // Stop the shooter
       addSequential(new StopShooter());
     }
