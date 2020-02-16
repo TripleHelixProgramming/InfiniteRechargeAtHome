@@ -37,15 +37,15 @@ public class Shooter extends Subsystem {
     // Bump direction
     public static final int BUMP_UP = 1;
     public static final int BUMP_DOWN = -1;
-    private static double RPM_DELTA = 250.0;
+    private static double RPM_DELTA = 1000.0;
 
     // Solenoid ids for hood position & climber
     private static int HOOD_NEAR_SOLENOID = 2;
     private static int HOOD_FAR_SOLENOID = 3; // Solenoid extended = far
 
     // Master & Slave motor CAN IDs
-    private static final int SHOOTER_MASTER_ID = 13;
-    private static final int SHOOTER_SLAVE_ID = 22;
+    private static final int SHOOTER_MASTER_ID = 22;
+    private static final int SHOOTER_SLAVE_ID = 13;
 
     public double MAX_RPM = 5700;
 

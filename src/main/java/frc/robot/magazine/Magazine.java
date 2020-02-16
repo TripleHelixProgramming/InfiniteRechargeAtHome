@@ -103,6 +103,8 @@ public class Magazine extends Subsystem {
     super.periodic();
 
     SmartDashboard.putNumber("Ball Count", ball_count);
+    SmartDashboard.putBoolean("Ball At Spacer", ballAtSpacer());
+    SmartDashboard.putBoolean("Ball At Shooter", ballAtShooter());
   }
 
   @Override
