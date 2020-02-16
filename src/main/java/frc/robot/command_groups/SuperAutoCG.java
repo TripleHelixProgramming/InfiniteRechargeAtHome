@@ -7,64 +7,42 @@
 
 package frc.robot.command_groups;
 
+import com.team319.trajectory.Path;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
-import frc.robot.drivetrain.commands.StopDrivetrain;
-import frc.robot.drivetrain.commands.TurnToAngle;
-import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.shooter.Position;
 import frc.robot.magazine.commands.ResetBallCount;
+import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 
-public class AutoCG extends CommandGroup {
-
-  //  Auto Command Group to just run a path and that's it.
-  public AutoCG(Path path){
-    addSequential(new PathFollower(path));
-  }
-  
-  // Auto command group that shoots, then runs a path while collecting balls
-  // but does not run a path back to shoot the balls.
-  public AutoCG(Position pos, double pigeon_offset, double delay, Path path) {
-    this(pos, pigeon_offset, delay, path, null);
-  }
+public class SuperAutoCG extends CommandGroup {
 
   //  Auto command group that shoots from a known positions, runs a path
   //  to collect balls, reverses its path back to known position and 
   //  shoots again.
-  public AutoCG(Position pos, double pigeon_offset, double delay, Path path,  Path phase2) {
-    
-    // Runs command group to shoot from a know position.
-    addSequential(new ShootCG(pos));
+  public SuperAutoCG(Position pos1, Position pos2, double delay1, double delay2, Path path1,  Path path2, Path path3, Path path4) {
 
-    // Re-orient the robot before running path.  Run path to get more balls
-    // and deploy the Intake delay seconds along the path.
-    // AddSequential(new TurnToAngle(??));
-    addParallel(new IntakeDeployCG(delay));
-    addSequential(new PathFollower(path).reverse());
-  
-    // Do we need a wait here before reversing??
-    addSequential(new WaitCommand(0.25));
+    addParallel(new IntakeDeployCG(delay1));
+    addSequential(new PathFollower(path1));
     addParallel(new RetractIntake());
 
-    // Run path back to shooting position, if 2nd path is not null.
-    if (phase2 == null) {
-      // Just reverse the first path.
-      addSequential(new PathFollower(path));
-    } else {
-      // Run a different path as phase 2.
-      addSequential(new PathFollower(phase2));
-    }
+    addSequential(new PathFollower(path2));
 
-    // Adjust angle & Shoot the balls we just picked up.
-    // addSequential(new TurnToAngle(-30));
-    addSequential(new StopDrivetrain());
-    addSequential(new ShootCG(pos));
+    // Runs command group to shoot from a know position.
+    addSequential(new ShootCG(pos1));
+
+    addParallel(new IntakeDeployCG(delay2));
+    addSequential(new PathFollower(path3));
+    addParallel(new RetractIntake());
+
+    addSequential(new PathFollower(path4));
+
+    // Runs command group to shoot from a know position.
+    addSequential(new ShootCG(pos2)); 
 
     // Stop the ball handling system - magazine & spacer
     addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
@@ -80,8 +58,10 @@ public class AutoCG extends CommandGroup {
 
   private class ShootCG extends CommandGroup {
     public ShootCG(Position pos) {
-      // Center on target --  this may need a timeout?
-      // addSequential(new AimInPlace());  
+
+      // Center on target --  with a timeout
+      // addSequential(new aimInPlace(), 1.0);  
+      
       // Spin shooter up to the expected rpms for that position.
       addSequential(new SpinShooterUp(pos));
 
@@ -90,7 +70,7 @@ public class AutoCG extends CommandGroup {
       addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
 
       // Reset ball count back to zero
-      addParallel(new ResetBallCount());
+      addSequential(new ResetBallCount());
 
       // Stop the shooter
       addSequential(new StopShooter());

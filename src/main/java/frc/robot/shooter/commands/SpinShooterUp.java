@@ -31,7 +31,6 @@ public class SpinShooterUp extends Command {
     // eg. requires(chassis);
     requires(Shooter.getShooter());
     position = pos;
-    Shooter.getShooter().setCurrentPosition(position);
   }
 
   // This will use the last position.
@@ -43,6 +42,8 @@ public class SpinShooterUp extends Command {
   @Override
   protected void initialize() {
 
+    Shooter.getShooter().setCurrentPosition(position);
+
     // Get motor setpoint & expected rpm from position enum.
     rpm = position.getRPM();
     hood_position = position.getHoodPosition();
@@ -51,9 +52,9 @@ public class SpinShooterUp extends Command {
     rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
     rpm += rpmDelta;
 
-//  Shooter.getShooter().setHoodPosition(hood_position);
-
+    Shooter.getShooter().setHoodPosition(hood_position);
     Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
+    
   }
 
   // Called repeatedly when this Command is scheduled to run

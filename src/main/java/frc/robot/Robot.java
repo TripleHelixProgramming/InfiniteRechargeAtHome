@@ -34,6 +34,7 @@ import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 import frc.robot.magazine.Magazine;
+import frc.robot.oi.OI;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -107,6 +108,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
+    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
   }
 
   /**
@@ -133,7 +135,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.TEST_RIGHT_TURN;
     // mode = AutoMode.TEST_2FEET_FORWARD;
     // mode = AutoMode.BASELINE_AUTO;
-    mode = AutoMode.MIDDLE_AUTO;     // No auto
+    mode = AutoMode.TEST_AUTO_CG;     // No auto
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {
@@ -168,6 +170,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     HelixLogger.getInstance().saveLogs();
+    SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
   }
 
   /**

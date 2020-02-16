@@ -21,6 +21,7 @@ import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.command_groups.ClimbCG;
 import frc.robot.drivetrain.commands.CameraInfo;
+import frc.robot.drivetrain.commands.CarsonDrive;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.SampleDrive;
@@ -35,7 +36,6 @@ import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
-import frc.robot.spacer.commands.SpacerCommand;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
@@ -78,9 +78,9 @@ public class OI {
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH));
-    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP));
-    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new AimAndSpinCG());
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH_SHOOT));
+    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP_SHOOT));
+    new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new AimAndSpinCG());
 
     // Return to Default Command
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
@@ -89,19 +89,22 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
     // Aiming is on a whileHeld reft button
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new AimInPlace());
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new SampleDrive()); // The Drivetrain's Default
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
+    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new CarsonDrive()); // The Drivetrain's Default
 
     // Shooting is on a whenPressed / whenReleased right button
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whileHeld(new TuneDrivetrain(0.5));
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new TuneDrivetrain(0.0));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
+    // new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    // new ClimbTrigger().whenActive(new ClimbCG()); 
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whileHeld(new TuneDrivetrain(0.5));
 
-    // Bumping up and down
+    // new ClimbTrigger().whenActive(new ClimbCG());
+
+    // Bumping up and down  
 
   //   new Button() {
 

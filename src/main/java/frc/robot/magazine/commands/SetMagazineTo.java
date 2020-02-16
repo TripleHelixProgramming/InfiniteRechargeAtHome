@@ -19,26 +19,12 @@ public class SetMagazineTo extends Command {
   private double SHOOT_SPEED = -0.8;
   private double INTAKE_SPEED = -0.8;
 
-  // From Robot Worksheet
-  private double MAGAZINE_ROLLER_DIAMETER = 1.44;
-  private double INCHES_PER_MAGZINE_ROLLER_REV = MAGAZINE_ROLLER_DIAMETER * 3.1416; // inches
-
-  // Gear ratio = Stage 1 * Stage 2
-  private double GEAR_RATIO = 1 / 4 * 1 / 4;
-  private double MAGAZINE_ROLLER_REVS_PER_MOTOR_REV = 1 * GEAR_RATIO;
-  private double INCHES_PER_MOTOR_REV = INCHES_PER_MAGZINE_ROLLER_REV * MAGAZINE_ROLLER_REVS_PER_MOTOR_REV;
-
-  private double BALL_CIRCUMFERENCE = 9 * 3.1416;   // ball diameter * pi
-
   private double power = 0.0;
-  private double startPos = 0.0;
 
   private Boolean ballAtShooterLastTime = false;
+  private Boolean ballAtSpacerLastTime = false;
   private Boolean ballAtShooter = false;
   private Boolean ballAtSpacer = false;
-  private Boolean ballShot = false;
-
-  private int ballsShot = 0;
 
   public SetMagazineTo(BallHandlingState action) {
     // Use requires() here to declare subsystem dependencies
@@ -57,40 +43,27 @@ public class SetMagazineTo extends Command {
   protected void execute() {
 
     ballAtShooterLastTime = ballAtShooter;
+    ballAtSpacerLastTime = ballAtSpacer;
     ballAtShooter = Magazine.getMagazine().ballAtShooter();
     ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
-    if (ballAtShooterLastTime && !ballAtShooter) {
-      ballsShot++;
-      ballShot = true;
-      startPos = Magazine.getMagazine().getMotorPosition();
-    } else {
-      ballShot = false;
-    }
+    if (ballAtSpacerLastTime && !ballAtSpacer) Magazine.getMagazine().IncreaseBallCount();
+    // if (ballAtShooterLastTime && !ballAtShooter) Magazine.getMagazine().DecreaseBallCount();
+    if (Magazine.getMagazine().ball_count == 3 && ballAtSpacer) Magazine.getMagazine().ball_count = 4;
+    if (action == Magazine.BallHandlingState.SHOOT) Magazine.getMagazine().ball_count = 0;
 
     switch (action) {
+
     case SHOOT_NO_LOGIC: // For testing purposes before beam breaks.
       Magazine.getMagazine().setPower(SHOOT_SPEED);
       break;
+
     case INTAKE_NO_LOGIC: // For testing purposes before beam breaks.
       Magazine.getMagazine().setPower(INTAKE_SPEED);
       break;
-    case SHOOT_ONE:
-      // power = SHOOT_SPEED;
-      // if (!Shooter.getShooter().isAtRPM()) {
-      //     power = 0.0;
-      // } else {
-      //     if (!ballShot) {
-      //       // Roll magazine forware by one ball circumference.
-      //       if (((Magazine.getMagazine().getMotorPosition()- startPos) * INCHES_PER_MOTOR_REV) >= BALL_CIRCUMFERENCE) {
-      //           // Roller has turn for 1 ball circumference.
-      //           ballShot = true;
-      //           power = 0.0;
-      //       }
-      //   }
-      // }
-      // Magazine.getMagazine().setPower(power);
-      break;
+      
+    case SHOOT_ONE:  
+      //SHOOT ONE is same as SHOOT, except case ADVANCE is executed on button release.
     case SHOOT:
       power = 0.0;
       if (Shooter.getShooter().isAtRPM()) {
@@ -98,6 +71,17 @@ public class SetMagazineTo extends Command {
       }
       Magazine.getMagazine().setPower(power);
       break;
+
+    case ADVANCE:  
+      // Called when SHOOT ONE button is released to advance the magazine to next ball.
+      // Magazine will run indefinitely, when no balls left in magazine.
+      power = 0.0;
+      if (!ballAtShooter) {
+        power = SHOOT_SPEED;
+      }
+      Magazine.getMagazine().setPower(power);
+      break;
+
     case INTAKE:
       power = 0.0;
       if (!ballAtShooter && ballAtSpacer) {
@@ -105,6 +89,7 @@ public class SetMagazineTo extends Command {
       }
       Magazine.getMagazine().setPower(power);
       break;
+
     case STOP:
     default:
       Magazine.getMagazine().setPower(0.0);

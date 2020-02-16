@@ -14,6 +14,7 @@ import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
 import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
+import frc.paths.Biggie;
 import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
 
@@ -22,13 +23,14 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoMode {
         // Auto (delay for intake)
-		LEFT_AUTO(25.0, 1.5),
-		MIDDLE_AUTO(0.0, 0.5),
-		RIGHT_AUTO(30.0, 2.5),
-		BASELINE_AUTO(0.0, 0.0),
-		TEST_RIGHT_TURN(0.0, 0.0),
-		TEST_3FEET_FORWARD(0.0, 0.0),
-		NONE(0.0, 0.0);
+		MIDFIELD_AUTO(25.0, 0.5),				// Midfield Auto
+		TRENCH_AUTO(30.0, 2.5),					// Our Trench auto
+		SUPER_AUTO(0.0, 1.0),					// Our Super Auto
+		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
+		TEST_AUTO_CG(0.0, 0.0),					// Simple test for autoCG() call
+		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
+		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
+		NONE(0.0, 0.0);							// Don't run any auto
 		
 		private double pigeon_offset;
 		private double delay;
@@ -69,36 +71,49 @@ public class AutoRoutines {
 		// TO DO:  Uncomment the logic below after paths have been created.
 
 		switch (mode) {
-		// case LEFT_AUTO:
+		// case MIDFIELD_AUTO:
 		// 	return new AutoCG(
-		// 		new LeftAuto(),
-		// 		Position.LEFT_AUTO,
+		// 		Position.MIDFIELD_SHOOT,
 		// 		mode.getPigeonOffset(),
 		// 		mode.getDelay(),
-		// 		new LeftAutoPhase2() 
+		// 		new MidFieldAuto(),
+		// 		new MidFieldAutoPhase2() 
 		// 	);
-		case MIDDLE_AUTO:
+		// case TRENCH_AUTO:
+		// 	return new AutoCG(
+		// 		Position.TRENCH_SHOOT,
+		// 		mode.getPigeonOffset(),
+		// 		mode.getDelay(),
+		// 		new ThruTrench(),
+		// 		new ThruTrenchToTrenchShoot() 
+		// 	);
+		// case SUPER_AUTO:
+		// 	return new SuperAutoCG(
+		// 		Position.MIDFIELD_SHOOT,
+		//		Position.TRENCH_SHOOT,
+		// 		mode.getDelay(),     	// delay 1
+		//		2.0,					// delay 2
+		// 		new OpponentTrench(),
+		// 		new OppTrenchToMidField().
+		//		new MidFieldThruOurTrench(),
+		//		new ThruTrenchToTrenchShoot()
+		// 	);
+		case TEST_AUTO_CG:
 			return new AutoCG(
-				new ThreeFeetBackward(),
-				Position.MIDDLE_AUTO,
+				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
 				mode.getDelay(),
 				new ThreeFeetForward()
 			);
-		// case RIGHT_AUTO:
-		// 	return new AutoCG(
-		// 		new RightAuto(),
-		// 		Position.RIGHT_AUTO,
-		// 		mode.getPigeonOffset(),
-		// 		mode.getDelay(),
-		// 		new RightAutoPhase2() 
-		// 	);
 		case TEST_RIGHT_TURN:
+			// Tuning Auto
 			return new AutoCG(new RightTurn());
 		case TEST_3FEET_FORWARD:
+			// Tuning Auto
 			return new AutoCG(new ThreeFeetForward());
-		case BASELINE_AUTO:   // Just get off the baseline
-			return new AutoCG(new ThreeFeetForward());
+		case BASELINE_AUTO:   
+			// Just get off the baseline
+			return new AutoCG(new Biggie());
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;
@@ -108,11 +123,11 @@ public class AutoRoutines {
 	public static AutoMode getSelectedAutoMode() {
 
 		if (!left.get()) {
-			return AutoMode.LEFT_AUTO;
+			return AutoMode.SUPER_AUTO;
 		} else if (!right.get()) {  // Our Side only auto
-			return AutoMode.RIGHT_AUTO;
+			return AutoMode.TRENCH_AUTO;
 		} else if (!middle.get()) { 
-			return AutoMode.MIDDLE_AUTO;
+			return AutoMode.MIDFIELD_AUTO;
         } else {
             return AutoMode.BASELINE_AUTO;
         }
@@ -121,5 +136,4 @@ public class AutoRoutines {
 	private static void putSmartDash(AutoMode mode) {
 		SmartDashboard.putString("AUTO MODE:", mode.toString());
 	}	
-
 }

@@ -5,27 +5,29 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.magazine.commands;
+package frc.robot.drivetrain.commands;
+
+import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.magazine.*;
+import frc.robot.drivetrain.Drivetrain;
 
-public class ResetBallCount extends Command {
-  public ResetBallCount() {
+public class StopDrivetrain extends Command {
+  public StopDrivetrain() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Magazine.getMagazine());
+    requires(Drivetrain.getDrivetrain());
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Drivetrain.getDrivetrain().setSetpoint(PERCENT_FULLSPEED, 0.0, 0.0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Magazine.getMagazine().ResetBallCount();
   }
 
   // Make this return true when this Command no longer needs to run execute()
