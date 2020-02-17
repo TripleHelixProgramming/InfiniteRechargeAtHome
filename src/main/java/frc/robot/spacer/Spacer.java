@@ -9,8 +9,10 @@ package frc.robot.spacer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -34,6 +36,7 @@ public class Spacer extends Subsystem {
   private TalonSRX indexer = new TalonSRX(INDEXER_ID);
 
   private final CANEncoder encoder;
+  private final CANDigitalInput limit;
   
   public Spacer() {
     super();
@@ -41,6 +44,10 @@ public class Spacer extends Subsystem {
     indexer.configFactoryDefault();
     motor.restoreFactoryDefaults();
     motor.setIdleMode(IdleMode.kBrake);
+
+    //  Disable Limit Switches
+    limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);
+    limit.enableLimitSwitch(false);
     encoder = motor.getEncoder();
   }
 

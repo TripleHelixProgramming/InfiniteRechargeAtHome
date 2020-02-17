@@ -16,7 +16,7 @@ public enum Position {
     // POSITION(rpms expected, hood position)
     MIDFIELD_SHOOT(3135, 0),
     TRENCH_SHOOT(3000, 0),
-    DUMP_BALLS(2000, 1),
+    DUMP_BALLS(1000, 1),
     LAYUP_SHOOT(3135, 1),
     UNKNOWN(0, 0);
 

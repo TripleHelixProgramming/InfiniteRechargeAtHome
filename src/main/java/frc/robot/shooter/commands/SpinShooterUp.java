@@ -31,6 +31,7 @@ public class SpinShooterUp extends Command {
     // eg. requires(chassis);
     requires(Shooter.getShooter());
     position = pos;
+    Shooter.getShooter().setCurrentPosition(position);
   }
 
   // This will use the last position.

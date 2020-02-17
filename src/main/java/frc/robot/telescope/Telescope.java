@@ -25,8 +25,8 @@ public class Telescope extends Subsystem {
     private static Telescope INSTANCE = null;
 
     // TO DO: Update solenoid IDs once robot is wired.
-    public static int TELESCOPE_RAISE_ID= 4;
-    public static int TELESCOPE_LOWER_ID= 5;
+    public static int TELESCOPE_RAISE_ID= 5;
+    public static int TELESCOPE_LOWER_ID= 4;
 
     // TO DO: Get CAN ID for the motor controller, see pinned #Software items for the 2020 Robot Worksheet.
     public static int TELESCOPE_MOTOR_ID = 17;
