@@ -7,8 +7,10 @@
 
 package frc.robot.magazine;
 
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -26,6 +28,7 @@ public class Magazine extends Subsystem {
 
   private final CANSparkMax motor;
   private final CANEncoder encoder;
+  private final CANDigitalInput limit;
 
   // Number of balls currently in the system.
   public int ball_count = 0;
@@ -47,6 +50,11 @@ public class Magazine extends Subsystem {
     motor = new CANSparkMax(MAGAZINE_ID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
     motor.setIdleMode(IdleMode.kBrake);
+
+    //  Disable Limit Switches
+    limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);
+    limit.enableLimitSwitch(false);
+
     encoder = motor.getEncoder();
 
     ball_count = 0;
@@ -82,6 +90,14 @@ public class Magazine extends Subsystem {
 
   public void DecreaseBallCount() {
     ball_count--;
+  }
+
+  public int getBallCount() {
+    return ball_count;
+  }
+  
+  public void setBallCount(int count) {
+    ball_count = count;
   }
   
   public void ResetBallCount() {

@@ -10,8 +10,9 @@ package frc.robot;
 import static frc.robot.Preferences.getPreferences;
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
-import static frc.robot.controlpanel.ControlPanel.getControlPanel;
+// import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.intake.Intake.getIntake;
+import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
 import static frc.robot.oi.OI.getOI;
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
     getSpacer();
     getMagazine();
     getShooter();
+    getTelescope();
 
     // TODO: Commented since hardware not ready yet.
     // Don't enable until tesed, CAN/PCM ids are set, etc.

@@ -48,9 +48,8 @@ public class SetMagazineTo extends Command {
     ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
     if (ballAtSpacerLastTime && !ballAtSpacer) Magazine.getMagazine().IncreaseBallCount();
-    // if (ballAtShooterLastTime && !ballAtShooter) Magazine.getMagazine().DecreaseBallCount();
-    if (Magazine.getMagazine().ball_count == 3 && ballAtSpacer) Magazine.getMagazine().ball_count = 4;
-    // if (action == Magazine.BallHandlingState.SHOOT) Magazine.getMagazine().ball_count = 0;
+    if (Magazine.getMagazine().getBallCount() == 3 && ballAtSpacer) Magazine.getMagazine().setBallCount(4);
+    if (action == Magazine.BallHandlingState.SHOOT) Magazine.getMagazine().setBallCount(0);
 
     switch (action) {
 

@@ -227,6 +227,7 @@ public class Shooter extends Subsystem {
 
     public void stop() {
         setRPM(ShooterState.STOP, 0.0);
+        setHoodToFar();
     }
 
     // Doesn't alter any handling of the shooter but
