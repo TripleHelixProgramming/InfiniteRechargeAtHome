@@ -40,8 +40,8 @@ public class Shooter extends Subsystem {
     private static double RPM_DELTA = 1000.0;
 
     // Solenoid ids for hood position & climber
-    private static int HOOD_NEAR_SOLENOID = 2;
-    private static int HOOD_FAR_SOLENOID = 3; // Solenoid extended = far
+    private static int HOOD_NEAR_SOLENOID = 3;
+    private static int HOOD_FAR_SOLENOID = 2; // Solenoid extended = far
 
     // Master & Slave motor CAN IDs
     private static final int SHOOTER_MASTER_ID = 22;
@@ -93,6 +93,7 @@ public class Shooter extends Subsystem {
 
         // Keeps the motor from slamming to a hault when STOP mode is set.
         master.setClosedLoopRampRate(2.0);
+        master.setSmartCurrentLimit(60);
 
         // Tell the slave to follow the master and invert it since on opposite side.
         slave.follow(master, true);
@@ -106,11 +107,11 @@ public class Shooter extends Subsystem {
         pidController = master.getPIDController();
 
         // PID coefficients
-        kP = 0.0001;
+        kP = 0.00015;
         kI = 0.0;
-        kD = 0.005;
+        kD = 0.0;
         kIz = 0.0;
-        kFF = 0.000175;
+        kFF = 0.000181;
         kMaxOutput = 1;
         kMinOutput = -1;
         currentRPM = 0;

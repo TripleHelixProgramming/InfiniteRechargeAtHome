@@ -15,6 +15,8 @@ import frc.paths.RightTurn;
 import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
 import frc.paths.Biggie;
+import frc.paths.Right;
+import frc.paths.RightSweep;
 import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
 
@@ -103,7 +105,8 @@ public class AutoRoutines {
 				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
 				mode.getDelay(),
-				new ThreeFeetForward()
+				new Right(),
+				new RightSweep()
 			);
 		case TEST_RIGHT_TURN:
 			// Tuning Auto

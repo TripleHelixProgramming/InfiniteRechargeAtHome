@@ -11,8 +11,9 @@ public class ExtendTelescope extends Command {
 
   private Telescope myTelescope = null;
   private double inputPosition, currentPosition;
-  private double ROTATIONS_SCALE = 0.1;
-  private double MIN_POSITION = 0.1;
+  private double ROTATIONS_SCALE = 3.00;
+  private double MIN_POSITION = 1.0;
+  private double MAX_ROTATIONS = 39.0;
 
   public ExtendTelescope() {
     // Use requires() here to declare subsystem dependencies
@@ -33,6 +34,7 @@ public class ExtendTelescope extends Command {
     inputPosition = ROTATIONS_SCALE * OI.getOI().getClimberPower();
     currentPosition = myTelescope.getPosition();
     inputPosition =  currentPosition + inputPosition;
+    if (inputPosition > MAX_ROTATIONS) { inputPosition = MAX_ROTATIONS;}
     myTelescope.setRotations(inputPosition);
   }
 
@@ -45,6 +47,7 @@ public class ExtendTelescope extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    myTelescope.setRotations(myTelescope.getPosition()); // We are where we want to be. Hold here.
     HelixEvents.getInstance().addEvent("TELESCOPE", "Ending ExtendTelescope");
   }
 

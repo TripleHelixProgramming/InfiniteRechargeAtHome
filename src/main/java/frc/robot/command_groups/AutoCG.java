@@ -40,17 +40,23 @@ public class AutoCG extends CommandGroup {
   public AutoCG(Position pos, double pigeon_offset, double delay, Path path,  Path phase2) {
     
     // Runs command group to shoot from a know position.
-    addSequential(new ShootCG(pos));
+    // addSequential(new ShootCG(pos));
 
     // Re-orient the robot before running path.  Run path to get more balls
     // and deploy the Intake delay seconds along the path.
     // AddSequential(new TurnToAngle(??));
-    addParallel(new IntakeDeployCG(delay));
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 3.25); //added.25s
+    addParallel(new SpinShooterUp(pos));
     addSequential(new PathFollower(path).reverse());
   
     // Do we need a wait here before reversing??
-    addSequential(new WaitCommand(0.25));
-    addParallel(new RetractIntake());
+    addSequential(new TurnToAngle(20));
+    addSequential(new StopDrivetrain());
+    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 2.75); //added .25s
+    addParallel(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
+    addParallel(new IntakeDeployCG(delay));
+    addSequential(new TurnToAngle(0));
+    addSequential(new WaitCommand(0.1));
 
     // Run path back to shooting position, if 2nd path is not null.
     if (phase2 == null) {
@@ -58,16 +64,26 @@ public class AutoCG extends CommandGroup {
       addSequential(new PathFollower(path));
     } else {
       // Run a different path as phase 2.
-      addSequential(new PathFollower(phase2));
+      addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
+
+      addSequential(new PathFollower(phase2).reverse());
     }
+    addParallel(new SpinShooterUp(pos));
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
+    addSequential(new PathFollower(phase2));
+    addSequential(new RetractIntake());
+    addSequential(new TurnToAngle(20));
+    addSequential(new StopDrivetrain());
+    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4);
+    addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
 
     // Adjust angle & Shoot the balls we just picked up.
     // addSequential(new TurnToAngle(-30));
-    addSequential(new StopDrivetrain());
-    addSequential(new ShootCG(pos));
+    // addSequential(new StopDrivetrain());
+    // addSequential(new ShootCG(pos));
 
     // Stop the ball handling system - magazine & spacer
-    addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
+    // addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
   }
 
   // Deploys & runs the intake after "delay" seconds have passed.

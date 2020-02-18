@@ -53,20 +53,21 @@ public class Telescope extends Subsystem {
         // initialize motor
         motor.restoreFactoryDefaults();
         motor.setIdleMode(IdleMode.kBrake);
+        motor.setSmartCurrentLimit(20);
         encoder = motor.getEncoder();
 
         pidController = motor.getPIDController();
 
         // PID coefficients
-        kP = 6e-5;
+        kP = 0.1; // 6e-5;
         kI = 0.0;
         kD = 0.0;
         kIz = 0.0;
-        kFF = 0.00015;
+//        kFF = 0.00015;
+        kFF = 0.0;
         kMaxOutput = 1;
         kMinOutput = -1;
         //currentRPM = 0;
-
         // set PID coefficients
         pidController.setP(kP);
         pidController.setI(kI);
@@ -90,8 +91,9 @@ public class Telescope extends Subsystem {
 
     public void setRotations(double rotations) {
         pidController.setReference(rotations, ControlType.kPosition);
-        SmartDashboard.putNumber("SetPoint", rotations);
-        SmartDashboard.putNumber("ProcessVariable", encoder.getPosition());
+        SmartDashboard.putNumber("Telescope SetPoint", rotations);
+        SmartDashboard.putNumber("Telescope ProcessVariable", encoder.getPosition());
+        SmartDashboard.putNumber("Telescope Difference", rotations - encoder.getPosition());
       }
 
     public double getPosition() {

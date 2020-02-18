@@ -15,6 +15,7 @@ import com.team2363.utilities.ControllerMap;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
@@ -102,7 +103,7 @@ public class OI {
 
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whileHeld(new TuneDrivetrain(0.5));
 
-    // new ClimbTrigger().whenActive(new ClimbCG());
+    new CTrigger().whenActive(new ClimbCG());
 
     // Bumping up and down  
 
@@ -166,4 +167,11 @@ public class OI {
     // }
     return stick;
   }
+
+  class CTrigger extends Trigger {
+    @Override
+    public boolean get(){
+        return getClimberPower() > 0.8;
+    }
+}
 }

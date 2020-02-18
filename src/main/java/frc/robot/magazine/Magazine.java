@@ -50,6 +50,7 @@ public class Magazine extends Subsystem {
     motor = new CANSparkMax(MAGAZINE_ID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
     motor.setIdleMode(IdleMode.kBrake);
+    motor.setSmartCurrentLimit(30);
 
     //  Disable Limit Switches
     limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);
