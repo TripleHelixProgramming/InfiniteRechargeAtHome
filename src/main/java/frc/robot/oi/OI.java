@@ -105,7 +105,7 @@ public class OI {
 
     new CTrigger().whenActive(new ClimbCG());
 
-    // Bumping up and down  
+  // Bumping up and down  
 
   //   new Button() {
 
@@ -160,7 +160,7 @@ public class OI {
 
   // Get Climber power from operator controller right joystick y-axis
   public double getClimberPower() {
-    double stick = -operator.getRawAxis(PS4_RIGHT_STICK_Y);
+    double stick = -operator.getRawAxis(PS4_LEFT_STICK_Y);
     // stick *= Math.abs(stick);
     // if (Math.abs(stick) < 0.05) {
     //   stick = 0;
