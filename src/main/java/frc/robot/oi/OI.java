@@ -171,7 +171,6 @@ public class OI {
   class CTrigger extends Trigger {
     @Override
     public boolean get(){
-        return getClimberPower() > 0.8;
-    }
-}
+      return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    }
+  }
 }
