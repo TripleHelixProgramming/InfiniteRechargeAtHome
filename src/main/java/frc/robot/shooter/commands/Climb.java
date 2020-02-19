@@ -33,14 +33,14 @@ public class Climb extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double rpm = min(OI.getOI().getClimberPower(), 0) * Shooter.getShooter().getMAXRPM();
+    double rpm = min(OI.getOI().getClimberPower(), 0) * Shooter.getShooter().getMAX_CLIMB_RPM();
     Shooter.getShooter().setRPM(ShooterState.CLIMB, rpm);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return OI.getOI().getClimberPower() > 0.5;
+    return OI.getOI().getClimberPower() > 0.5; // Push up on stick to stop climb.
   }
 
   // Called once after isFinished returns true
