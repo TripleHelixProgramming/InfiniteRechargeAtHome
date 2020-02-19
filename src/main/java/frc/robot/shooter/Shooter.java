@@ -48,6 +48,7 @@ public class Shooter extends Subsystem {
     private static final int SHOOTER_SLAVE_ID = 13;
 
     public double MAX_RPM = 5700;
+    public double MAX_CLIMB_RPM = 2500;
 
     private CANSparkMax master, slave;
 
@@ -203,6 +204,10 @@ public class Shooter extends Subsystem {
         return(MAX_RPM);
     }
 
+    public double getMAX_CLIMB_RPM(){
+        return(MAX_CLIMB_RPM);
+    }
+
     // Get the current shooter velocity from the encoder (in RPMs)
     public double getRPM() {
         return encoder.getVelocity();
@@ -217,7 +222,7 @@ public class Shooter extends Subsystem {
         currentState = state;
         currentRPM = rpm;
 
-        if (state == ShooterState.CLIMB) currentRPM = -rpm;
+       // if (state == ShooterState.CLIMB) currentRPM = -rpm;
         
         pidController.setReference(currentRPM, ControlType.kVelocity);
 
