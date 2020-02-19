@@ -38,6 +38,11 @@ public class Intake extends Subsystem {
 
     private Intake() {
         super();
+        motor.configFactoryDefault();
+        motor.configPeakCurrentDuration(100,0);
+        motor.configPeakCurrentLimit(60,0);
+        motor.configContinuousCurrentLimit(40);
+        motor.enableCurrentLimit(true);
     }
 
     /**

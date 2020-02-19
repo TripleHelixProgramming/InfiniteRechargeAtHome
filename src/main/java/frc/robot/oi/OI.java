@@ -15,6 +15,7 @@ import com.team2363.utilities.ControllerMap;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
@@ -102,9 +103,9 @@ public class OI {
 
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whileHeld(new TuneDrivetrain(0.5));
 
-    // new ClimbTrigger().whenActive(new ClimbCG());
+    new CTrigger().whenActive(new ClimbCG());
 
-    // Bumping up and down  
+  // Bumping up and down  
 
   //   new Button() {
 
@@ -159,11 +160,17 @@ public class OI {
 
   // Get Climber power from operator controller right joystick y-axis
   public double getClimberPower() {
-    double stick = -operator.getRawAxis(PS4_RIGHT_STICK_Y);
+    double stick = -operator.getRawAxis(PS4_LEFT_STICK_Y);
     // stick *= Math.abs(stick);
     // if (Math.abs(stick) < 0.05) {
     //   stick = 0;
     // }
     return stick;
+  }
+
+  class CTrigger extends Trigger {
+    @Override
+    public boolean get(){
+      return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    }
   }
 }

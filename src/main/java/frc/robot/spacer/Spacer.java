@@ -44,6 +44,7 @@ public class Spacer extends Subsystem {
     indexer.configFactoryDefault();
     motor.restoreFactoryDefaults();
     motor.setIdleMode(IdleMode.kBrake);
+    motor.setSmartCurrentLimit(30);
 
     //  Disable Limit Switches
     limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);

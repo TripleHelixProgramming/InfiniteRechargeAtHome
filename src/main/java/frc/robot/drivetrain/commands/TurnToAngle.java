@@ -21,6 +21,8 @@ public class TurnToAngle extends Command {
   private final Notifier notifier = new Notifier(this::calculate);
   private double angle;
 
+  private boolean isFinished = false;
+
   public TurnToAngle(double angle) {
     requires(getDrivetrain());
 
@@ -55,6 +57,7 @@ public class TurnToAngle extends Command {
   // Called once after isFinished returns true
   protected void end() {
     notifier.stop();
+    isFinished = true;
     // HelixEvents.addEvent("DRIVETRAIN", "Finished turning to angle");
   }
 
@@ -67,5 +70,6 @@ public class TurnToAngle extends Command {
   private void calculate() {
     final double output = controller.calculate(getDrivetrain().getHeading());
     getDrivetrain().setSetpoint(PERCENT_FULLSPEED, -output, output);
+    if (isFinished == true) notifier.stop();
   }
 }
