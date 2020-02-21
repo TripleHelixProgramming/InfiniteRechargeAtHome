@@ -72,47 +72,43 @@ public class OI {
     // Starts the Intake and Ball Handling for intake.  When released runs the command  
     // RetractIntake(), which pulls the intake in and stops the rollers.
     new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));  
-    new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
-
-    // Return to Default Command
     new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new RetractIntake());
+
+    new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
 
-    // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
+    // All SpinUpShooter() commands should rumble the controller when shooter is at speed. 
+    // When released the shooter is stopped and the hood is pulled inward.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.MIDFIELD_SHOOT));
-    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new LayUpCG());
-    new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new SpinShooterUp(Position.TRENCH_SHOOT));
-
-    // Return to Default Command
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
+
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.MIDFIELD_SHOOT));
     new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
+
+    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new LayUpCG());
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
+
+    new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new SpinShooterUp(Position.TRENCH_SHOOT));
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
-    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new CarsonDrive()); // The Drivetrain's Default
 
     // Shooting is on a whenPressed / whenReleased right button
-
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
     // new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whileHeld(new TuneDrivetrain(0.5));
-
     new CTrigger().whenActive(new ClimbCG());
 
   // Bumping up and down  
-
   //   new Button() {
 
   //   @Override
   //   public boolean get() {
-  //     return (operator.getPOV() == 0);
+  //     return (driver.getPOV() == 0);
   //   }
   // }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
 
@@ -120,7 +116,7 @@ public class OI {
 
   // @Override
   // public boolean get() {
-  //   return (operator.getPOV() == 180);
+  //   return (driver.getPOV() == 180);
   // }
   // }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
 }
