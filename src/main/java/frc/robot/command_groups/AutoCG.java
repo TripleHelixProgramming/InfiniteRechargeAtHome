@@ -13,7 +13,11 @@ import com.team319.trajectory.Path;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.StopDrivetrain;
 import frc.robot.drivetrain.commands.TurnToAngle;
+import frc.paths.GhostBiggie;
+import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.commands.AimInPlace;
+import frc.robot.drivetrain.commands.AutoAimInPlace;
+import frc.robot.intake.commands.DeployIntake;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
@@ -45,16 +49,17 @@ public class AutoCG extends CommandGroup {
     // Re-orient the robot before running path.  Run path to get more balls
     // and deploy the Intake delay seconds along the path.
     // AddSequential(new TurnToAngle(??));
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 3.25); //added.25s
+    addParallel(new DeployIntake(true));
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 4); //added.25sp
     addParallel(new SpinShooterUp(pos));
     addSequential(new PathFollower(path).reverse());
   
     // Do we need a wait here before reversing??
-    addSequential(new TurnToAngle(20));
-    addSequential(new StopDrivetrain());
+    addSequential(new TurnToAngle(16));
+    // addSequential(new AutoAimInPlace());
+    addParallel(new StopDrivetrain(), 1);
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 2.75); //added .25s
     addParallel(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
-    addParallel(new IntakeDeployCG(delay));
     addSequential(new TurnToAngle(0));
     addSequential(new WaitCommand(0.1));
 
@@ -70,9 +75,8 @@ public class AutoCG extends CommandGroup {
     }
     addParallel(new SpinShooterUp(pos));
     addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
-    addSequential(new PathFollower(phase2));
-    addSequential(new RetractIntake());
-    addSequential(new TurnToAngle(20));
+    addSequential(new PathFollower(new GhostBiggie()));
+    addParallel(new RetractIntake());
     addSequential(new StopDrivetrain());
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4);
     addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
