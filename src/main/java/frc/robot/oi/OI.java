@@ -79,9 +79,9 @@ public class OI {
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.TRENCH_SHOOT));
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.MIDFIELD_SHOOT));
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinShooterUp(Position.LAYUP_SHOOT));
-    new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new AimAndSpinCG());
+    new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new SpinShooterUp(Position.TRENCH_SHOOT));
 
     // Return to Default Command
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
