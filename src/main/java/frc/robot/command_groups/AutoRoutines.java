@@ -31,7 +31,8 @@ public class AutoRoutines {
 		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
-		NONE(0.0, 0.0);							// Don't run any auto
+		NONE(0.0, 0.0), 						// Don't run any auto
+		COLLECT_REND_BALLS(0.0, 0.0);
 		
 		private double pigeon_offset;
 		private double delay;
@@ -107,7 +108,10 @@ public class AutoRoutines {
 			return new AutoCG(new ThreeFeetForward());
 		case BASELINE_AUTO:   
 			// Just get off the baseline
-			return new AutoCG(new Biggie());
+			return new BaselineAutoCG();
+			// return new AutoCG(new Biggie());
+		case COLLECT_REND_BALLS:
+			return new CollectRendBallsCG();
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;

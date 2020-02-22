@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Intake extends Subsystem {
@@ -39,6 +40,7 @@ public class Intake extends Subsystem {
     private Intake() {
         super();
         motor.configFactoryDefault();
+        motor.setNeutralMode(NeutralMode.Brake);
         motor.configPeakCurrentDuration(100,0);
         motor.configPeakCurrentLimit(60,0);
         motor.configContinuousCurrentLimit(40);

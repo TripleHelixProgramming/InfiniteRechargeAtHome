@@ -32,6 +32,7 @@ import frc.robot.drivetrain.commands.VisionTakeOverGroup;
 import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.intake.Intake;
 import frc.robot.intake.commands.RetractIntake;
+import frc.robot.intake.commands.ReverseIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
@@ -77,6 +78,9 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
 
+    new JoystickButton(operator, ControllerMap.PS4_RIGHT_TRIGGER).whenPressed(new ReverseIntake());
+    new JoystickButton(operator, ControllerMap.PS4_RIGHT_TRIGGER).whenReleased(new RetractIntake());
+
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed. 
     // When released the shooter is stopped and the hood is pulled inward.
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
@@ -92,7 +96,8 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
     // Aiming is on a whileHeld reft button
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimAndSpinCG());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
@@ -168,6 +173,14 @@ public class OI {
   class CTrigger extends Trigger {
     @Override
     public boolean get(){
-      return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    }
+      return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    
+    }
+  }
+
+  class ReverseIntakeTrigger extends Trigger {
+    @Override
+    public boolean get(){
+      return (operator.getRawAxis(ControllerMap.PS4_RIGHT_TRIGGER) > 0.8);    
+    }
   }
 }

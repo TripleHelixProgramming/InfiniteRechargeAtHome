@@ -18,7 +18,7 @@ public enum Position {
     TRENCH_SHOOT(2750, 1),
     DUMP_BALLS(1000, 0),
     LAYUP_SHOOT(2250, 0),
-    UNKNOWN(0, 0);
+    UNKNOWN(0, 1);
 
     private int rpm;
     private int hoodPosition;

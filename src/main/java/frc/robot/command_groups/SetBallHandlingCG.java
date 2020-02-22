@@ -35,8 +35,8 @@ public class SetBallHandlingCG extends CommandGroup {
     // Shooter is at required RPM for position. Start feeding balls in.
     addParallel(new SetSpacerTo(state));
     addParallel(new SetMagazineTo(state));
-    if (state == BallHandlingState.STOP) {
-      addSequential(new StopShooter());
-    }
+    // if (state == BallHandlingState.STOP) {
+    //   addSequential(new StopShooter());
+    // }
   }
 }

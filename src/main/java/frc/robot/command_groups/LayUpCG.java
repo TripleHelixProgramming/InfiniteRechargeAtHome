@@ -18,7 +18,7 @@ public class LayUpCG extends CommandGroup {
    * Add your docs here.
    */
   public LayUpCG() {
-    addParallel(new PathFollower(new EightteenInchesBack()));
+    addParallel(new PathFollower(new EightteenInchesBack()).reverse());
     addParallel(new SpinShooterUp(Position.LAYUP_SHOOT));
   }
 }
