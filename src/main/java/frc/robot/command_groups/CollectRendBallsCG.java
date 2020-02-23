@@ -8,12 +8,17 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.paths.CollectRendBalls;
 import frc.robot.drivetrain.commands.AutoAimInPlace;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.StopDrivetrain;
 import frc.robot.drivetrain.commands.TurnToAngle;
+import frc.robot.intake.commands.DeployIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.shooter.Position;
+import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.shooter.commands.StopShooter;
 
 public class CollectRendBallsCG extends CommandGroup {
   /**
@@ -22,6 +27,8 @@ public class CollectRendBallsCG extends CommandGroup {
   public CollectRendBallsCG() {
 
     // addParallel(new StartIntakeCG(true),4);
+    addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
+    addParallel(new StartIntakeCG(true),5);
     addSequential(new PathFollower(new CollectRendBalls()).reverse());
     // addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE),2);
     // addSequential(new PathFollower(new CollectRendBalls()));
@@ -30,5 +37,14 @@ public class CollectRendBallsCG extends CommandGroup {
     addSequential(new StopDrivetrain());
     // addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
     // addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 1.0);
+    addSequential(new TurnToAngle(22));
+    addSequential(new WaitCommand(1));
+
+    addSequential(new TurnToAngle(-10));
+    // addSequential(new AutoAimInPlace());
+    addSequential(new StopDrivetrain());
+    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT),3);
+    addSequential(new StopShooter());
+    addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
   }
 }

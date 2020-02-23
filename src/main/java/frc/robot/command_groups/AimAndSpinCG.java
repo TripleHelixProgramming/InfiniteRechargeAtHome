@@ -16,7 +16,7 @@ import frc.robot.shooter.commands.SpinShooterUp;
 
 public class AimAndSpinCG extends CommandGroup {
   public AimAndSpinCG() {
-    addSequential(new AimInPlace());
+    addParallel(new AimInPlace());
     addSequential(new SpinShooterUp(Position.UNKNOWN));
   }
 }

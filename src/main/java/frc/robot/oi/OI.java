@@ -78,8 +78,8 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
 
-    new JoystickButton(operator, ControllerMap.PS4_RIGHT_TRIGGER).whenPressed(new ReverseIntake());
-    new JoystickButton(operator, ControllerMap.PS4_RIGHT_TRIGGER).whenReleased(new RetractIntake());
+    new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new ReverseIntake());
+    new JoystickButton(operator, ControllerMap.PS4_R2).whenReleased(new RetractIntake());
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed. 
     // When released the shooter is stopped and the hood is pulled inward.

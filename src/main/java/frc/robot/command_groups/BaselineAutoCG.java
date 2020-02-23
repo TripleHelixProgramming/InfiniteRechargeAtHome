@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.shooter.commands.StopShooter;
 import frc.paths.BaselineAuto;
 import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.drivetrain.commands.AutoAimInPlace;
@@ -21,8 +22,7 @@ public class BaselineAutoCG extends CommandGroup {
         addSequential(new StopDrivetrain());
         addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
         addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 1.0);
-        addSequential(new TurnToAngle(0.0));
-        addSequential(new StopDrivetrain());
+        addSequential(new StopShooter());
     }
 
 }
