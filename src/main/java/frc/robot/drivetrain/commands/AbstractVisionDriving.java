@@ -44,8 +44,10 @@ public abstract class AbstractVisionDriving extends Command {
   @Override
   protected void execute() {
     // controller.setReference(0);
-    double kP = 0.125;
-    output = -camera.getRotationalDegreesToTarget() * kP;
+    double kP = 0.125; // 0.15
+    double kF = 0.65; //.5
+    angleToTarget = camera.getRotationalDegreesToTarget();
+    output = -angleToTarget * kP - kF*(Math.abs(angleToTarget) / angleToTarget);
     getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
   }
 
@@ -58,6 +60,7 @@ public abstract class AbstractVisionDriving extends Command {
   protected void end() {
     // notifier.stop();
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Stopping Vision Driving");
+    camera.setDriverMode();
     // getDrivetrain().setPIDFValues();
     // isFinished = true;
   }

@@ -10,6 +10,7 @@ package frc.robot.command_groups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.paths.EightteenInchesBack;
 import frc.robot.drivetrain.commands.PathFollower;
+import frc.robot.drivetrain.commands.ResetPigeon;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
 
@@ -18,6 +19,7 @@ public class LayUpCG extends CommandGroup {
    * Add your docs here.
    */
   public LayUpCG() {
+    addSequential(new ResetPigeon());
     addParallel(new PathFollower(new EightteenInchesBack()).reverse());
     addParallel(new SpinShooterUp(Position.LAYUP_SHOOT));
   }

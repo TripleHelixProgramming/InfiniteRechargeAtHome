@@ -14,10 +14,10 @@ package frc.robot.shooter;
 public enum Position {
 
     // POSITION(rpms expected, hood position)
-    MIDFIELD_SHOOT(2000, 0),
-    TRENCH_SHOOT(2750, 1),
-    DUMP_BALLS(1000, 0),
-    LAYUP_SHOOT(2250, 0),
+    MIDFIELD_SHOOT(2150, 0), //2000 for bot2
+    TRENCH_SHOOT(2900, 1), //2750 works for bot2 (blue)
+    DUMP_BALLS(1150, 0), // 1000 for bot2
+    LAYUP_SHOOT(2400, 0), // 2250 for bot2
     UNKNOWN(0, 1);
 
     private int rpm;

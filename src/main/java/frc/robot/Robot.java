@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
-    Drivetrain.getDrivetrain().getFrontCamera().setDockingMode();
+    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
@@ -144,9 +144,10 @@ public class Robot extends TimedRobot {
     // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
     // mode = AutoMode.TEST_RIGHT_TURN;
     // mode = AutoMode.TEST_2FEET_FORWARD;
-    mode = AutoMode.BASELINE_AUTO;
-    // mode = AutoMode.TRENCH_AUTO;
+    // mode = AutoMode.BASELINE_AUTO;
+    mode = AutoMode.TRENCH_AUTO;
     // mode = AutoMode.TRENCH_AUTO;     // No auto
+    // mode = AutoMode.TEST_RIGHT_TURN;
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
     // autonomousCommand = new PathFollower(new RightTurn()).reverse();
 

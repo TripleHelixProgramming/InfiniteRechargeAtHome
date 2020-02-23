@@ -66,6 +66,7 @@ public class SpinShooterUp extends Command {
     //  target, then calculate the setpoint and expected rpms for that distance.
     if (position == Position.UNKNOWN) {
       rpm = (int)Drivetrain.getDrivetrain().getFrontCamera().calculateRPM();
+      // Shooter.getShooter().setHoodPosition(Drivetrain.getDrivetrain().getFrontCamera().determineHoodPostion());
       Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
     } 
   }
