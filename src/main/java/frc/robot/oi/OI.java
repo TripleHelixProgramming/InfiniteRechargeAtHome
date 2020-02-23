@@ -73,7 +73,7 @@ public class OI {
     // Starts the Intake and Ball Handling for intake.  When released runs the command  
     // RetractIntake(), which pulls the intake in and stops the rollers.
     new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));  
-    new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new RetractIntake());
+    new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new StopIntakeCG());
 
     new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());

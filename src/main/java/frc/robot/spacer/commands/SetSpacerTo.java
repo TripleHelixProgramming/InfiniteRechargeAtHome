@@ -8,6 +8,7 @@
 package frc.robot.spacer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Shooter;
@@ -44,6 +45,8 @@ public class SetSpacerTo extends Command {
     ballAtSpacerLastTime = ballAtSpacer;
     ballAtShooter = Magazine.getMagazine().ballAtShooter();
     ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
+
+    SmartDashboard.putString("Spacer State", action.toString());
 
     switch (action) {
       case SHOOT_NO_LOGIC:
