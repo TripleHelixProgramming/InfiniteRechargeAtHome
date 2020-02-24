@@ -49,37 +49,27 @@ public class AutoCG extends CommandGroup {
     // Re-orient the robot before running path.  Run path to get more balls
     // and deploy the Intake delay seconds along the path.
     // AddSequential(new TurnToAngle(??));
-    addParallel(new DeployIntake(true));
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 4); //added.25sp
+    addParallel(new StartIntakeCG(true), 4); //added.25sp
     addParallel(new SpinShooterUp(pos));
     addSequential(new PathFollower(path).reverse());
   
     // Do we need a wait here before reversing??
-    addSequential(new TurnToAngle(16));
+    addSequential(new TurnToAngle(12.5));
     // addSequential(new AutoAimInPlace());
     addParallel(new StopDrivetrain(), 1);
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 2.75); //added .25s
-    addParallel(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
     addSequential(new TurnToAngle(0));
-    addSequential(new WaitCommand(0.1));
 
     // Run path back to shooting position, if 2nd path is not null.
-    if (phase2 == null) {
-      // Just reverse the first path.
-      addSequential(new PathFollower(path));
-    } else {
-      // Run a different path as phase 2.
-      addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
-
-      addSequential(new PathFollower(phase2).reverse());
-    }
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
+    addSequential(new PathFollower(phase2).reverse());
+    
     addParallel(new SpinShooterUp(pos));
     addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
     addSequential(new PathFollower(new GhostBiggie()));
     addParallel(new RetractIntake());
     addSequential(new StopDrivetrain());
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4);
-    addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
 
     // Adjust angle & Shoot the balls we just picked up.
     // addSequential(new TurnToAngle(-30));

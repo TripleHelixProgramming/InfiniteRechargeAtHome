@@ -29,10 +29,10 @@ public class AutoRoutines {
 		TRENCH_AUTO(30.0, 2.5),					// Our Trench auto
 		SUPER_AUTO(0.0, 1.0),					// Our Super Auto
 		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
-		TEST_AUTO_CG(0.0, 0.0),					// Simple test for autoCG() call
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
-		NONE(0.0, 0.0);							// Don't run any auto
+		NONE(0.0, 0.0), 						// Don't run any auto
+		COLLECT_REND_BALLS(0.0, 0.0);
 		
 		private double pigeon_offset;
 		private double delay;
@@ -81,14 +81,6 @@ public class AutoRoutines {
 		// 		new MidFieldAuto(),
 		// 		new MidFieldAutoPhase2() 
 		// 	);
-		// case TRENCH_AUTO:
-		// 	return new AutoCG(
-		// 		Position.TRENCH_SHOOT,
-		// 		mode.getPigeonOffset(),
-		// 		mode.getDelay(),
-		// 		new ThruTrench(),
-		// 		new ThruTrenchToTrenchShoot() 
-		// 	);
 		// case SUPER_AUTO:
 		// 	return new SuperAutoCG(
 		// 		Position.MIDFIELD_SHOOT,
@@ -100,7 +92,7 @@ public class AutoRoutines {
 		//		new MidFieldThruOurTrench(),
 		//		new ThruTrenchToTrenchShoot()
 		// 	);
-		case TEST_AUTO_CG:
+		case TRENCH_AUTO:
 			return new AutoCG(
 				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
@@ -116,7 +108,10 @@ public class AutoRoutines {
 			return new AutoCG(new ThreeFeetForward());
 		case BASELINE_AUTO:   
 			// Just get off the baseline
-			return new AutoCG(new Biggie());
+			return new BaselineAutoCG();
+			// return new AutoCG(new Biggie());
+		case COLLECT_REND_BALLS:
+			return new CollectRendBallsCG();
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;

@@ -65,8 +65,8 @@ public class SpinShooterUp extends Command {
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
     if (position == Position.UNKNOWN) {
-      rpmDelta = (int)(position.getBumpRPM() * Shooter.getShooter().getBumpTicks());
-      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + rpmDelta;
+      rpm = (int)Drivetrain.getDrivetrain().getFrontCamera().calculateRPM();
+      // Shooter.getShooter().setHoodPosition(Drivetrain.getDrivetrain().getFrontCamera().determineHoodPostion());
       Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
     } 
   }
@@ -76,6 +76,7 @@ public class SpinShooterUp extends Command {
   protected boolean isFinished() {
     // Was looking for a PID controller method on the SPARK MAX that tells us it is at
     // the setpoint, but could not find one, so doing it this way -   +/- a # of rpms
+    if (position == Position.UNKNOWN) return false;
     return (Shooter.getShooter().isAtRPM());
   }
 

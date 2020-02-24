@@ -25,6 +25,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.paths.RightTurn;
+import frc.paths.TenFeetForward;
+import frc.paths.ThreeFeetBackward;
+import frc.paths.ThreeFeetForward;
 import frc.robot.command_groups.AutoRoutines;
 import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
@@ -111,6 +115,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
     Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+    SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
+    SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
+
   }
 
   /**
@@ -138,8 +145,12 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.TEST_RIGHT_TURN;
     // mode = AutoMode.TEST_2FEET_FORWARD;
     // mode = AutoMode.BASELINE_AUTO;
-    mode = AutoMode.TEST_AUTO_CG;     // No auto
+    mode = AutoMode.COLLECT_REND_BALLS;
+    // mode = AutoMode.TRENCH_AUTO;     // No auto
+    // mode = AutoMode.TEST_RIGHT_TURN;
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
+    // autonomousCommand = new PathFollower(new RightTurn()).reverse();
+
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
@@ -174,6 +185,8 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     HelixLogger.getInstance().saveLogs();
     SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
+    SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
+
   }
 
   /**

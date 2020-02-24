@@ -70,6 +70,6 @@ public class TurnToAngle extends Command {
   private void calculate() {
     final double output = controller.calculate(getDrivetrain().getHeading());
     getDrivetrain().setSetpoint(PERCENT_FULLSPEED, -output, output);
-    if (isFinished == true) notifier.stop();
+    if (isFinished) notifier.stop();
   }
 }

@@ -36,6 +36,6 @@ public class StopIntakeCG extends CommandGroup {
     // look at the various beam breaks in the magazine to determine whether it
     // should run or not.
     addParallel(new RetractIntake());
-    addParallel(new SetBallHandlingCG(BallHandlingState.STOP));
+    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
   }
 }

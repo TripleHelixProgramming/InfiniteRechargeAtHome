@@ -13,12 +13,12 @@ import edu.wpi.first.wpilibj.Preferences;
 
 public class Camera {
 
-    private String name;
+    private static String name;
     private double cameraAlignment;
 
-    static double cameraHeight = 16; // (inches) currently the height on the programming bot
-    static double bottomTargetHeight = 85.25; // (inches) use 89.75 for actual arena height
-    static double cameraElevation = 20.18; //(degrees) currently the angle on the programming bot
+    static double cameraHeight = 21.25; // (inches) currently the height on the programming bot
+    static double bottomTargetHeight = 81.25; // (inches) use 89.75 for actual arena height
+    static double cameraElevation = 29.05; // (degrees) currently the angle on the programming bot
 
     static double g = 386.4;
     static double h = 44;
@@ -42,7 +42,7 @@ public class Camera {
     public void setToMode() {
         getDefault().getTable(name).getEntry("pipeline").setNumber(0);
     }
-    
+
     public void setDockingMode() {
         getDefault().getTable(name).getEntry("pipeline").setNumber(1);
         getDefault().getTable(name).getEntry("ledMode").setNumber(3);
@@ -51,10 +51,10 @@ public class Camera {
     }
 
     // public void setMiddleDockingMode() {
-    //     getDefault().getTable(name).getEntry("pipeline").setNumber(2);
-    //     getDefault().getTable(name).getEntry("ledMode").setNumber(0);
-    //     NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(2);
-    //     getDefault().getTable(name).getEntry("stream").setNumber(0);
+    // getDefault().getTable(name).getEntry("pipeline").setNumber(2);
+    // getDefault().getTable(name).getEntry("ledMode").setNumber(0);
+    // NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(2);
+    // getDefault().getTable(name).getEntry("stream").setNumber(0);
     // }
 
     public void setDriverMode() {
@@ -77,7 +77,7 @@ public class Camera {
         return getDefault().getTable(name).getEntry("tx").getDouble(0);
     }
 
-    public double getVerticalDegreesToTarget() {
+    public static double getVerticalDegreesToTarget() {
         return getDefault().getTable(name).getEntry("ty").getDouble(0);
     }
 
@@ -86,26 +86,39 @@ public class Camera {
     }
 
     public void getType() {
-        // SmartDashboard.putString("Type", "" + getDefault().getTable(name).getEntry("tcornx").getNumberArray(new Number [4])[0]);
+        // SmartDashboard.putString("Type", "" +
+        // getDefault().getTable(name).getEntry("tcornx").getNumberArray(new Number
+        // [4])[0]);
     }
 
     public double getTargetSkew() {
         return getVerticalDegreesToTarget() / (getAreaOfTarget() - Math.abs(getRotationalDegreesToTarget() * 0.01));
     }
 
-    public double calculateDistanceToTarget() {
-        return (bottomTargetHeight - cameraHeight)/Math.tan(Math.toRadians(cameraElevation + getVerticalDegreesToTarget()));
+    public static double calculateDistanceToTarget() {
+        return (bottomTargetHeight - cameraHeight)
+                / Math.tan(Math.toRadians(cameraElevation + getVerticalDegreesToTarget()));
         // calculates ground distane from robot to target, only accurate when tx = 0
     }
 
-    public int calculateRPM() {
+    // public static int determineHoodPostion() {
+    //     if (calculateDistanceToTarget() > 10)
+    //         return 1;
+    //     return 0;
+    //  }
 
-        double calcRPMNum = Math.pow(calculateDistanceToTarget(),2)*g;
-        double calcRPMDenFirstTerm = calculateDistanceToTarget()*Math.sin(Math.toRadians(2*shooterElevation));
-        double calcRPMDenSecondTerm = 2*h*Math.pow(Math.cos(Math.toRadians(shooterElevation)), 2);
-        double linearVelocity = Math.sqrt((calcRPMNum)/(calcRPMDenFirstTerm-calcRPMDenSecondTerm));
+    public double calculateRPM() {
+
+        // double calcRPMNum = Math.pow(calculateDistanceToTarget(),2)*g;
+        // double calcRPMDenFirstTerm = calculateDistanceToTarget()*Math.sin(Math.toRadians(2*shooterElevation));
+        // double calcRPMDenSecondTerm = 2*h*Math.pow(Math.cos(Math.toRadians(shooterElevation)), 2);
+        // double linearVelocity = Math.sqrt((calcRPMNum)/(calcRPMDenFirstTerm-calcRPMDenSecondTerm));
         
-        return (int)((linearVelocity*60)/(2*Math.PI*r));
+        // return (int)((linearVelocity*60)/(2*Math.PI*r));
+        // if (determineHoodPostion() == 1)
+        //     return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
+        // return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
+        return 39.5 * (calculateDistanceToTarget() / 12) + 1987 + 150; //+150 term is for Bot2
     }
 
     public static void main(String... args) {

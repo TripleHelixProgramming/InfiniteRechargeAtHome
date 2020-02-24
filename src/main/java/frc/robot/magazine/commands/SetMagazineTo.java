@@ -8,6 +8,7 @@
 package frc.robot.magazine.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
 import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Shooter;
@@ -16,8 +17,8 @@ public class SetMagazineTo extends Command {
 
   public BallHandlingState action;
 
-  private double SHOOT_SPEED = 0.8;
-  private double INTAKE_SPEED = 0.8;
+  private double SHOOT_SPEED = 0.9;
+  private double INTAKE_SPEED = 0.9;
 
   private double power = 0.0;
 
@@ -50,6 +51,8 @@ public class SetMagazineTo extends Command {
     if (ballAtSpacerLastTime && !ballAtSpacer) Magazine.getMagazine().IncreaseBallCount();
     if (Magazine.getMagazine().getBallCount() == 3 && ballAtSpacer) Magazine.getMagazine().setBallCount(4);
     if (action == Magazine.BallHandlingState.SHOOT) Magazine.getMagazine().setBallCount(0);
+
+    SmartDashboard.putString("Magazine State", action.toString());
 
     switch (action) {
 

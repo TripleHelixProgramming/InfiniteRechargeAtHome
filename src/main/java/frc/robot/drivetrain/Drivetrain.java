@@ -184,9 +184,9 @@ public class Drivetrain extends Subsystem {
 
   public void setPIDFValues() {
 
-    kF = 1.25;
-    kP = 1;
-    kI = 0.01;
+    kF = 1.75; //1.25
+    kP = 1; //1
+    kI = 0.0; //0.01
     kD = 0;
 
     left.configPIDF(VELOCITY_CONTROL_SLOT, kP, kI, kD, kF);
