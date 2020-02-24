@@ -23,9 +23,7 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoMode {
         // Auto (delay for intake)
-		MIDFIELD_AUTO(25.0, 0.5),				// Midfield Auto
 		TRENCH_AUTO(30.0, 2.5),					// Our Trench auto
-		SUPER_AUTO(0.0, 1.0),					// Our Super Auto
 		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
@@ -89,6 +87,7 @@ public class AutoRoutines {
 			return new BaselineAutoCG();
 		case COLLECT_REND_BALLS:
 			return new CollectRendBallsCG();
+		case NONE:
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;
