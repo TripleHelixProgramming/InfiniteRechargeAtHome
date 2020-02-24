@@ -76,11 +76,8 @@ public class Robot extends TimedRobot {
     getShooter();
     getTelescope();
 
-    // TODO: Commented since hardware not ready yet.
-    // Don't enable until tesed, CAN/PCM ids are set, etc.
-    // getClimber();
+    // No Control Panel subsystem hardware yet.
     // getControlPanel();
-
   }
 
   /** 
@@ -145,12 +142,11 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.TEST_RIGHT_TURN;
     // mode = AutoMode.TEST_2FEET_FORWARD;
     // mode = AutoMode.BASELINE_AUTO;
-    mode = AutoMode.COLLECT_REND_BALLS;
-    // mode = AutoMode.TRENCH_AUTO;     // No auto
+    // mode = AutoMode.COLLECT_REND_BALLS;
+    // mode = AutoMode.TRENCH_AUTO;     
     // mode = AutoMode.TEST_RIGHT_TURN;
+    mode = AutoMode.NONE;
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
-    // autonomousCommand = new PathFollower(new RightTurn()).reverse();
-
 
     if (autonomousCommand != null) {
       autonomousCommand.start();

@@ -15,6 +15,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.team2363.logger.HelixLogger;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -80,6 +81,7 @@ public class Shooter extends Subsystem {
 
         // Set Shooter to stop state.
         stop();
+        setupLogs();
     }
 
     public void setUpMotors() {
@@ -221,8 +223,6 @@ public class Shooter extends Subsystem {
 
         currentState = state;
         currentRPM = rpm;
-
-       // if (state == ShooterState.CLIMB) currentRPM = -rpm;
         
         pidController.setReference(currentRPM, ControlType.kVelocity);
 
@@ -291,10 +291,16 @@ public class Shooter extends Subsystem {
         hood.set(Value.kReverse);
     }
 
+    private void setupLogs() {
+        HelixLogger.getInstance().addDoubleSource("SHOOTER CURRENT", master::getOutputCurrent);
+        HelixLogger.getInstance().addDoubleSource("SHOOTER VOLTAGE", master::getBusVoltage);
+        HelixLogger.getInstance().addDoubleSource("SHOOTER VELOCITY", encoder::getVelocity);
+    }
+
     @Override
     protected void initDefaultCommand() {
         // The shooter is PID Controlled. It will keep going at it's last setpoint. All
         // SpinUpShooter Commands are on toggle button with StopShooter().
-        // setDefaultCommand(new TestWithController());
+        // setDefaultCommand(new MyDefaultCommand());
     }
 }

@@ -7,6 +7,8 @@
 
 package frc.robot.spacer.commands;
 
+import com.team2363.logger.HelixEvents;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
@@ -36,6 +38,7 @@ public class SetSpacerTo extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    HelixEvents.getInstance().addEvent("SPACER", "SetSpacerTo " + action.toString());
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -101,5 +104,6 @@ public class SetSpacerTo extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    HelixEvents.getInstance().addEvent("SPACER", "SetSpacerTo " + action.toString() + "Interrupted.");
   }
 }

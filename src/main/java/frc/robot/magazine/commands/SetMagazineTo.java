@@ -7,6 +7,8 @@
 
 package frc.robot.magazine.commands;
 
+import com.team2363.logger.HelixEvents;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
@@ -37,11 +39,14 @@ public class SetMagazineTo extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    HelixEvents.getInstance().addEvent("MAGAZINE", "SetMagazineTo" + action.toString());
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+
+
 
     ballAtShooterLastTime = ballAtShooter;
     ballAtSpacerLastTime = ballAtSpacer;
@@ -65,7 +70,13 @@ public class SetMagazineTo extends Command {
       break;
       
     case SHOOT_ONE:  
-      //SHOOT ONE is same as SHOOT, except case ADVANCE is executed on button release.
+      // power = 0.0;
+      // if (Shooter.getShooter().isAtRPM() && ballAtSpacer) {
+      //   power = SHOOT_SPEED;
+      // }
+      // Magazine.getMagazine().setPower(power);
+      // break;
+
     case SHOOT:
       power = 0.0;
       if (Shooter.getShooter().isAtRPM()) {
@@ -114,5 +125,6 @@ public class SetMagazineTo extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    HelixEvents.getInstance().addEvent("MAGAZINE", "Interrupted SetMagazineTo" + action.toString());
   }
 }

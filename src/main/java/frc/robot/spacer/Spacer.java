@@ -10,15 +10,14 @@ package frc.robot.spacer;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANDigitalInput;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.team2363.logger.HelixLogger;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Add your docs here.
@@ -35,7 +34,6 @@ public class Spacer extends Subsystem {
   private CANSparkMax motor = new CANSparkMax(SPACER_ID, MotorType.kBrushless);
   private TalonSRX indexer = new TalonSRX(INDEXER_ID);
 
-  private final CANEncoder encoder;
   private final CANDigitalInput limit;
   
   public Spacer() {
@@ -49,7 +47,8 @@ public class Spacer extends Subsystem {
     //  Disable Limit Switches
     limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);
     limit.enableLimitSwitch(false);
-    encoder = motor.getEncoder();
+
+    setupLogs();
   }
 
   /**
@@ -72,12 +71,13 @@ public class Spacer extends Subsystem {
 
   }
 
-  public double getMotorPosition() {
-    return encoder.getPosition();
-  }
-
   public boolean isBallPresent() {
     return motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
+  }
+  
+  private void setupLogs() {
+    HelixLogger.getInstance().addDoubleSource("SPACER CURRENT", motor::getOutputCurrent);
+    HelixLogger.getInstance().addDoubleSource("SPACER VOLTAGE", motor::getBusVoltage);
   }
 
   @Override

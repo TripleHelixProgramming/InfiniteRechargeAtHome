@@ -8,12 +8,12 @@
 package frc.robot.magazine;
 
 import com.revrobotics.CANDigitalInput;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.team2363.logger.HelixLogger;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +27,6 @@ public class Magazine extends Subsystem {
   private static final int MAGAZINE_ID = 20;
 
   private final CANSparkMax motor;
-  private final CANEncoder encoder;
   private final CANDigitalInput limit;
 
   // Number of balls currently in the system.
@@ -56,10 +55,10 @@ public class Magazine extends Subsystem {
     limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);
     limit.enableLimitSwitch(false);
 
-    encoder = motor.getEncoder();
-
     ball_count = 0;
     balls_processed = Preferences.getPreferences().getBallsProcessed();
+
+    setupLogs();
   }
 
   /**
@@ -75,10 +74,6 @@ public class Magazine extends Subsystem {
   public void setPower(double power) {
     // set motors to power;
     motor.set(power);
-  }
-  
-  public double getMotorPosition() {
-    return encoder.getPosition();
   }
 
   //  ball_count - total number of balls currently in the magazine.
@@ -112,6 +107,11 @@ public class Magazine extends Subsystem {
 
   public Boolean ballAtSpacer() {
     return Spacer.getSpacer().isBallPresent();
+  }
+
+  private void setupLogs() {
+    HelixLogger.getInstance().addDoubleSource("MAGAZINE CURRENT", motor::getOutputCurrent);
+    HelixLogger.getInstance().addDoubleSource("MAGAZINE VOLTAGE", motor::getBusVoltage);
   }
 
   @Override

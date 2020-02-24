@@ -15,6 +15,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.team2363.logger.HelixLogger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -77,6 +78,8 @@ public class Telescope extends Subsystem {
         pidController.setOutputRange(kMinOutput, kMaxOutput);
 
         currentState = TelescopeState.STOWED;
+
+        setupLogs();
     }
 
     /**
@@ -114,15 +117,11 @@ public class Telescope extends Subsystem {
         solenoid.set(Value.kReverse);
     }
 
-    // // Status of the telescope's extended state.
-    // public boolean isDeployed() {
-    //     return currentState == TelescopeState.DEPLOYED;
-    // }
-    
-    // // Status of the telescope's stowed state.
-    // public boolean isStowed() {
-    //     return currentState == TelescopeState.STOWED;
-    // }
+    private void setupLogs() {
+        HelixLogger.getInstance().addDoubleSource("TELESCOPE CURRENT", motor::getOutputCurrent);
+        HelixLogger.getInstance().addDoubleSource("TELESCOPE VOLTAGE", motor::getBusVoltage);
+        HelixLogger.getInstance().addDoubleSource("TELESCOPE POSITION", encoder::getPosition);
+    }
 
     @Override
     public void initDefaultCommand() {

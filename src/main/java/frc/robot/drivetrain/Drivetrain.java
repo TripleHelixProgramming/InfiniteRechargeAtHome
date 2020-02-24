@@ -15,11 +15,13 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.team2363.logger.HelixLogger;
 import com.team2363.utilities.HelixMath;
 import com.team319.models.BobTalonSRX;
 import com.team319.models.BobVictorSPX;
 import com.team319.models.LeaderBobTalonSRX;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.commands.SampleDrive;
@@ -64,6 +66,7 @@ public class Drivetrain extends Subsystem {
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   private final Camera frontCamera = new Camera("limelight-front");
+  PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   private Drivetrain() {
     initMotorControllers();
@@ -87,7 +90,7 @@ public class Drivetrain extends Subsystem {
     BaseMotorController leftSlave2 = null;
 
     // Configure the controllers based on the name of the bot.
-    String botName = frc.robot.Preferences.getPreferences().getRobotName();
+    final String botName = frc.robot.Preferences.getPreferences().getRobotName();
     if (("Bot1".equalsIgnoreCase(botName) == true) || ("Bot2".equalsIgnoreCase(botName) == true)) {
 
       WHEEL_DIAMETER_IN_INCHES = 6;
@@ -222,34 +225,20 @@ public class Drivetrain extends Subsystem {
   }
 
   private void setupLogs() {
-    // HelixLogger.getInstance().addDoubleSource("TOTAL CURRENT",
-    // pdp::getTotalCurrent);
-    // HelixLogger.getInstance().addDoubleSource("DT LM Current",
-    // left::getOutputCurrent);
-    // HelixLogger.getInstance().addDoubleSource("DT RM Current",
-    // right::getOutputCurrent);
-
-    // // This logging format should work for Talons OR Victor SLAVES.
-    // HelixLogger.getInstance().addDoubleSource("DT LS1 Current", () ->
-    // pdp.getCurrent(LEFT_SLAVE_1_PDP));
-    // HelixLogger.getInstance().addDoubleSource("DT LS2 Current", () ->
-    // pdp.getCurrent(LEFT_SLAVE_2_PDP));
-    // HelixLogger.getInstance().addDoubleSource("DT RS1 Current", () ->
-    // pdp.getCurrent(RIGHT_SLAVE_1_PDP));
-    // HelixLogger.getInstance().addDoubleSource("DT RS2 Current", () ->
-    // pdp.getCurrent(RIGHT_SLAVE_1_PDP));
-
-    // HelixLogger.getInstance().addDoubleSource("PIGEON HEADING", () ->
-    // this.getYaw());
-
-    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN LEFT Voltage",
-    // left::getMotorOutputVoltage);
-    // HelixLogger.getInstance().addIntegerSource("DRIVETRAIN LEFT Velocity",
-    // this::getLeftVelocity);
-    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN RIGHT Voltage",
-    // right::getMotorOutputVoltage);
-    // HelixLogger.getInstance().addIntegerSource("DRIVETRAIN RIGHT Velocity",
-    // this::getRightVelocity);
+    HelixLogger.getInstance().addDoubleSource("TOTAL CURRENT", pdp::getTotalCurrent);
+    HelixLogger.getInstance().addDoubleSource("DRIVETRAIN LEFT Voltage", left::getMotorOutputVoltage);
+    HelixLogger.getInstance().addDoubleSource("DRIVETRAIN RIGHT Voltage", right::getMotorOutputVoltage);
+    HelixLogger.getInstance().addDoubleSource("DT LM Current", left::getSupplyCurrent);
+    HelixLogger.getInstance().addDoubleSource("DT RM Current", right::getSupplyCurrent);
+    
+    // HelixLogger.getInstance().addDoubleSource("PIGEON HEADING", this::getYaw); 
+    // This logging format should work for Talons OR Victor SLAVES.
+    // HelixLogger.getInstance().addDoubleSource("DT LS1 Current", () -> pdp.getCurrent(LEFT_SLAVE_1_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DT LS2 Current", () -> pdp.getCurrent(LEFT_SLAVE_2_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DT RS1 Current", () -> pdp.getCurrent(RIGHT_SLAVE_1_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DT RS2 Current", () -> pdp.getCurrent(RIGHT_SLAVE_1_PDP));
+    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN LEFT Velocity", ()->this.getLeftVelocity()); 
+    // HelixLogger.getInstance().addDoubleSource("DRIVETRAIN RIGHT Velocity", this::getRightVelocity);
   }
 
   public void resetEncoders() {

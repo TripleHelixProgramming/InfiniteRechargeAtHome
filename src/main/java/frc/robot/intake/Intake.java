@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.team2363.logger.HelixLogger;
 
 public class Intake extends Subsystem {
 
@@ -45,6 +46,8 @@ public class Intake extends Subsystem {
         motor.configPeakCurrentLimit(60,0);
         motor.configContinuousCurrentLimit(40);
         motor.enableCurrentLimit(true);
+
+        setupLogs();
     }
 
     /**
@@ -90,6 +93,11 @@ public class Intake extends Subsystem {
     // Status of the intake arm/platform's retracted state.
     public boolean isRetracted() {
         return solenoid.get() == Value.kReverse;
+    }
+
+    private void setupLogs() {
+        HelixLogger.getInstance().addDoubleSource("INTAKE CURRENT", motor::getSupplyCurrent);
+        HelixLogger.getInstance().addDoubleSource("INTAKE VOLTAGE", motor::getBusVoltage);
     }
 
     @Override

@@ -21,9 +21,9 @@ public class Camera {
     static double cameraElevation = 29.05; // (degrees) currently the angle on the programming bot
 
     static double g = 386.4;
-    static double h = 44;
+    static double h = 44.0;
     static double r = 2.5;
-    static double shooterElevation = 29;
+    static double shooterElevation = 29.0;
 
     public Camera(String name) {
         this.name = name;
@@ -49,13 +49,6 @@ public class Camera {
         // NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(1);
         getDefault().getTable(name).getEntry("stream").setNumber(0);
     }
-
-    // public void setMiddleDockingMode() {
-    // getDefault().getTable(name).getEntry("pipeline").setNumber(2);
-    // getDefault().getTable(name).getEntry("ledMode").setNumber(0);
-    // NetworkTableInstance.getDefault().getTable(name).getEntry("pipeline").setNumber(2);
-    // getDefault().getTable(name).getEntry("stream").setNumber(0);
-    // }
 
     public void setDriverMode() {
         getDefault().getTable(name).getEntry("pipeline").setNumber(0);
@@ -118,7 +111,7 @@ public class Camera {
         // if (determineHoodPostion() == 1)
         //     return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
         // return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
-        return 39.5 * (calculateDistanceToTarget() / 12) + 1987 + 150; //+150 term is for Bot2
+        return 39.5 * (calculateDistanceToTarget() / 12.0) + 1987.0; 
     }
 
     public static void main(String... args) {
