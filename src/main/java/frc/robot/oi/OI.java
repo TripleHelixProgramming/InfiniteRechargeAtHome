@@ -179,11 +179,4 @@ public class OI {
       return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    
     }
   }
-
-  class ReverseIntakeTrigger extends Trigger {
-    @Override
-    public boolean get(){
-      return (operator.getRawAxis(ControllerMap.PS4_RIGHT_TRIGGER) > 0.8);    
-    }
-  }
 }
