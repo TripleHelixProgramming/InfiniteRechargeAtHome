@@ -17,7 +17,7 @@ public class RetractIntake extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    HelixEvents.getInstance().addEvent("INTAKE", "Starting RetractIntake");
+    // HelixEvents.getInstance().addEvent("INTAKE", "Starting RetractIntake");
     Intake.getIntake().rollerOff();
     Intake.getIntake().retract();
   }
@@ -36,7 +36,7 @@ public class RetractIntake extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    HelixEvents.getInstance().addEvent("INTAKE", "Ending RetractIntake");
+    // HelixEvents.getInstance().addEvent("INTAKE", "Ending RetractIntake");
   }
 
   // Called when another command which requires one or more of the same
