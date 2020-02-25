@@ -76,7 +76,7 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new StopIntakeCG());
 
     new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
-    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
+    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new StopIntakeCG());
 
     new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new ReverseIntake());
     new JoystickButton(operator, ControllerMap.PS4_R2).whenReleased(new RetractIntake());
@@ -97,7 +97,7 @@ public class OI {
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
+    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
