@@ -26,7 +26,7 @@ public class Telescope extends Subsystem {
     private static Telescope INSTANCE = null;
 
     // TO DO: Update solenoid IDs once robot is wired.
-    public static int TELESCOPE_RAISE_ID= 5;
+    public static int TELESCOPE_RAISE_ID= 5 ;  // Bot1 Wired BackwardS! 5;
     public static int TELESCOPE_LOWER_ID= 4;
 
     // TO DO: Get CAN ID for the motor controller, see pinned #Software items for the 2020 Robot Worksheet.
@@ -56,6 +56,7 @@ public class Telescope extends Subsystem {
         motor.setIdleMode(IdleMode.kBrake);
         motor.setSmartCurrentLimit(20);
         encoder = motor.getEncoder();
+        encoder.setPosition(0.0);
 
         pidController = motor.getPIDController();
 
@@ -130,5 +131,6 @@ public class Telescope extends Subsystem {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Telescope ProcessVariable", encoder.getPosition());
     }
 }
