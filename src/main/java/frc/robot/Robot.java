@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.COLLECT_REND_BALLS;
     // mode = AutoMode.TRENCH_AUTO;     
     // mode = AutoMode.TEST_RIGHT_TURN;
-    mode = AutoMode.NONE;
+    mode = AutoMode.COLLECT_REND_BALLS;
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {

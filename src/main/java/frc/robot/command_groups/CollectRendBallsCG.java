@@ -10,6 +10,9 @@ package frc.robot.command_groups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.paths.CollectRendBalls;
+import frc.paths.CollectRendBalls3;
+import frc.paths.CoolectRendBalls2;
+import frc.paths.g;
 import frc.robot.drivetrain.commands.AutoAimInPlace;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.StopDrivetrain;
@@ -27,9 +30,9 @@ public class CollectRendBallsCG extends CommandGroup {
   public CollectRendBallsCG() {
 
     // addParallel(new StartIntakeCG(true),4);
-    addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
-    addParallel(new StartIntakeCG(true),5);
-    addSequential(new PathFollower(new CollectRendBalls()).reverse());
+    // addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
+    // addParallel(new StartIntakeCG(true),5);
+    addSequential(new PathFollower(new CollectRendBalls3()).reverse()); //.reverse()
     // addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE),2);
     // addSequential(new PathFollower(new CollectRendBalls()));
     // addSequential(new TurnToAngle(-10.0));
@@ -37,14 +40,14 @@ public class CollectRendBallsCG extends CommandGroup {
     addSequential(new StopDrivetrain());
     // addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
     // addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 1.0);
-    addSequential(new TurnToAngle(22));
-    addSequential(new WaitCommand(1));
+    // addSequential(new TurnToAngle(22));
+    // addSequential(new WaitCommand(1));
 
-    addSequential(new TurnToAngle(-10));
+    // addSequential(new TurnToAngle(-10));
     // addSequential(new AutoAimInPlace());
-    addSequential(new StopDrivetrain());
-    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT),3);
-    addSequential(new StopShooter());
-    addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
+    // addSequential(new StopDrivetrain());
+    // addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT),3);
+    // addSequential(new StopShooter());
+    // addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
   }
 }
