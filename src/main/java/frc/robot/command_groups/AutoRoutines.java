@@ -7,17 +7,15 @@
 
 package frc.robot.command_groups;
 
+import com.team2363.logger.HelixEvents;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.paths.BaseLineThruTrench;
 import frc.paths.RightTurn;
-import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
-import frc.paths.Biggie;
 import frc.paths.Right;
 import frc.paths.RightSweep;
-import frc.paths.ThruTrenchToBaseLine;
 import frc.robot.shooter.Position;
 
 public class AutoRoutines {
@@ -25,9 +23,7 @@ public class AutoRoutines {
 	// AutoType Order must match paths order below.
 	public enum AutoMode {
         // Auto (delay for intake)
-		MIDFIELD_AUTO(25.0, 0.5),				// Midfield Auto
 		TRENCH_AUTO(30.0, 2.5),					// Our Trench auto
-		SUPER_AUTO(0.0, 1.0),					// Our Super Auto
 		BASELINE_AUTO(0.0, 0.0),				// Get off the baseline
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
@@ -55,10 +51,9 @@ public class AutoRoutines {
 		}
 	}
 	
-    private static DigitalInput left = new DigitalInput(0);
-    private static DigitalInput middle = new DigitalInput(1);
-	private static DigitalInput right = new DigitalInput(2);
-
+    private static DigitalInput trench = new DigitalInput(0);
+    private static DigitalInput baseline = new DigitalInput(1);
+	private static DigitalInput midfield = new DigitalInput(2);
 
 	/* 
 	 * Base onselectedAutoMode Robot Position on the alliance wall & plates states, determines 
@@ -69,29 +64,10 @@ public class AutoRoutines {
 	public static Command getAutoRoutine (AutoMode mode) {
 		
 		putSmartDash(mode);
-
-		// TO DO:  Uncomment the logic below after paths have been created.
+		HelixEvents.getInstance().addEvent("AUTO SELECTION", mode.toString());
 
 		switch (mode) {
-		// case MIDFIELD_AUTO:
-		// 	return new AutoCG(
-		// 		Position.MIDFIELD_SHOOT,
-		// 		mode.getPigeonOffset(),
-		// 		mode.getDelay(),
-		// 		new MidFieldAuto(),
-		// 		new MidFieldAutoPhase2() 
-		// 	);
-		// case SUPER_AUTO:
-		// 	return new SuperAutoCG(
-		// 		Position.MIDFIELD_SHOOT,
-		//		Position.TRENCH_SHOOT,
-		// 		mode.getDelay(),     	// delay 1
-		//		2.0,					// delay 2
-		// 		new OpponentTrench(),
-		// 		new OppTrenchToMidField().
-		//		new MidFieldThruOurTrench(),
-		//		new ThruTrenchToTrenchShoot()
-		// 	);
+
 		case TRENCH_AUTO:
 			return new AutoCG(
 				Position.TRENCH_SHOOT,
@@ -109,9 +85,9 @@ public class AutoRoutines {
 		case BASELINE_AUTO:   
 			// Just get off the baseline
 			return new BaselineAutoCG();
-			// return new AutoCG(new Biggie());
 		case COLLECT_REND_BALLS:
 			return new CollectRendBallsCG();
+		case NONE:
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
 			return null;
@@ -120,14 +96,14 @@ public class AutoRoutines {
 	
 	public static AutoMode getSelectedAutoMode() {
 
-		if (!left.get()) {
-			return AutoMode.SUPER_AUTO;
-		} else if (!right.get()) {  // Our Side only auto
+		if (!trench.get()) {
 			return AutoMode.TRENCH_AUTO;
-		} else if (!middle.get()) { 
-			return AutoMode.MIDFIELD_AUTO;
+		} else if (!baseline.get()) {  // Our Side only auto
+			return AutoMode.BASELINE_AUTO;
+		} else if (!midfield.get()) { 
+			return AutoMode.COLLECT_REND_BALLS;
         } else {
-            return AutoMode.BASELINE_AUTO;
+            return AutoMode.NONE;
         }
 	}
 

@@ -13,6 +13,7 @@ public class ExtendTelescope extends Command {
   private double inputPosition, currentPosition;
   private double ROTATIONS_SCALE = 3.00;
   private double MIN_POSITION = 1.0;
+  private static final double MIN_POS_OFFSET = 2.0;
   private double MAX_ROTATIONS = 39.0;
 
   public ExtendTelescope() {
@@ -24,8 +25,9 @@ public class ExtendTelescope extends Command {
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  protected void initialize() {    
     HelixEvents.getInstance().addEvent("TELESCOPE", "Starting ExtendTelescope");
+    MIN_POSITION = myTelescope.getPosition() + MIN_POS_OFFSET;
   }
 
   // Called repeatedly when this Command is scheduled to run

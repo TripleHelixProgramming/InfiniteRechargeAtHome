@@ -15,6 +15,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.team2363.logger.HelixLogger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -25,7 +26,7 @@ public class Telescope extends Subsystem {
     private static Telescope INSTANCE = null;
 
     // TO DO: Update solenoid IDs once robot is wired.
-    public static int TELESCOPE_RAISE_ID= 5;
+    public static int TELESCOPE_RAISE_ID= 5 ;  // Bot1 Wired BackwardS! 5;
     public static int TELESCOPE_LOWER_ID= 4;
 
     // TO DO: Get CAN ID for the motor controller, see pinned #Software items for the 2020 Robot Worksheet.
@@ -55,6 +56,7 @@ public class Telescope extends Subsystem {
         motor.setIdleMode(IdleMode.kBrake);
         motor.setSmartCurrentLimit(20);
         encoder = motor.getEncoder();
+        encoder.setPosition(0.0);
 
         pidController = motor.getPIDController();
 
@@ -77,6 +79,8 @@ public class Telescope extends Subsystem {
         pidController.setOutputRange(kMinOutput, kMaxOutput);
 
         currentState = TelescopeState.STOWED;
+
+        setupLogs();
     }
 
     /**
@@ -114,15 +118,11 @@ public class Telescope extends Subsystem {
         solenoid.set(Value.kReverse);
     }
 
-    // // Status of the telescope's extended state.
-    // public boolean isDeployed() {
-    //     return currentState == TelescopeState.DEPLOYED;
-    // }
-    
-    // // Status of the telescope's stowed state.
-    // public boolean isStowed() {
-    //     return currentState == TelescopeState.STOWED;
-    // }
+    private void setupLogs() {
+        HelixLogger.getInstance().addDoubleSource("TELESCOPE CURRENT", motor::getOutputCurrent);
+        HelixLogger.getInstance().addDoubleSource("TELESCOPE VOLTAGE", motor::getBusVoltage);
+        HelixLogger.getInstance().addDoubleSource("TELESCOPE POSITION", encoder::getPosition);
+    }
 
     @Override
     public void initDefaultCommand() {
@@ -131,5 +131,6 @@ public class Telescope extends Subsystem {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Telescope ProcessVariable", encoder.getPosition());
     }
 }

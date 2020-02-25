@@ -7,6 +7,8 @@
 
 package frc.robot.shooter.commands;
 
+import com.team2363.logger.HelixEvents;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.shooter.Shooter;
@@ -27,7 +29,7 @@ public class BumpShooter extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-      // Nothing to run.
+    HelixEvents.getInstance().addEvent("SHOOTER", "BumpShooter() Initialized.");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -47,7 +49,7 @@ public class BumpShooter extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-      // Nothing to do here after bumping up.
+    HelixEvents.getInstance().addEvent("SHOOTER", "BumpShooter() Complete.");
   }
 
   // Called when another command which requires one or more of the same
