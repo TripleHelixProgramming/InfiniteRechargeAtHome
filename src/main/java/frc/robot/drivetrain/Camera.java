@@ -23,7 +23,7 @@ public class Camera {
     static double g = 386.4;
     static double h = 44.0;
     static double r = 2.5;
-    static double shooterElevation = 29.0;
+    static double shooterElevation = 24.0; //was 29
 
     public Camera(String name) {
         this.name = name;
