@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    
+    SmartDashboard.putBoolean("Target Aquired", Drivetrain.getDrivetrain().getFrontCamera().isTargetFound());    
   }
 
   /**

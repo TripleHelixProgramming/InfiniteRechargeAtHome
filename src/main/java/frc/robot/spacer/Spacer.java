@@ -31,7 +31,7 @@ public class Spacer extends Subsystem {
   private static final int INDEXER_ID = 18;
 
   private static final double INDEXER_SPEED = .2;
-  private static double OSCILATTE_INTERVAL = 4.0;
+  private static double OSCILATTE_INTERVAL = 5.0;
   private double currentIndexerPower = 0.0;
   private double lastOscillatePower = 0.0;
 
@@ -98,7 +98,7 @@ public class Spacer extends Subsystem {
     if (lastOscillatePower == INDEXER_SPEED) {
       indexer.set(ControlMode.PercentOutput, -INDEXER_SPEED);
       lastOscillatePower = -INDEXER_SPEED;
-      oscilateIndexer.startSingle(1.0);
+      oscilateIndexer.startSingle(5.0);
     } else {
       indexer.set(ControlMode.PercentOutput, INDEXER_SPEED);
       lastOscillatePower = INDEXER_SPEED;

@@ -100,8 +100,10 @@ public class OI {
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new SetBallHandlingCG(BallHandlingState.STOP));
+
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
     // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
     // new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
@@ -179,4 +181,12 @@ public class OI {
       return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    
     }
   }
+
+  class RightTriggerButton extends Trigger {
+    @Override
+    public boolean get(){
+      return (driver.getRawAxis(ControllerMap.X_BOX_RIGHT_TRIGGER) > 0.8);    
+    }
+  }
+
 }

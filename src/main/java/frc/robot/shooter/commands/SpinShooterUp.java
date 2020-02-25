@@ -54,7 +54,7 @@ public class SpinShooterUp extends Command {
 
     robot_rpm_boost = 0.0;
     // Compensate for bot2 shooting lower than bot1.
-    if ("Bot2".equalsIgnoreCase(botName) == true) {
+    if ("Bot1".equalsIgnoreCase(botName) == true) {
         robot_rpm_boost = 150.0;
     }
 
