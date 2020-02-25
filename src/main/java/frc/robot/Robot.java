@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
+    SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
+
   }
 
   /**
