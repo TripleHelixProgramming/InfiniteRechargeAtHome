@@ -39,6 +39,7 @@ import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
+import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
@@ -76,7 +77,7 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new StopIntakeCG());
 
     new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
-    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
+    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new StopIntakeCG());
 
     new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new ReverseIntake());
     new JoystickButton(operator, ControllerMap.PS4_R2).whenReleased(new RetractIntake());
@@ -95,18 +96,16 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new SpinShooterUp(Position.TRENCH_SHOOT));
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
+    new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new StowTelescope());
+
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
+    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
     new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new SetBallHandlingCG(BallHandlingState.STOP));
-
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
-    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
-    // new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
     new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new AimAndSpinCG());
     new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new StopShooter());

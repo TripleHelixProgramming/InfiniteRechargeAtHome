@@ -7,8 +7,6 @@
 
 package frc.robot.spacer;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANDigitalInput.LimitSwitch;
@@ -16,8 +14,6 @@ import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2363.logger.HelixLogger;
-
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -28,17 +24,10 @@ public class Spacer extends Subsystem {
   private static Spacer INSTANCE = null;
 
   private static final int SPACER_ID = 19;
-  private static final int INDEXER_ID = 18;
 
-  private static final double INDEXER_SPEED = .2;
-  private static double OSCILATTE_INTERVAL = 5.0;
-  private double currentIndexerPower = 0.0;
-  private double lastOscillatePower = 0.0;
+  public Boolean spacer_running = false;
 
   private CANSparkMax motor = new CANSparkMax(SPACER_ID, MotorType.kBrushless);
-  private TalonSRX indexer = new TalonSRX(INDEXER_ID);
-
-  private final Notifier oscilateIndexer = new Notifier(this::Oscillate);
 
   private final CANDigitalInput limit;
   
@@ -46,7 +35,6 @@ public class Spacer extends Subsystem {
     super();
 
     // initialize motor
-    indexer.configFactoryDefault();
     motor.restoreFactoryDefaults();
     motor.setIdleMode(IdleMode.kBrake);
     motor.setSmartCurrentLimit(30);
@@ -54,8 +42,6 @@ public class Spacer extends Subsystem {
     //  Disable Limit Switches
     limit = new CANDigitalInput(motor,LimitSwitch.kForward,LimitSwitchPolarity.kNormallyOpen);
     limit.enableLimitSwitch(false);
-
-    oscilateIndexer.startSingle(OSCILATTE_INTERVAL);
 
     setupLogs();
   }
@@ -76,35 +62,17 @@ public class Spacer extends Subsystem {
     motor.set(power);
 
     if (power == 0.0) 
-      currentIndexerPower = 0.0;
+      spacer_running = false;
     else 
-      currentIndexerPower = INDEXER_SPEED;
-
-    indexer.set(ControlMode.PercentOutput, currentIndexerPower);
+      spacer_running = true;
   }
 
   public boolean isBallPresent() {
     return motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
   }
 
-  private void Oscillate() {
-
-    if (currentIndexerPower == 0.0) {
-      oscilateIndexer.startSingle(OSCILATTE_INTERVAL);
-      lastOscillatePower = -INDEXER_SPEED;
-      return;
-    } 
-
-    if (lastOscillatePower == INDEXER_SPEED) {
-      indexer.set(ControlMode.PercentOutput, -INDEXER_SPEED);
-      lastOscillatePower = -INDEXER_SPEED;
-      oscilateIndexer.startSingle(5.0);
-    } else {
-      indexer.set(ControlMode.PercentOutput, INDEXER_SPEED);
-      lastOscillatePower = INDEXER_SPEED;
-      oscilateIndexer.startSingle(OSCILATTE_INTERVAL);
-    }
-    return;
+  public boolean isSpacerRunning() {
+    return spacer_running;
   }
   
   private void setupLogs() {

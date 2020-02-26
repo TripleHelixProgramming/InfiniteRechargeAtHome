@@ -8,14 +8,13 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.telescope.commands.DeployTelescope;
-import frc.robot.telescope.commands.ExtendTelescope;
-import frc.robot.telescope.commands.StowTelescope;
-import frc.robot.shooter.commands.Climb;
+import frc.robot.indexer.commands.SetIndexerTo;
 
-public class ClimbCG extends CommandGroup {
-
-  public ClimbCG() {
+public class IndexerOscillateCG extends CommandGroup {
+  /**
+   * Add your docs here.
+   */
+  public IndexerOscillateCG() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -32,10 +31,7 @@ public class ClimbCG extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    addSequential(new DeployTelescope(), 1.5);
-    addSequential(new ExtendTelescope());
-    // addSequential(new StowTelescope(), 1.0);
-    addSequential(new Climb());
+    addSequential(new SetIndexerTo(0.2), 3.0);
+    addSequential(new SetIndexerTo(-0.2), 0.5);
   }
 }
