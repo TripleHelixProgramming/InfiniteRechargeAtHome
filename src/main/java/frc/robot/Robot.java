@@ -17,6 +17,7 @@ import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
 import static frc.robot.indexer.Indexer.getIndexer;
 import static frc.robot.oi.OI.getOI;
+// import static frc.robot.status.Status.getStatus;
 
 import com.team2363.logger.HelixEvents;
 import com.team2363.logger.HelixLogger;
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
   }
 
   private void initializeSubsystems() {
+    // TEST: getStatus();
     getOI();
     getDrivetrain();
     getIntake();
