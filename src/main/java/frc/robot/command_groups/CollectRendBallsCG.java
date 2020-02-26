@@ -30,16 +30,18 @@ public class CollectRendBallsCG extends CommandGroup {
   public CollectRendBallsCG() {
 
     // addParallel(new StartIntakeCG(true),4);
-    // addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
+    addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
     // addParallel(new StartIntakeCG(true),5);
     addSequential(new PathFollower(new CollectRendBalls3()).reverse()); //.reverse()
-    // addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE),2);
+    addSequential(new StopDrivetrain());
+    addSequential(new StartIntakeCG(true), 2);
     // addSequential(new PathFollower(new CollectRendBalls()));
-    // addSequential(new TurnToAngle(-10.0));
+    addSequential(new TurnToAngle(-19));
     // addSequential(new AutoAimInPlace());
     addSequential(new StopDrivetrain());
-    // addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
-    // addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 1.0);
+    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4.0);
+    addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 1.0);
+    addSequential(new StopShooter());
     // addSequential(new TurnToAngle(22));
     // addSequential(new WaitCommand(1));
 

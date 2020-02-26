@@ -17,13 +17,8 @@ public class Camera {
     private double cameraAlignment;
 
     static double cameraHeight = 21.25; // (inches) currently the height on the programming bot
-    static double bottomTargetHeight = 81.25; // (inches) use 89.75 for actual arena height
-    static double cameraElevation = 29.05; // (degrees) currently the angle on the programming bot
-
-    static double g = 386.4;
-    static double h = 44.0;
-    static double r = 2.5;
-    static double shooterElevation = 24.0; //was 29
+    static double bottomTargetHeight = 81; // (inches) use 81.25 for actual arena height
+    static double cameraElevation = 28; // (degrees) currently the angle on the programming bot (was 27.75)
 
     public Camera(String name) {
         this.name = name;

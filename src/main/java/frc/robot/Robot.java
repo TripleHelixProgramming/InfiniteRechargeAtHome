@@ -15,6 +15,7 @@ import static frc.robot.intake.Intake.getIntake;
 import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
+import static frc.robot.indexer.Indexer.getIndexer;
 import static frc.robot.oi.OI.getOI;
 
 import com.team2363.logger.HelixEvents;
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
     getMagazine();
     getShooter();
     getTelescope();
+    getIndexer();
 
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
@@ -111,7 +113,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
-    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+    Drivetrain.getDrivetrain().getFrontCamera().setDockingMode();
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
@@ -147,7 +149,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.COLLECT_REND_BALLS;
     // mode = AutoMode.TRENCH_AUTO;     
     // mode = AutoMode.TEST_RIGHT_TURN;
-    mode = AutoMode.NONE;
+    mode = AutoMode.COLLECT_REND_BALLS;
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {
@@ -184,7 +186,8 @@ public class Robot extends TimedRobot {
     HelixLogger.getInstance().saveLogs();
     SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
-
+    Drivetrain.getDrivetrain().getFrontCamera().setDockingMode();
+    SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
   }
 
   /**
