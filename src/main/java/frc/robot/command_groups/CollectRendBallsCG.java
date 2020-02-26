@@ -24,9 +24,9 @@ import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 
 public class CollectRendBallsCG extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
+
+  // This command group collects the balls from the rendevous area and shoots them, scoring 5 balls in total
+
   public CollectRendBallsCG() {
 
     // addParallel(new StartIntakeCG(true),4);
@@ -51,5 +51,6 @@ public class CollectRendBallsCG extends CommandGroup {
     // addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT),3);
     // addSequential(new StopShooter());
     // addSequential(new SetBallHandlingCG(BallHandlingState.STOP));
+
   }
 }

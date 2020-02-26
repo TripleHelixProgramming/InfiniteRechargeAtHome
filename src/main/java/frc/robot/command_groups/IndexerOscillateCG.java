@@ -31,7 +31,7 @@ public class IndexerOscillateCG extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new SetIndexerTo(0.2), 5.0);
-    addSequential(new SetIndexerTo(-0.2), 3.0);
+    addSequential(new SetIndexerTo(0.2), 3.0);
+    addSequential(new SetIndexerTo(-0.2), 0.5);
   }
 }

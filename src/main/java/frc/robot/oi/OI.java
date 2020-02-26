@@ -39,6 +39,7 @@ import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
+import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
@@ -94,6 +95,8 @@ public class OI {
 
     new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new SpinShooterUp(Position.TRENCH_SHOOT));
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
+
+    new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new StowTelescope());
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());

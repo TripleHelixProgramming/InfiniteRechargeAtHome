@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
-    // SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
+    SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
 
   }
 
@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
     AutoMode mode;
     
     // GET THE AUTO MODE FROM THE HARDWARE SWITCH
-    // mode = AutoRoutines.getSelectedAutoMode();  
+    mode = AutoRoutines.getSelectedAutoMode();  
 
     // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
     // mode = AutoMode.TEST_RIGHT_TURN;
@@ -149,7 +149,8 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.COLLECT_REND_BALLS;
     // mode = AutoMode.TRENCH_AUTO;     
     // mode = AutoMode.TEST_RIGHT_TURN;
-    mode = AutoMode.COLLECT_REND_BALLS;
+    // mode = AutoMode.NONE;
+
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {
