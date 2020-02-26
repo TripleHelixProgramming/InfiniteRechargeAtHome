@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
-    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+    Drivetrain.getDrivetrain().getFrontCamera().setDockingMode();
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
@@ -187,7 +187,8 @@ public class Robot extends TimedRobot {
     HelixLogger.getInstance().saveLogs();
     SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
-
+    Drivetrain.getDrivetrain().getFrontCamera().setDockingMode();
+    SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
   }
 
   /**
