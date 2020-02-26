@@ -13,7 +13,7 @@ public class ExtendTelescope extends Command {
   private double inputPosition, currentPosition;
   private double ROTATIONS_SCALE = 3.00;
   private double MIN_POSITION = 1.0;
-  private static final double MIN_POS_OFFSET = 2.0;
+  private static final double MIN_POS_OFFSET = 1.0;
   private double MAX_ROTATIONS = 39.0;
 
   public ExtendTelescope() {
@@ -37,6 +37,7 @@ public class ExtendTelescope extends Command {
     currentPosition = myTelescope.getPosition();
     inputPosition =  currentPosition + inputPosition;
     if (inputPosition > MAX_ROTATIONS) { inputPosition = MAX_ROTATIONS;}
+    if (Math.abs(19 - currentPosition) < 1) OI.getOI().setControllerRumble(true);
     myTelescope.setRotations(inputPosition);
   }
 

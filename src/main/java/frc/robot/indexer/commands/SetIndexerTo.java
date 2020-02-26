@@ -17,7 +17,7 @@ public class SetIndexerTo extends Command {
   public SetIndexerTo(double power) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Spacer.getSpacer());
+    requires(Indexer.getIndexer());
     this.power = power;
   }
 

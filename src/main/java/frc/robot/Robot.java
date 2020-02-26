@@ -15,6 +15,7 @@ import static frc.robot.intake.Intake.getIntake;
 import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
+import static frc.robot.indexer.Indexer.getIndexer;
 import static frc.robot.oi.OI.getOI;
 
 import com.team2363.logger.HelixEvents;
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
     getMagazine();
     getShooter();
     getTelescope();
+    getIndexer();
 
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
@@ -115,7 +117,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
-    // SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
+    SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
 
   }
 
@@ -138,7 +140,7 @@ public class Robot extends TimedRobot {
     AutoMode mode;
     
     // GET THE AUTO MODE FROM THE HARDWARE SWITCH
-    // mode = AutoRoutines.getSelectedAutoMode();  
+    mode = AutoRoutines.getSelectedAutoMode();  
 
     // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
     // mode = AutoMode.TEST_RIGHT_TURN;
@@ -147,7 +149,8 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.COLLECT_REND_BALLS;
     // mode = AutoMode.TRENCH_AUTO;     
     // mode = AutoMode.TEST_RIGHT_TURN;
-    mode = AutoMode.NONE;
+    // mode = AutoMode.NONE;
+
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {

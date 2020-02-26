@@ -35,7 +35,7 @@ public class ClimbCG extends CommandGroup {
 
     addSequential(new DeployTelescope(), 1.5);
     addSequential(new ExtendTelescope());
-    addSequential(new StowTelescope(), 1.0);
+    // addSequential(new StowTelescope(), 1.0);
     addSequential(new Climb());
   }
 }
