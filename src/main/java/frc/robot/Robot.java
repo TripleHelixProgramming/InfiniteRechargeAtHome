@@ -142,15 +142,14 @@ public class Robot extends TimedRobot {
     AutoMode mode;
     
     // GET THE AUTO MODE FROM THE HARDWARE SWITCH
-    mode = AutoRoutines.getSelectedAutoMode(); // getSelectedAutoMode()
+    mode = AutoRoutines.getSelectedAutoMode(); 
 
     // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
     // mode = AutoMode.TEST_RIGHT_TURN;
-    // mode = AutoMode.TEST_2FEET_FORWARD;
+    // mode = AutoMode.TEST_3FEET_FORWARD;
     // mode = AutoMode.BASELINE_AUTO;
     // mode = AutoMode.COLLECT_REND_BALLS;
     // mode = AutoMode.TRENCH_AUTO;     
-    // mode = AutoMode.TEST_RIGHT_TURN;
     // mode = AutoMode.NONE;
 
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
