@@ -22,7 +22,6 @@ import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.command_groups.ClimbCG;
 import frc.robot.command_groups.LayUpCG;
-import frc.robot.drivetrain.commands.CameraInfo;
 import frc.robot.drivetrain.commands.CarsonDrive;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
@@ -80,7 +79,8 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new StopIntakeCG());
 
     new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new ReverseIntake());
-    new JoystickButton(operator, ControllerMap.PS4_R2).whenReleased(new RetractIntake());
+    new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    new JoystickButton(operator, ControllerMap.PS4_R2).whenReleased(new StopIntakeCG());
 
     // All SpinUpShooter() commands should rumble the controller when shooter is at speed. 
     // When released the shooter is stopped and the hood is pulled inward.
@@ -112,22 +112,20 @@ public class OI {
 
     new CTrigger().whenActive(new ClimbCG());
 
-  // Bumping up and down  
-  //   new Button() {
+    // Bumping up and down  
+    new Button() {
+        @Override
+        public boolean get() {
+          return (driver.getPOV() == 0);
+        }
+    }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
 
-  //   @Override
-  //   public boolean get() {
-  //     return (driver.getPOV() == 0);
-  //   }
-  // }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
-
-  // new Button() {
-
-  // @Override
-  // public boolean get() {
-  //   return (driver.getPOV() == 180);
-  // }
-  // }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
+    new Button() {
+      @Override
+      public boolean get() {
+        return (driver.getPOV() == 180);
+      }
+    }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
 }
 
   /**

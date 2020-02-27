@@ -62,12 +62,12 @@ public class Intake extends Subsystem {
 
     // Spins the intake roller to bring balls/cells into the robot.
     public void rollerIn() {
-        motor.set(ControlMode.PercentOutput, -0.8);
+        motor.set(ControlMode.PercentOutput, 0.8);
     }
 
     // Spins the intake roller to eject balls/cells from the robot.
     public void rollerOut() {
-        motor.set(ControlMode.PercentOutput, 0.8);
+        motor.set(ControlMode.PercentOutput, -0.8);
     }
 
     // Stops the intake roller.

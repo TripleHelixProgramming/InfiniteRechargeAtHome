@@ -55,7 +55,7 @@ public class SpinShooterUp extends Command {
     robot_rpm_boost = 0.0;
     // Compensate for bot2 shooting lower than bot1.
     if ("Bot1".equalsIgnoreCase(botName) == true) {
-        robot_rpm_boost = 150.0;
+        robot_rpm_boost = 0; //was 159
     }
 
     // Get motor setpoint & expected rpm from position enum.
@@ -78,7 +78,7 @@ public class SpinShooterUp extends Command {
     //  if shooting from a unknown position. Use camera to get distance to
     //  target, then calculate the setpoint and expected rpms for that distance.
     if (position == Position.UNKNOWN) {
-      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + robot_rpm_boost;
+      rpm = Drivetrain.getDrivetrain().getFrontCamera().calculateRPM() + rpmDelta;
       // Shooter.getShooter().setHoodPosition(Drivetrain.getDrivetrain().getFrontCamera().determineHoodPostion());
       Shooter.getShooter().setRPM(ShooterState.SHOOT, rpm);
     } 
