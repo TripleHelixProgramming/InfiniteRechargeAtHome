@@ -18,7 +18,7 @@ public class Camera {
 
     static double cameraHeight = 21.25; // (inches) currently the height on the programming bot
     static double bottomTargetHeight = 81; // (inches) use 81.25 for actual arena height
-    static double cameraElevation = 28; // (degrees) currently the angle on the programming bot (was 27.75)
+    static double cameraElevation = 26.5; // (degrees) currently the angle on the programming bot (was 27.75)
 
     public Camera(String name) {
         this.name = name;
@@ -106,7 +106,8 @@ public class Camera {
         // if (determineHoodPostion() == 1)
         //     return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
         // return 39.5 * (calculateDistanceToTarget() / 12) + 1987;
-        return 39.5 * (calculateDistanceToTarget() / 12.0) + 1987.0; 
+        // return 39.5 * (calculateDistanceToTarget() / 12.0) + 1987.0; BOT 2
+        return 21.8 * (calculateDistanceToTarget() / 12.0) + 2486.4;
     }
 
     public static void main(String... args) {

@@ -18,6 +18,7 @@ public enum Position {
     TRENCH_SHOOT(2900, 1), //2750 works for bot2 (blue)
     DUMP_BALLS(1150, 0), // 1000 for bot2
     LAYUP_SHOOT(2400, 0), // 2250 for bot2
+    REND_SHOOT(2850, 1),
     UNKNOWN(0, 1);
 
     private int rpm;
@@ -27,7 +28,7 @@ public enum Position {
     // This changes the default global bump RPM.
     // The enum is structured so that it could handle different
     // bump rpm values per position but for now there's only the one.
-    public static final int DEFAULT_BUMP_RPM = 10;
+    public static final int DEFAULT_BUMP_RPM = 100;
 
     private Position(int rpm, int hp) {
         this.rpm = rpm;
