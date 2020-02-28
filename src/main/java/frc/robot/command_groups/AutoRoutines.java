@@ -16,6 +16,7 @@ import frc.paths.RightTurn;
 import frc.paths.ThreeFeetForward;
 import frc.paths.Right;
 import frc.paths.RightSweep;
+import frc.robot.drivetrain.Drivetrain;
 import frc.robot.shooter.Position;
 
 public class AutoRoutines {
@@ -69,6 +70,7 @@ public class AutoRoutines {
 		switch (mode) {
 
 		case TRENCH_AUTO:
+			Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
 			return new AutoCG(
 				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
