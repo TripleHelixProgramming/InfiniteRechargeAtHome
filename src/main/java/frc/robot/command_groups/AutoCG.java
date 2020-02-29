@@ -54,9 +54,9 @@ public class AutoCG extends CommandGroup {
     addSequential(new PathFollower(path).reverse());
   
     // Do we need a wait here before reversing??
-    addSequential(new TurnToAngle(12.5));
-    // addSequential(new AutoAimInPlace());
-    addParallel(new StopDrivetrain(), 1);
+    addSequential(new TurnToAngle(11)); //12.5
+    addSequential(new AutoAimInPlace(), 2);
+    addParallel(new StopDrivetrain(), 0.1);
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 2.75); //added .25s
     addSequential(new TurnToAngle(0));
 
@@ -67,7 +67,8 @@ public class AutoCG extends CommandGroup {
     addParallel(new SpinShooterUp(pos));
     addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE), 2);
     addSequential(new PathFollower(new GhostBiggie()));
-    addParallel(new RetractIntake());
+    addSequential(new AutoAimInPlace(), 2);
+    addParallel(new StopIntakeCG());
     addSequential(new StopDrivetrain());
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 4);
 
