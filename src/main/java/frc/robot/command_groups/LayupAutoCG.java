@@ -18,9 +18,6 @@ import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.commands.StopShooter;
 
 public class LayupAutoCG extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
   public LayupAutoCG(Path phase1, Path phase2) {
     addParallel(new StartIntakeCG(true), 4);
     addSequential(new PathFollower(phase1).reverse());

@@ -16,6 +16,7 @@ import frc.paths.RightTurn;
 import frc.paths.ThreeFeetForward;
 import frc.paths.TrenchLayupPartOne;
 import frc.paths.TrenchLayupPartTwo;
+import frc.paths.BaselineAuto;
 import frc.paths.OppTrenchLayupPartOne;
 import frc.paths.OppTrenchLayupPartTwo;
 import frc.paths.Right;
@@ -78,22 +79,17 @@ public class AutoRoutines {
 		switch (mode) {
 
 		case TRENCH_AUTO:
-			return new AutoCG(
-				Position.TRENCH_SHOOT,
-				mode.getPigeonOffset(),
-				mode.getDelay(),
+			return new FarAutoCG(
 				new Right(),
-				new RightSweep()
+				new RightSweep(),
+				true
 			);
-		case TEST_RIGHT_TURN:
-			// Tuning Auto
-			return new AutoCG(new RightTurn());
-		case TEST_3FEET_FORWARD:
-			// Tuning Auto
-			return new AutoCG(new ThreeFeetForward());
 		case BASELINE_AUTO:   
 			// Just get off the baseline
-			return new BaselineAutoCG();
+			return new FarAutoCG(
+				new BaselineAuto(), 
+				new BaselineAuto(), 
+				false);
 		case COLLECT_REND_BALLS:
 			return new CollectRendBallsCG();
 		case TRENCH_LAYUP:
