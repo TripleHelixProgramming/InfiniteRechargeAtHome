@@ -14,6 +14,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.RightTurn;
 import frc.paths.ThreeFeetForward;
+import frc.paths.TrenchLayupPartOne;
+import frc.paths.TrenchLayupPartTwo;
+import frc.paths.OppTrenchLayupPartOne;
+import frc.paths.OppTrenchLayupPartTwo;
 import frc.paths.Right;
 import frc.paths.RightSweep;
 import frc.robot.drivetrain.Drivetrain;
@@ -29,7 +33,9 @@ public class AutoRoutines {
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
 		NONE(0.0, 0.0), 						// Don't run any auto
-		COLLECT_REND_BALLS(0.0, 0.0);
+		COLLECT_REND_BALLS(0.0, 0.0),
+		TRENCH_LAYUP(0.0, 0.0),
+		OPP_TRENCH_LAYUP(0.0, 0.0);
 		
 		private double pigeon_offset;
 		private double delay;
@@ -55,6 +61,8 @@ public class AutoRoutines {
     private static DigitalInput trench = new DigitalInput(0);
     private static DigitalInput baseline = new DigitalInput(1);
 	private static DigitalInput midfield = new DigitalInput(2);
+	private static DigitalInput oppTrenchLayup = new DigitalInput(3);
+	private static DigitalInput trenchLayup = new DigitalInput(4);
 
 	/* 
 	 * Base onselectedAutoMode Robot Position on the alliance wall & plates states, determines 
@@ -70,7 +78,6 @@ public class AutoRoutines {
 		switch (mode) {
 
 		case TRENCH_AUTO:
-			Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
 			return new AutoCG(
 				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
@@ -89,6 +96,16 @@ public class AutoRoutines {
 			return new BaselineAutoCG();
 		case COLLECT_REND_BALLS:
 			return new CollectRendBallsCG();
+		case TRENCH_LAYUP:
+			return new LayupAutoCG(
+				new TrenchLayupPartOne(),
+				new TrenchLayupPartTwo()
+			);
+		case OPP_TRENCH_LAYUP:
+			return new LayupAutoCG(
+				new OppTrenchLayupPartOne(),
+				new OppTrenchLayupPartTwo()
+			);
 		case NONE:
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
@@ -104,7 +121,11 @@ public class AutoRoutines {
 			return AutoMode.BASELINE_AUTO;
 		} else if (!midfield.get()) { 
 			return AutoMode.COLLECT_REND_BALLS;
-        } else {
+        } else if (!oppTrenchLayup.get()){
+			return AutoMode.OPP_TRENCH_LAYUP;
+		} else if (!trenchLayup.get()) {
+			return AutoMode.TRENCH_AUTO;
+		} else {
             return AutoMode.NONE;
         }
 	}
