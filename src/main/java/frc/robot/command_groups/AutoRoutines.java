@@ -19,6 +19,8 @@ import frc.paths.TrenchLayupPartTwo;
 import frc.paths.BaselineAuto;
 import frc.paths.OppTrenchLayupPartOne;
 import frc.paths.OppTrenchLayupPartTwo;
+import frc.paths.RendLayupPartOne;
+import frc.paths.RendLayupPartTwo;
 import frc.paths.Right;
 import frc.paths.RightSweep;
 import frc.robot.drivetrain.Drivetrain;
@@ -34,7 +36,7 @@ public class AutoRoutines {
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
 		NONE(0.0, 0.0), 						// Don't run any auto
-		COLLECT_REND_BALLS(0.0, 0.0),
+		REND_LAYUP(0.0, 0.0),
 		TRENCH_LAYUP(0.0, 0.0),
 		OPP_TRENCH_LAYUP(0.0, 0.0);
 		
@@ -61,7 +63,7 @@ public class AutoRoutines {
 	
     private static DigitalInput trench = new DigitalInput(0);
     private static DigitalInput baseline = new DigitalInput(1);
-	private static DigitalInput midfield = new DigitalInput(2);
+	private static DigitalInput rendLayup = new DigitalInput(2);
 	private static DigitalInput oppTrenchLayup = new DigitalInput(3);
 	private static DigitalInput trenchLayup = new DigitalInput(4);
 
@@ -88,10 +90,13 @@ public class AutoRoutines {
 			// Just get off the baseline
 			return new FarAutoCG(
 				new BaselineAuto(), 
-				new BaselineAuto(), 
+				null, 
 				false);
-		case COLLECT_REND_BALLS:
-			return new CollectRendBallsCG();
+		case REND_LAYUP:
+			return new LayupAutoCG(
+				new RendLayupPartOne(),
+				new RendLayupPartTwo()
+			);
 		case TRENCH_LAYUP:
 			return new LayupAutoCG(
 				new TrenchLayupPartOne(),
@@ -115,8 +120,8 @@ public class AutoRoutines {
 			return AutoMode.TRENCH_AUTO;
 		} else if (!baseline.get()) {  // Our Side only auto
 			return AutoMode.BASELINE_AUTO;
-		} else if (!midfield.get()) { 
-			return AutoMode.COLLECT_REND_BALLS;
+		} else if (!rendLayup.get()) { 
+			return AutoMode.REND_LAYUP;
         } else if (!oppTrenchLayup.get()){
 			return AutoMode.OPP_TRENCH_LAYUP;
 		} else if (!trenchLayup.get()) {

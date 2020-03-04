@@ -35,10 +35,10 @@ public class FarAutoCG extends CommandGroup {
     if (runPhase2) {
       addSequential(new TurnToAngle(0));
 
-      addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
       addParallel(new StartIntakeCG(true), 4);
       addSequential(new PathFollower(phase2).reverse());
 
+      addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
       addParallel(new StopIntakeCG());
       addSequential(new PathFollower(phase2));
 
