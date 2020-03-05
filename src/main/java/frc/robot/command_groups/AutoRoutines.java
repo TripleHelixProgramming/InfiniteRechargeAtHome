@@ -16,6 +16,7 @@ import frc.paths.RightTurn;
 import frc.paths.ThreeFeetForward;
 import frc.paths.Right;
 import frc.paths.RightSweep;
+import frc.robot.drivetrain.Drivetrain;
 import frc.robot.shooter.Position;
 
 public class AutoRoutines {
@@ -28,7 +29,8 @@ public class AutoRoutines {
 		TEST_RIGHT_TURN(0.0, 0.0),				// For tuning
 		TEST_3FEET_FORWARD(0.0, 0.0),			// For tuning
 		NONE(0.0, 0.0), 						// Don't run any auto
-		COLLECT_REND_BALLS(0.0, 0.0);
+		COLLECT_REND_BALLS(0.0, 0.0),
+		LAYUP(0.0,0.0);
 		
 		private double pigeon_offset;
 		private double delay;
@@ -54,6 +56,7 @@ public class AutoRoutines {
     private static DigitalInput trench = new DigitalInput(0);
     private static DigitalInput baseline = new DigitalInput(1);
 	private static DigitalInput midfield = new DigitalInput(2);
+	private static DigitalInput layup = new DigitalInput(3);
 
 	/* 
 	 * Base onselectedAutoMode Robot Position on the alliance wall & plates states, determines 
@@ -69,6 +72,7 @@ public class AutoRoutines {
 		switch (mode) {
 
 		case TRENCH_AUTO:
+			Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
 			return new AutoCG(
 				Position.TRENCH_SHOOT,
 				mode.getPigeonOffset(),
@@ -87,6 +91,8 @@ public class AutoRoutines {
 			return new BaselineAutoCG();
 		case COLLECT_REND_BALLS:
 			return new CollectRendBallsCG();
+		case LAYUP:
+			return new LayupAutoCG();
 		case NONE:
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
@@ -102,7 +108,9 @@ public class AutoRoutines {
 			return AutoMode.BASELINE_AUTO;
 		} else if (!midfield.get()) { 
 			return AutoMode.COLLECT_REND_BALLS;
-        } else {
+		} else if (!layup.get()) {
+			return AutoMode.LAYUP;
+		} else {
             return AutoMode.NONE;
         }
 	}
