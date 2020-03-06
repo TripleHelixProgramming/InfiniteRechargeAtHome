@@ -18,7 +18,7 @@ public class AutoAimInPlace extends AbstractVisionDriving {
   @Override
   protected boolean isFinished() {
 
-    if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 0.75 && Drivetrain.getDrivetrain().getFrontCamera().getAreaOfTarget() != 0) {
+    if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 0.5 && Drivetrain.getDrivetrain().getFrontCamera().isTargetFound()) {
       return true;
     }
     return false;

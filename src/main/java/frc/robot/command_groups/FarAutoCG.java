@@ -25,7 +25,7 @@ public class FarAutoCG extends CommandGroup {
     addParallel(new StartIntakeCG(true), 4);
     addSequential(new PathFollower(phase1).reverse());
 
-    addSequential(new TurnToAngle(0));
+    addSequential(new TurnToAngle(10), 1);
     addSequential(new AutoAimInPlace(), 2);
     addSequential(new StopDrivetrain());
 
@@ -42,6 +42,7 @@ public class FarAutoCG extends CommandGroup {
       addParallel(new StopIntakeCG());
       addSequential(new PathFollower(phase2));
 
+      addSequential(new TurnToAngle(10), 1);
       addSequential(new AutoAimInPlace(), 2);
       addSequential(new StopDrivetrain());
 

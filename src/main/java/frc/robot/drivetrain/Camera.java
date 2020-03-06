@@ -53,8 +53,8 @@ public class Camera {
     }
 
     public boolean isTargetFound() {
-        double v = getDefault().getTable(name).getEntry("tx").getDouble(0);
-        return v != 0;
+        double v = getDefault().getTable(name).getEntry("tv").getDouble(0);
+        return v == 1;
     }
 
     public boolean isTargetClose() {

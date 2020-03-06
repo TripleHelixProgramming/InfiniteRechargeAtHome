@@ -36,8 +36,8 @@ public abstract class AbstractVisionDriving extends Command {
   }
 
   @Override protected void execute() {
-    double kP = 0.125; // 0.15
-    double kF = 0.65; //.5
+    double kP = 0.11; // 0.125
+    double kF = 0.8; //.65
     angleToTarget = camera.getRotationalDegreesToTarget();
     output = -angleToTarget * kP - kF*(Math.abs(angleToTarget) / angleToTarget);
     getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);

@@ -125,7 +125,7 @@ public class AutoRoutines {
         } else if (!oppTrenchLayup.get()){
 			return AutoMode.OPP_TRENCH_LAYUP;
 		} else if (!trenchLayup.get()) {
-			return AutoMode.TRENCH_AUTO;
+			return AutoMode.TRENCH_LAYUP;
 		} else {
             return AutoMode.NONE;
         }
