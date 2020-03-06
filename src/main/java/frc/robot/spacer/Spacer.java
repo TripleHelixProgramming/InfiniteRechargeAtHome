@@ -23,7 +23,7 @@ public class Spacer extends Subsystem {
 
   private static Spacer INSTANCE = null;
 
-  private static final int SPACER_ID = 19;
+  private static final int SPACER_ID = 16;
 
   public Boolean spacer_running = false;
 

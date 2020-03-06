@@ -24,7 +24,7 @@ public class Magazine extends Subsystem {
 
   private static Magazine INSTANCE = null;
 
-  private static final int MAGAZINE_ID = 20;
+  private static final int MAGAZINE_ID = 15;
 
   private final CANSparkMax motor;
   private final CANDigitalInput limit;
