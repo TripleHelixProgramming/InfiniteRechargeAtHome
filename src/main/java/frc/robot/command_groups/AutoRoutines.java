@@ -64,8 +64,8 @@ public class AutoRoutines {
     private static DigitalInput trench = new DigitalInput(0);
     private static DigitalInput baseline = new DigitalInput(1);
 	private static DigitalInput rendLayup = new DigitalInput(2);
-	private static DigitalInput oppTrenchLayup = new DigitalInput(3);
-	private static DigitalInput trenchLayup = new DigitalInput(4);
+	private static DigitalInput trenchLayup = new DigitalInput(3);
+	private static DigitalInput oppTrenchLayup = new DigitalInput(4);
 
 	/* 
 	 * Base onselectedAutoMode Robot Position on the alliance wall & plates states, determines 
