@@ -107,6 +107,12 @@ public class AutoRoutines {
 				new OppTrenchLayupPartOne(),
 				new OppTrenchLayupPartTwo()
 			);
+		case TEST_RIGHT_TURN:
+			// Tuning Auto
+			return new AutoCG(new RightTurn());
+		case TEST_3FEET_FORWARD:
+			// Tuning Auto
+			return new AutoCG(new ThreeFeetForward());
 		case NONE:
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
