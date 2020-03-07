@@ -10,6 +10,7 @@ package frc.robot.command_groups;
 import com.team319.trajectory.Path;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.paths.GhostBiggie;
 import frc.robot.drivetrain.commands.AutoAimInPlace;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.StopDrivetrain;
@@ -25,8 +26,8 @@ public class FarAutoCG extends CommandGroup {
     addParallel(new StartIntakeCG(true), 4);
     addSequential(new PathFollower(phase1).reverse());
 
-    addSequential(new TurnToAngle(10), 1);
-    addSequential(new AutoAimInPlace(), 2);
+    addSequential(new TurnToAngle(12.5), 2);
+    addSequential(new AutoAimInPlace(), 3);
     addSequential(new StopDrivetrain());
 
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);
@@ -40,10 +41,9 @@ public class FarAutoCG extends CommandGroup {
 
       addParallel(new SpinShooterUp(Position.TRENCH_SHOOT));
       addParallel(new StopIntakeCG());
-      addSequential(new PathFollower(phase2));
+      addSequential(new PathFollower(new GhostBiggie()));
 
-      addSequential(new TurnToAngle(10), 1);
-      addSequential(new AutoAimInPlace(), 2);
+      addSequential(new AutoAimInPlace(), 3);
       addSequential(new StopDrivetrain());
 
       addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);

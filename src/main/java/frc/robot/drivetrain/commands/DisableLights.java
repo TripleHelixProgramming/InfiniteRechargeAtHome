@@ -8,6 +8,7 @@
 package frc.robot.drivetrain.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.Drivetrain;
 
 public class DisableLights extends Command {
@@ -18,6 +19,7 @@ public class DisableLights extends Command {
   @Override
   protected void initialize() {
     Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
+    SmartDashboard.putString("Camera Light:", "Disable");
   }
 
   // Called repeatedly when this Command is scheduled to run

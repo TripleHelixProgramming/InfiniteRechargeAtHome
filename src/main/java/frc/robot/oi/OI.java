@@ -21,8 +21,11 @@ import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.command_groups.ClimbCG;
+import frc.robot.command_groups.EnableLightsCG;
 import frc.robot.command_groups.LayUpCG;
 import frc.robot.drivetrain.commands.CarsonDrive;
+import frc.robot.drivetrain.commands.DisableLights;
+import frc.robot.drivetrain.commands.EnableLights;
 import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.RampDown;
 import frc.robot.drivetrain.commands.SampleDrive;
@@ -109,6 +112,9 @@ public class OI {
 
     new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new AimAndSpinCG());
     new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new StopShooter());
+
+    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new EnableLightsCG());
+    new JoystickButton(driver, ControllerMap.X_BOX_B).whenReleased(new DisableLights());
 
     new CTrigger().whenActive(new ClimbCG());
 

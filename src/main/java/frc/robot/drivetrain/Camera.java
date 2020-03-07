@@ -25,6 +25,10 @@ public class Camera {
         cameraAlignment = Preferences.getInstance().getDouble(name + "-alignment", 0);
     }
 
+    public String getCameraName() {
+        return name;
+    }
+
     public double getCameraAlignment() {
         return cameraAlignment;
     }

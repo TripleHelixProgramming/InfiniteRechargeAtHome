@@ -10,6 +10,7 @@ package frc.robot.command_groups;
 import com.team319.trajectory.Path;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.paths.OppTrenchLayupPartOne;
 import frc.paths.OppTrenchLayupPartTwo;
 import frc.robot.drivetrain.commands.PathFollower;
@@ -21,6 +22,9 @@ public class LayupAutoCG extends CommandGroup {
   public LayupAutoCG(Path phase1, Path phase2) {
     addParallel(new StartIntakeCG(true), 4);
     addSequential(new PathFollower(phase1).reverse());
+
+    addSequential(new StopDrivetrain());
+    addSequential(new WaitCommand(1));
 
     addParallel(new StopIntakeCG(), 4);
     addSequential(new PathFollower(phase2));
