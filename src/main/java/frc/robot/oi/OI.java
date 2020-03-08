@@ -103,6 +103,7 @@ public class OI {
 
     // Aiming is on a whileHeld reft button
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new DisableLights());
     // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
@@ -112,6 +113,7 @@ public class OI {
 
     new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new AimAndSpinCG());
     new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new StopShooter());
+    new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new DisableLights());
 
     new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new EnableLightsCG());
     new JoystickButton(driver, ControllerMap.X_BOX_B).whenReleased(new DisableLights());

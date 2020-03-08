@@ -13,6 +13,8 @@ import frc.robot.drivetrain.Drivetrain;
 
 public class DisableLights extends Command {
   public DisableLights() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time

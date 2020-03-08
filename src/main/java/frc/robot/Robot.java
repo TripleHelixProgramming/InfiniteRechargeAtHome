@@ -27,11 +27,14 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.paths.LayupAutoPartTwo;
 import frc.paths.RightTurn;
 import frc.paths.TenFeetForward;
 import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
+import frc.paths.g;
 import frc.robot.command_groups.AutoRoutines;
+import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
 
@@ -41,6 +44,7 @@ import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 import frc.robot.magazine.Magazine;
+import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.oi.OI;
 
 /**
@@ -150,8 +154,10 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.BASELINE_AUTO;
     // mode = AutoMode.COLLECT_REND_BALLS;
     // mode = AutoMode.TRENCH_AUTO;     
+    // mode = AutoMode.LAYUP;
     // mode = AutoMode.NONE;
 
+    // autonomousCommand = new PathFollower(new g());
     autonomousCommand = AutoRoutines.getAutoRoutine(mode);
 
     if (autonomousCommand != null) {
@@ -183,9 +189,15 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
+  boolean firstTime = true;
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    if (firstTime) {
+      Scheduler.getInstance().add(new SetBallHandlingCG(BallHandlingState.ADVANCE));
+      firstTime = false;
+    }
+
     HelixLogger.getInstance().saveLogs();
     // SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
     // SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
