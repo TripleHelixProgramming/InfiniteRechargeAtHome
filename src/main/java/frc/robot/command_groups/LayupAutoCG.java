@@ -7,29 +7,34 @@
 
 package frc.robot.command_groups;
 
+import com.team319.trajectory.Path;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.paths.LayupAutoPartOne;
-import frc.paths.LayupAutoPartTwo;
+import edu.wpi.first.wpilibj.command.WaitCommand;
+import frc.paths.OppTrenchLayupPartOne;
+import frc.paths.OppTrenchLayupPartTwo;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.StopDrivetrain;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.shooter.Position;
-import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 
 public class LayupAutoCG extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-  public LayupAutoCG() {
-
+  public LayupAutoCG(Path phase1, Path phase2) {
     addParallel(new StartIntakeCG(true), 4);
-    addSequential(new PathFollower(new LayupAutoPartOne()).reverse());
-    addParallel(new StopIntakeCG());
-    addParallel(new SpinShooterUp(Position.LAYUP_SHOOT));
-    addSequential(new PathFollower(new LayupAutoPartTwo()));
+    addSequential(new PathFollower(phase1).reverse());
+
     addSequential(new StopDrivetrain());
-    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 5);
+    addSequential(new WaitCommand(1));
+
+    addParallel(new StopIntakeCG(), 4);
+    addSequential(new PathFollower(phase2));
+    addSequential(new StopDrivetrain());
+    
+    addSequential(new LayUpCG());
+    addSequential(new StopDrivetrain());
+    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);
+
     addSequential(new StopShooter());
+    addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 1);
   }
 }

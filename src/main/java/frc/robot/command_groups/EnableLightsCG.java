@@ -5,22 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.drivetrain.commands;
-import frc.robot.drivetrain.Drivetrain;
+package frc.robot.command_groups;
 
-public class AutoAimInPlace extends AbstractVisionDriving {
- 
-  @Override
-  public double getThrottle() {
-    return 0;
-  }
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.drivetrain.commands.EnableLights;
 
-  @Override
-  protected boolean isFinished() {
-
-    if (Math.abs(Drivetrain.getDrivetrain().getFrontCamera().getRotationalDegreesToTarget()) < 0.5 && Drivetrain.getDrivetrain().getFrontCamera().isTargetFound()) {
-      return true;
-    }
-    return false;
+public class EnableLightsCG extends CommandGroup {
+  /**
+   * Add your docs here.
+   */
+  public EnableLightsCG() {
+    addSequential(new EnableLights(), 0.25);
   }
 }
