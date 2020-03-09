@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.status.commands.RunRainbow;
 import frc.robot.status.commands.ToggleFlashlight;
 
 //
@@ -46,7 +47,7 @@ public class Status extends Subsystem {
 
     // Addressable LEDs use the PWM port and its +6v power.
     private static int ADDRESSABLE_LED_PWM_CHANNEL = 0;
-    private static int ADDRESSABLE_LED_COUNT = 25;
+    public static int ADDRESSABLE_LED_COUNT = 25; // accessable to actions
 
     private DigitalOutput flashlightOutput = null;
 
@@ -69,7 +70,7 @@ public class Status extends Subsystem {
         // here as soon as we initialize the output we set it to false to
         // disable the regulator which turns off the flashlight.
         flashlightOutput = new DigitalOutput(FLASHLIGHT_DIO_CHANNEL);
-        flashlightOutput.set(true);
+        flashlightOutput.set(false);
 
         // Init the addressable led stuff. Note that the docs indicate
         // setting the length is expensive, so doing so here in a singleton
@@ -88,6 +89,11 @@ public class Status extends Subsystem {
         // This will start counting when the RIO initializes.
         timer = new Timer();
         timer.start();
+    }
+
+    // This will set/send the buffer to the LEDs.
+    public synchronized void setLedData(AddressableLEDBuffer buffer) {
+        addressableLed.setData(buffer);
     }
 
     public void setBootActions() {
@@ -184,12 +190,15 @@ public class Status extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        // It's not needed but added for completeness.
-        setDefaultCommand(new ToggleFlashlight(false));
+        // Run the rainbow pattern by default.
+        setDefaultCommand(new RunRainbow());
     }
 
     @Override
     public void periodic() {
+
+        // Skip preiodic code below.
+        if (true) return;
 
         // Send rainbow
         //rainbowPeriodic();
