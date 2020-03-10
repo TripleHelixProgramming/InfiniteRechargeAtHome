@@ -56,8 +56,8 @@ public class Indexer extends Subsystem {
   }
 
   private void setupLogs() {
-    HelixLogger.getInstance().addDoubleSource("INDEXER CURRENT", indexer::getSupplyCurrent);
-    HelixLogger.getInstance().addDoubleSource("INDEXER VOLTAGE", indexer::getBusVoltage);
+    HelixLogger.getInstance().addSource("INDEXER CURRENT", indexer::getSupplyCurrent);
+    HelixLogger.getInstance().addSource("INDEXER VOLTAGE", indexer::getBusVoltage);
   }
 
   @Override

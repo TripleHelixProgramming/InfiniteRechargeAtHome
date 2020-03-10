@@ -225,11 +225,11 @@ public class Drivetrain extends Subsystem {
   }
 
   private void setupLogs() {
-    HelixLogger.getInstance().addDoubleSource("TOTAL CURRENT", pdp::getTotalCurrent);
-    HelixLogger.getInstance().addDoubleSource("DRIVETRAIN LEFT Voltage", left::getMotorOutputVoltage);
-    HelixLogger.getInstance().addDoubleSource("DRIVETRAIN RIGHT Voltage", right::getMotorOutputVoltage);
-    HelixLogger.getInstance().addDoubleSource("DT LM Current", left::getSupplyCurrent);
-    HelixLogger.getInstance().addDoubleSource("DT RM Current", right::getSupplyCurrent);
+    HelixLogger.getInstance().addSource("TOTAL CURRENT", pdp::getTotalCurrent);
+    HelixLogger.getInstance().addSource("DRIVETRAIN LEFT Voltage", left::getMotorOutputVoltage);
+    HelixLogger.getInstance().addSource("DRIVETRAIN RIGHT Voltage", right::getMotorOutputVoltage);
+    HelixLogger.getInstance().addSource("DT LM Current", left::getSupplyCurrent);
+    HelixLogger.getInstance().addSource("DT RM Current", right::getSupplyCurrent);
     
     // HelixLogger.getInstance().addDoubleSource("PIGEON HEADING", this::getYaw); 
     // This logging format should work for Talons OR Victor SLAVES.
