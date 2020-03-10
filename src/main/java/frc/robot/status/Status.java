@@ -108,6 +108,10 @@ public class Status extends Subsystem {
     // Note: these can't be commands since commands require enablement.
     private void scheduleBootActions() {
 
+        ScannerAction action = new ScannerAction(245, 0, 255, 90);
+        action.setIntervalTime(0.075);
+        action.setIntervalCount(ADDRESSABLE_LED_COUNT * 5 * 2); // number of lights, how many times to update them, back and fourth
+        setAction(action);
     }
 
     // Things to do when auto resets/inits.
@@ -115,6 +119,7 @@ public class Status extends Subsystem {
     private void scheduleAutoActions() {
 
         // Set the color to purple by default.
+        setAction(null);
         setColor(245, 0, 255, 90);
     }
 
@@ -123,19 +128,20 @@ public class Status extends Subsystem {
     private void scheduleTeleOpActions() {
 
         // Set the color to purple by default.
+        setAction(null);
         setColor(245, 0, 255, 90);
 
         // Using a command group with sequentials to force timely control of the leds.
         CommandGroup commandGroup = new CommandGroup();
 
         // Don't do anything until 135 seconds into teleop.
-        commandGroup.addSequential(new WaitCommand(135));
+        commandGroup.addSequential(new WaitCommand(134)); // 15 sec before match end (adding extra since it takes a bit to start an action)
 
         // Run the rainbow to indicate we need to climb.
         commandGroup.addSequential(new ActionCommand(new RainbowAction()));
 
         // Don't do anything for some time.
-        commandGroup.addSequential(new WaitCommand(15));
+        commandGroup.addSequential(new WaitCommand(15)); // match end
 
         // Set red which should indicate match end.
         commandGroup.addSequential(new ActionCommand(new LedAction(255, 0, 0, 127)));
@@ -249,7 +255,7 @@ public class Status extends Subsystem {
         // The minium amount of time to delay the tread.
         // While the RIO should handle it either way, the delay
         // allows the OS schedular a good slice to do things.
-        private static final double MINIMUM_DELAY_SECONDS = 0.050;
+        private static final double MINIMUM_DELAY_SECONDS = 0.010;
 
         // How long to delay/sleep when there's no action.
         private static final double IDLE_DELAY_SECONDS = 0.250;
@@ -265,13 +271,16 @@ public class Status extends Subsystem {
                 synchronized (actionLock) {
                     if (currentAction != null) {
 
-                        System.out.println("ActionRunner: run");
+                        //System.out.println("ActionRunner: run");
                         currentAction.run();
 
                         // If the current action is now done, remove it and loop back around.
                         if (currentAction.isFinished() == true) {
-                            System.out.println("ActionRunner: finished");
+                            //System.out.println("ActionRunner: finished");
                             currentAction = null;
+
+                            // Action done, turn the LEDs off.
+                            setColor(Color.kBlack, 0);
                             continue;
                         }
 
@@ -281,7 +290,7 @@ public class Status extends Subsystem {
                             delay = MINIMUM_DELAY_SECONDS;
                         }
 
-                        System.out.println("ActionRunner: delay");
+                        //System.out.println("ActionRunner: delay");
                         Timer.delay(delay);
                         continue;
                     }
