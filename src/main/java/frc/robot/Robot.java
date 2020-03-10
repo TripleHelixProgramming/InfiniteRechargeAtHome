@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
   }
 
   private void initializeSubsystems() {
-    // TEST: getStatus();
+    // getStatus();
     getOI();
     getDrivetrain();
     getIntake();
@@ -86,6 +86,8 @@ public class Robot extends TimedRobot {
 
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
+
+    // getStatus().resetBoot();
   }
 
   /** 
@@ -140,6 +142,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // getStatus().resetAuto();
+
     getDrivetrain().resetHeading();
     getDrivetrain().getFrontCamera().setDriverMode();
 
@@ -176,6 +180,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // getStatus().resetTeleOp();
+    
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -183,6 +189,7 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
     getDrivetrain().getFrontCamera().setDriverMode();
   }
 
