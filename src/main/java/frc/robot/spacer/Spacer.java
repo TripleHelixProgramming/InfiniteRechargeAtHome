@@ -76,8 +76,8 @@ public class Spacer extends Subsystem {
   }
   
   private void setupLogs() {
-    HelixLogger.getInstance().addDoubleSource("SPACER CURRENT", motor::getOutputCurrent);
-    HelixLogger.getInstance().addDoubleSource("SPACER VOLTAGE", motor::getBusVoltage);
+    HelixLogger.getInstance().addSource("SPACER CURRENT", motor::getOutputCurrent);
+    HelixLogger.getInstance().addSource("SPACER VOLTAGE", motor::getBusVoltage);
   }
 
   @Override

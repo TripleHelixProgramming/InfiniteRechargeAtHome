@@ -96,8 +96,8 @@ public class Intake extends Subsystem {
     }
 
     private void setupLogs() {
-        HelixLogger.getInstance().addDoubleSource("INTAKE CURRENT", motor::getSupplyCurrent);
-        HelixLogger.getInstance().addDoubleSource("INTAKE VOLTAGE", motor::getBusVoltage);
+        HelixLogger.getInstance().addSource("INTAKE CURRENT", motor::getSupplyCurrent);
+        HelixLogger.getInstance().addSource("INTAKE VOLTAGE", motor::getBusVoltage);
     }
 
     @Override

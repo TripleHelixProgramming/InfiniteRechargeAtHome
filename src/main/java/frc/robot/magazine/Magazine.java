@@ -110,8 +110,8 @@ public class Magazine extends Subsystem {
   }
 
   private void setupLogs() {
-    HelixLogger.getInstance().addDoubleSource("MAGAZINE CURRENT", motor::getOutputCurrent);
-    HelixLogger.getInstance().addDoubleSource("MAGAZINE VOLTAGE", motor::getBusVoltage);
+    HelixLogger.getInstance().addSource("MAGAZINE CURRENT", motor::getOutputCurrent);
+    HelixLogger.getInstance().addSource("MAGAZINE VOLTAGE", motor::getBusVoltage);
   }
 
   @Override

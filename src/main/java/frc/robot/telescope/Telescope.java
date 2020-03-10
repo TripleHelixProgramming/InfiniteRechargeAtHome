@@ -119,9 +119,9 @@ public class Telescope extends Subsystem {
     }
 
     private void setupLogs() {
-        HelixLogger.getInstance().addDoubleSource("TELESCOPE CURRENT", motor::getOutputCurrent);
-        HelixLogger.getInstance().addDoubleSource("TELESCOPE VOLTAGE", motor::getBusVoltage);
-        HelixLogger.getInstance().addDoubleSource("TELESCOPE POSITION", encoder::getPosition);
+        HelixLogger.getInstance().addSource("TELESCOPE CURRENT", motor::getOutputCurrent);
+        HelixLogger.getInstance().addSource("TELESCOPE VOLTAGE", motor::getBusVoltage);
+        HelixLogger.getInstance().addSource("TELESCOPE POSITION", encoder::getPosition);
     }
 
     @Override
