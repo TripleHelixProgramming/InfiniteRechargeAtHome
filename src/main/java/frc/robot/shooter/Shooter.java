@@ -292,9 +292,9 @@ public class Shooter extends Subsystem {
     }
 
     private void setupLogs() {
-        HelixLogger.getInstance().addDoubleSource("SHOOTER CURRENT", master::getOutputCurrent);
-        HelixLogger.getInstance().addDoubleSource("SHOOTER VOLTAGE", master::getBusVoltage);
-        HelixLogger.getInstance().addDoubleSource("SHOOTER VELOCITY", encoder::getVelocity);
+        HelixLogger.getInstance().addSource("SHOOTER CURRENT", master::getOutputCurrent);
+        HelixLogger.getInstance().addSource("SHOOTER VOLTAGE", master::getBusVoltage);
+        HelixLogger.getInstance().addSource("SHOOTER VELOCITY", encoder::getVelocity);
     }
 
     @Override
