@@ -7,19 +7,17 @@
 
 package frc.robot.status;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.status.commands.ColorCommand;
 import frc.robot.status.commands.RunRainbow;
-import frc.robot.status.commands.ToggleFlashlight;
 
 //
 // This subsystem should be used for any status output such as lights.
@@ -34,11 +32,6 @@ public class Status extends Subsystem {
     public static final int STATE_IN_AUTO = 1;
     public static final int STATE_IN_TELEOP = 2;
 
-    // What to do.
-    public static final int ACTION_LED_OFF = 0;
-    public static final int ACTION_LED_ON = 1;
-    public static final int ACTION_LED_FLASH = 2;
-    public static final int ACTION_LED_CLIMB = 3;
 
     private static Status INSTANCE = null;
 
@@ -47,13 +40,15 @@ public class Status extends Subsystem {
 
     // Addressable LEDs use the PWM port and its +6v power.
     private static int ADDRESSABLE_LED_PWM_CHANNEL = 0;
-    public static int ADDRESSABLE_LED_COUNT = 25; // accessable to actions
+    public static int ADDRESSABLE_LED_COUNT = 60; // accessable to actions
 
     private DigitalOutput flashlightOutput = null;
 
     // Addressable LED support.
     private AddressableLED addressableLed = null;
-    private AddressableLEDBuffer addressableBuffer = null;
+
+    // The current LED action
+    private Action currentAction = null;
 
     // Timer allows us to do things at specific game time.
     private Timer timer = null;
@@ -77,13 +72,15 @@ public class Status extends Subsystem {
         // is proably best. Don't attempt to do this during a run.
         // https://docs.wpilib.org/en/latest/docs/software/actuators/addressable-leds.html
         addressableLed = new AddressableLED(ADDRESSABLE_LED_PWM_CHANNEL);
-        addressableBuffer = new AddressableLEDBuffer(ADDRESSABLE_LED_COUNT);
-        addressableLed.setLength(addressableBuffer.getLength());
+        addressableLed.setLength(ADDRESSABLE_LED_COUNT);
 
-        addressableLed.setData(addressableBuffer);
+        // Spawn the thread that runs actions to control the LEDs.
+        new ActionRunner().start();
+
+        // addressableLed.setData(addressableBuffer);
         addressableLed.start();
 
-        //setColor(102, 46, 145, .1);
+        // setColor(102, 46, 145, .1);
 
         // Create the timer and start it.
         // This will start counting when the RIO initializes.
@@ -96,18 +93,12 @@ public class Status extends Subsystem {
         addressableLed.setData(buffer);
     }
 
+    public void setAction(Action action) {
+        currentAction = action;
+    }
+
     public void setBootActions() {
-        // Turn on to purple.
-        LedAction action = new LedAction(ACTION_LED_ON, 102, 46, 145, .7);
-        scheduleAction(action, STATE_RIO_BOOT, 0);
 
-        // Switch to yellow at 15s before match end.
-        action = new LedAction(ACTION_LED_ON, 253, 184, 19, .7);
-        scheduleAction(action, STATE_RIO_BOOT, 135);
-
-        // At match end go red.
-        action = new LedAction(ACTION_LED_ON, 255, 0, 0, 1);
-        scheduleAction(action, STATE_RIO_BOOT, 150);
     }
 
     public void setAutoActions() {
@@ -115,17 +106,9 @@ public class Status extends Subsystem {
     }
 
     public void setTeleOpActions() {
-        // Turn on to purple.
-        LedAction action = new LedAction(ACTION_LED_ON, 102, 46, 145, .3);
-        scheduleAction(action, STATE_RIO_BOOT, 0);
 
-        // Switch to yellow at 15s before match end.
-        action = new LedAction(ACTION_LED_ON, 253, 184, 19, .5);
-        scheduleAction(action, STATE_RIO_BOOT, 135);
+        Scheduler.getInstance().add(new TeleCommandGroup());
 
-        // At match end go red.
-        action = new LedAction(ACTION_LED_ON, 255, 0, 0, .5);
-        scheduleAction(action, STATE_RIO_BOOT, 150);
     }
 
     /**
@@ -142,7 +125,15 @@ public class Status extends Subsystem {
         inAuto = false;
         inTeleOp = false;
 
-        setActionSeconds();
+        // Turn off when boot
+        setColor(Color.kBlack, 0);
+
+        //setColor(245, 0, 255, 20);
+
+        //setColor(245, 0, 255, 255);
+        //setColor(102, 46, 145, 1);
+
+        // Resets the timer so that it represents "time since code init".
         timer.reset();
     }
 
@@ -152,8 +143,10 @@ public class Status extends Subsystem {
         inAuto = true;
         inTeleOp = false;
 
+        // Set purple
+        setColor(245, 0, 255, 90);
+
         // Resets the timer so that it represents "time since auto init".
-        setActionSeconds();
         timer.reset();
     }
 
@@ -163,11 +156,13 @@ public class Status extends Subsystem {
         inAuto = false;
         inTeleOp = true;
 
-        // Set the LEDs to TripleHelix Purple.
-        setColor(102, 46, 145, .5);
+        setColor(245, 0, 255, 90);
 
-        // Resets the timer so that it represents "time since teleop init".
-        setActionSeconds();
+        // Set the LEDs to TripleHelix Purple.
+        // setColor(102, 46, 145, .5);
+
+        // Todd Purple: 255, 0, 220
+
         timer.reset();
     }
 
@@ -191,274 +186,57 @@ public class Status extends Subsystem {
     @Override
     public void initDefaultCommand() {
         // Run the rainbow pattern by default.
-        setDefaultCommand(new RunRainbow());
+        //setDefaultCommand(new RunRainbow());
     }
 
     @Override
     public void periodic() {
 
-        // Skip preiodic code below.
-        if (true) return;
-
-        // Send rainbow
-        //rainbowPeriodic();
-
-        // Send climb
-        climbPeriodic();
-
-        // Comment this to use scheduled actions.
-        actionSecondsIndex = -1;
-
-        // Only run if there's a next second
-        if (actionSecondsIndex > -1) {
-            int actionSecond = actionSeconds[actionSecondsIndex];
-            int second = (int) timer.get();
-
-            if (second >= actionSecond) {
-                performActions(actionSecond);
-
-                if (actionSecondsIndex < actionSeconds.length - 1) {
-                    ++actionSecondsIndex;
-                } else {
-                    actionSecondsIndex = -1;
-                }
-            }
-        } else {
-            // Noting else to do so run rainbow.
-            //rainbowPeriodic();
-        }
     }
 
     // Set a color from the predefined wipilib Color
     // brightness: 0.0 (full off), 1.0 (full on)
-    public void setColor(Color color, double brightness) {
+    public void setColor(Color color, int brightness) {
         setColor((int) color.red, (int) color.green, (int) color.blue, brightness);
     }
 
     // Set RGB color values.
     // rgb values are 0 (full off) - 255 (full on)
     // brightness: 0.0 (full off), 1.0 (full on)
-    public void setColor(int red, int green, int blue, double brightness) {
-        red = (int) (red * brightness);
-        green = (int) (green * brightness);
-        blue = (int) (blue * brightness);
+    public void setColor(int red, int green, int blue, int brightness) {
+        double b = brightness / 255.0;
 
-        for (var i = 0; i < addressableBuffer.getLength(); i++) {
+        red = (int) (red * b);
+        green = (int) (green * b);
+        blue = (int) (blue * b);
+
+        AddressableLEDBuffer buffer = new AddressableLEDBuffer(ADDRESSABLE_LED_COUNT);
+        for (var i = 0; i < buffer.getLength(); i++) {
             // Sets the specified LED to the RGB values for red
-            addressableBuffer.setRGB(i, red, green, blue);
+            buffer.setRGB(i, red, green, blue);
         }
-        addressableLed.setData(addressableBuffer);
+        addressableLed.setData(buffer);
     }
 
-    // Run in periodic to make a rainbow pattern on the led.
-    private int rainbowHue = 0;
-    private void rainbowPeriodic() {
-        // For every pixel
-        for (var i = 0; i < addressableBuffer.getLength(); i++) {
-            // Calculate the hue - hue is easier for rainbows because the color
-            // shape is a circle so only one value needs to precess
-            final var hue = (rainbowHue + (i * 180 / addressableBuffer.getLength())) % 180;
-            // Set the value
-            addressableBuffer.setHSV(i, hue, 255, 128);
-        }
-        // Increase by to make the rainbow "move"
-        rainbowHue += 3;
-        // Check bounds
-        rainbowHue %= 180;
+    private class ActionRunner extends Thread {
+        public void run() {
+            while (true) {
 
-        addressableLed.setData(addressableBuffer);
-    }
-
-    private static final int climbTicksPerStep = 0;
-    private int climbTicks = climbTicksPerStep;
-    private int climbPerStep = 2; // How many address per step
-    private int climbStep = 0;
-    private void climbPeriodic() {
-
-        if (climbStep > ADDRESSABLE_LED_COUNT) {
-
-            //return; // to stop at full on/climb
-            
-            // start over
-            climbStep = 0;
-        }
-
-        --climbTicks;
-        if (climbTicks > 0) {
-            // Delaying another tick.
-            return;
-        }
-
-        // Could use climb step here
-        for (var i = 0; i < addressableBuffer.getLength(); ++i) {
-            if (i < climbStep) {
-                addressableBuffer.setRGB(i, 255, 0, 0);
-            } else {
-                addressableBuffer.setRGB(i, 0, 0, 0);
-            }
-        }
-        addressableLed.setData(addressableBuffer);
-
-        // Advance to next climb step.
-        climbStep += climbPerStep;
-        if (climbStep > ADDRESSABLE_LED_COUNT) {
-            climbStep = ADDRESSABLE_LED_COUNT;
-        } else if (climbStep == ADDRESSABLE_LED_COUNT) {
-            // Set to past the count to allow the next iteration to repeat or not.
-            climbStep = ADDRESSABLE_LED_COUNT + 1;
-        }
-
-        // Reset delay ticks.
-        climbTicks = climbTicksPerStep;
-    }
-
-    private Map<Integer, ArrayList<Action>> bootActions = new TreeMap<Integer, ArrayList<Action>>();
-    private Map<Integer, ArrayList<Action>> autoActions = new TreeMap<Integer, ArrayList<Action>>();
-    private Map<Integer, ArrayList<Action>> teleOpActions = new TreeMap<Integer, ArrayList<Action>>();
-
-    public void scheduleAction(Action action, int inState, int afterSeconds) {
-        Map<Integer, ArrayList<Action>> map = bootActions;
-        switch (inState) {
-        case STATE_IN_AUTO:
-            map = autoActions;
-            break;
-        case STATE_IN_TELEOP:
-            map = teleOpActions;
-            break;
-        }
-
-        Integer key = Integer.valueOf(afterSeconds);
-        if (map.containsKey(key) == false) {
-            map.put(key, new ArrayList<Action>());
-        }
-        map.get(key).add(action);
-    }
-
-    private int actionSecondsIndex = -1;
-    private int[] actionSeconds = new int[0];
-
-    private void setActionSeconds() {
-        Map<Integer, ArrayList<Action>> map = bootActions;
-
-        if (inAuto == true) {
-            map = autoActions;
-        } else if (inTeleOp == true) {
-            map = teleOpActions;
-        }
-
-        // Optimize periodic to not have to troll through the map looking
-        // for a close second (since it won't always line up to be a perfect second).
-        // This optimization is two parts. The seconds we're interested in
-        // and an index into the array of seconds we're interested in.
-        actionSeconds = new int[map.keySet().size()];
-        Iterator<Integer> iter = map.keySet().iterator();
-
-        int i = 0;
-        while (iter.hasNext() == true) {
-            actionSeconds[i++] = iter.next().intValue();
-        }
-
-        // Default the index to -1 to inform periodic there's nothing to do
-        // unless the actionSeconds contains something, then start at index 0.
-        actionSecondsIndex = -1;
-        if (actionSeconds.length > 0) {
-            actionSecondsIndex = 0;
-        }
-    }
-
-    private void performActions(int atSeconds) {
-        Map<Integer, ArrayList<Action>> map = bootActions;
-
-        if (inAuto == true) {
-            map = autoActions;
-        } else if (inTeleOp == true) {
-            map = teleOpActions;
-        }
-
-        ArrayList<Action> actions = map.get(Integer.valueOf(atSeconds));
-        Iterator<Action> iter = actions.iterator();
-        while (iter.hasNext()) {
-            Action action = iter.next();
-
-            switch (action.getAction()) {
-            case ACTION_LED_OFF:
-                setColor(Color.kBlack, 0);
-                break;
-
-            case ACTION_LED_ON:
-                if (action instanceof LedAction) {
-                    LedAction ledAction = (LedAction) action;
-                    setColor(ledAction.getRed(), ledAction.getGreen(), ledAction.getBlue(), ledAction.getBrightness());
+                if (Status.this.currentAction != null) {
+                    Status.this.currentAction.run();
                 } else {
-                    setColor(Color.kFuchsia, .5);
+                    // Delay 100ms since nothing to do
+                    Timer.delay(.100);
                 }
-            case ACTION_LED_FLASH:
-                // TODO: Implement
-                break;
             }
         }
     }
 
-    protected class Action {
-        private final int action;
-
-        public Action(int action) {
-            this.action = action;
-        }
-
-        public int getAction() {
-            return action;
-        }
-    }
-
-    public class LedAction extends Action {
-        private int red = 0;
-        private int green = 0;
-        private int blue = 0;
-        private double brightness = 0.0;
-
-        private int onTime = 1;
-        private int offTime = 1;
-
-        public LedAction(int action) {
-            super(action);
-        }
-
-        public LedAction(int action, int red, int green, int blue, double brightness) {
-            super(action);
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.brightness = brightness;
-        }
-
-        public int getRed() {
-            return red;
-        }
-
-        public int getGreen() {
-            return green;
-        }
-
-        public int getBlue() {
-            return blue;
-        }
-
-        public double getBrightness() {
-            return brightness;
-        }
-
-        public void setFlashIntervals(int onTime, int offTime) {
-            this.onTime = onTime;
-            this.offTime = offTime;
-        }
-
-        public int getOnTime() {
-            return onTime;
-        }
-
-        public int getOffTime() {
-            return offTime;
+    protected class TeleCommandGroup extends CommandGroup {
+        public TeleCommandGroup() {
+            addSequential(new WaitCommand(10));
+            addSequential(new RunRainbow(), 10);
+            addSequential(new ColorCommand(0,255,0,100));
         }
     }
 }

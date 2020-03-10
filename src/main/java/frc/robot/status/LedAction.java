@@ -16,7 +16,7 @@ public class LedAction extends Action {
     protected int intervalCount = -1;
 
     // How long to delay intervals.
-    protected double intervalTime = 0.1;
+    protected double intervalTime = 0.050;
 
     // Buffer this action uses, and sends to the LEDs.
     protected AddressableLEDBuffer buffer = new AddressableLEDBuffer(Status.ADDRESSABLE_LED_COUNT);
@@ -54,7 +54,7 @@ public class LedAction extends Action {
 
         // For every pixel
         for (var i = 0; i < buffer.getLength(); i++) {
-
+        
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
             final var hue = (rainbowHue + (i * 180 / buffer.getLength())) % 180;
@@ -69,10 +69,14 @@ public class LedAction extends Action {
         rainbowHue %= 180;
     }
 
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+
     // Expected to run in a thread dedicated for LED stuff.
+    @Override
     public void run() {
-        Timer timer = new Timer();
-        timer.start();
 
         while (intervalCount != 0) {
             updateBuffer();

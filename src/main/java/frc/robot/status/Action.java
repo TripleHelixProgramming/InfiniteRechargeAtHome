@@ -9,8 +9,15 @@ package frc.robot.status;
 
 public class Action implements Runnable {
 
+    public boolean isFinished() {
+        return true;
+    }
+
+    public double getDelay() {
+        return 0;
+    }
+
     public void run() {
         
     }
-
 }
