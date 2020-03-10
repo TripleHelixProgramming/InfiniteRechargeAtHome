@@ -87,7 +87,6 @@ public class Robot extends TimedRobot {
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
 
-    getStatus().setBootActions();
     getStatus().resetBoot();
   }
 
@@ -143,7 +142,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    getStatus().setAutoActions();
     getStatus().resetAuto();
 
     getDrivetrain().resetHeading();
@@ -182,7 +180,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    getStatus().setTeleOpActions();
     getStatus().resetTeleOp();
     
     // This makes sure that the autonomous stops running when

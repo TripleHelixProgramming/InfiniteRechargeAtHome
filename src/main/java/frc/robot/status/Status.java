@@ -16,8 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.status.commands.ColorCommand;
-import frc.robot.status.commands.RunRainbow;
+import frc.robot.status.commands.ActionCommand;
 
 //
 // This subsystem should be used for any status output such as lights.
@@ -25,13 +24,10 @@ import frc.robot.status.commands.RunRainbow;
 // is to eventually put more in here like controlling LED status lights.
 //
 
+// TODO: This class is really dedicated to doing LED stuff with the addressable led class.
+// Remove all the other stuff, and rename it as such.
+
 public class Status extends Subsystem {
-
-    // Run in what state.
-    public static final int STATE_RIO_BOOT = 0;
-    public static final int STATE_IN_AUTO = 1;
-    public static final int STATE_IN_TELEOP = 2;
-
 
     private static Status INSTANCE = null;
 
@@ -42,6 +38,7 @@ public class Status extends Subsystem {
     private static int ADDRESSABLE_LED_PWM_CHANNEL = 0;
     public static int ADDRESSABLE_LED_COUNT = 60; // accessable to actions
 
+    // The DO object that controls the flashlight.
     private DigitalOutput flashlightOutput = null;
 
     // Addressable LED support.
@@ -50,10 +47,14 @@ public class Status extends Subsystem {
     // The current LED action
     private Action currentAction = null;
 
+    // Object used for locking operations around the currentAction
+    private Object actionLock = new Object();
+
     // Timer allows us to do things at specific game time.
     private Timer timer = null;
 
-    // If both are false then the RIO is running but neither init has triggered.
+    // If both are false then the RIO is running but neither init has triggered
+    // (it's in boot up).
     private boolean inAuto = false;
     private boolean inTeleOp = false;
 
@@ -77,10 +78,11 @@ public class Status extends Subsystem {
         // Spawn the thread that runs actions to control the LEDs.
         new ActionRunner().start();
 
-        // addressableLed.setData(addressableBuffer);
-        addressableLed.start();
+        // Initialize to black.
+        setColor(Color.kBlack, 0);
 
-        // setColor(102, 46, 145, .1);
+        // This will output whatever was set in the last setData call continuously.
+        addressableLed.start();
 
         // Create the timer and start it.
         // This will start counting when the RIO initializes.
@@ -94,21 +96,51 @@ public class Status extends Subsystem {
     }
 
     public void setAction(Action action) {
-        currentAction = action;
+        // Before doing anything with an action synchornize around it.
+        // This prevents swapping the action while the action runner thread is doing
+        // something with it.
+        synchronized (actionLock) {
+            currentAction = action;
+        }
     }
 
-    public void setBootActions() {
+    // Things to do when boot starts.
+    // Note: these can't be commands since commands require enablement.
+    private void scheduleBootActions() {
 
     }
 
-    public void setAutoActions() {
+    // Things to do when auto resets/inits.
+    // This can be scheduled commands, command groups, etc.
+    private void scheduleAutoActions() {
 
+        // Set the color to purple by default.
+        setColor(245, 0, 255, 90);
     }
 
-    public void setTeleOpActions() {
+    // This is what we want to run when teleop starts.
+    // This can be scheduled commands, command groups, etc.
+    private void scheduleTeleOpActions() {
 
-        Scheduler.getInstance().add(new TeleCommandGroup());
+        // Set the color to purple by default.
+        setColor(245, 0, 255, 90);
 
+        // Using a command group with sequentials to force timely control of the leds.
+        CommandGroup commandGroup = new CommandGroup();
+
+        // Don't do anything until 135 seconds into teleop.
+        commandGroup.addSequential(new WaitCommand(135));
+
+        // Run the rainbow to indicate we need to climb.
+        commandGroup.addSequential(new ActionCommand(new RainbowAction()));
+
+        // Don't do anything for some time.
+        commandGroup.addSequential(new WaitCommand(15));
+
+        // Set red which should indicate match end.
+        commandGroup.addSequential(new ActionCommand(new LedAction(255, 0, 0, 127)));
+
+        Scheduler.getInstance().add(commandGroup);
     }
 
     /**
@@ -125,16 +157,10 @@ public class Status extends Subsystem {
         inAuto = false;
         inTeleOp = false;
 
-        // Turn off when boot
-        setColor(Color.kBlack, 0);
-
-        //setColor(245, 0, 255, 20);
-
-        //setColor(245, 0, 255, 255);
-        //setColor(102, 46, 145, 1);
-
         // Resets the timer so that it represents "time since code init".
         timer.reset();
+
+        scheduleBootActions();
     }
 
     // Resets the class state for Auto mode.
@@ -143,11 +169,10 @@ public class Status extends Subsystem {
         inAuto = true;
         inTeleOp = false;
 
-        // Set purple
-        setColor(245, 0, 255, 90);
-
         // Resets the timer so that it represents "time since auto init".
         timer.reset();
+
+        scheduleAutoActions();
     }
 
     // Resets the class state for TeleOp mode.
@@ -156,14 +181,10 @@ public class Status extends Subsystem {
         inAuto = false;
         inTeleOp = true;
 
-        setColor(245, 0, 255, 90);
-
-        // Set the LEDs to TripleHelix Purple.
-        // setColor(102, 46, 145, .5);
-
-        // Todd Purple: 255, 0, 220
-
+        // Resets the timer so that it represents "time since teleOp init".
         timer.reset();
+
+        scheduleTeleOpActions();
     }
 
     // Determines if the flashlight is on.
@@ -185,24 +206,27 @@ public class Status extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        // Run the rainbow pattern by default.
-        //setDefaultCommand(new RunRainbow());
+        // No default command - the output buffers are set in the reset* above.
     }
 
     @Override
     public void periodic() {
 
+        // TODO: Summer project - update the subsystem to look at it's own scheduled
+        // list of things to do based on state and what was set in the schedule* methods
+        // (internal vs. Command/CommandGroup on that scheduler).
+        // See an old commit for this class that had such things.
     }
 
-    // Set a color from the predefined wipilib Color
-    // brightness: 0.0 (full off), 1.0 (full on)
+    // Set a color from the predefined wpilib Color
+    // Brightness is on a scale of 0-255
     public void setColor(Color color, int brightness) {
         setColor((int) color.red, (int) color.green, (int) color.blue, brightness);
     }
 
     // Set RGB color values.
-    // rgb values are 0 (full off) - 255 (full on)
-    // brightness: 0.0 (full off), 1.0 (full on)
+    // RGB values are 0 (full off) - 255 (full on)
+    // Brightness is on a scale of 0-255
     public void setColor(int red, int green, int blue, int brightness) {
         double b = brightness / 255.0;
 
@@ -210,33 +234,62 @@ public class Status extends Subsystem {
         green = (int) (green * b);
         blue = (int) (blue * b);
 
+        // Create a buffer for all the LEDs, set all of them to the same value, and
+        // output the buffer.
         AddressableLEDBuffer buffer = new AddressableLEDBuffer(ADDRESSABLE_LED_COUNT);
         for (var i = 0; i < buffer.getLength(); i++) {
-            // Sets the specified LED to the RGB values for red
             buffer.setRGB(i, red, green, blue);
         }
         addressableLed.setData(buffer);
     }
 
+    // This is the thread that runs the current action.
     private class ActionRunner extends Thread {
+
+        // The minium amount of time to delay the tread.
+        // While the RIO should handle it either way, the delay
+        // allows the OS schedular a good slice to do things.
+        private static final double MINIMUM_DELAY_SECONDS = 0.050;
+
+        // How long to delay/sleep when there's no action.
+        private static final double IDLE_DELAY_SECONDS = 0.250;
+
         public void run() {
+
+            // The thread should persist while the code does (forever).
+            //
+            // TODO: A watchdog should probably check to see if the thread died off
+            // due to an exception and restart it.
             while (true) {
 
-                if (Status.this.currentAction != null) {
-                    Status.this.currentAction.run();
-                } else {
-                    // Delay 100ms since nothing to do
-                    Timer.delay(.100);
-                }
-            }
-        }
-    }
+                synchronized (actionLock) {
+                    if (currentAction != null) {
 
-    protected class TeleCommandGroup extends CommandGroup {
-        public TeleCommandGroup() {
-            addSequential(new WaitCommand(10));
-            addSequential(new RunRainbow(), 10);
-            addSequential(new ColorCommand(0,255,0,100));
+                        System.out.println("ActionRunner: run");
+                        currentAction.run();
+
+                        // If the current action is now done, remove it and loop back around.
+                        if (currentAction.isFinished() == true) {
+                            System.out.println("ActionRunner: finished");
+                            currentAction = null;
+                            continue;
+                        }
+
+                        // Delay the amount of time requested by the action.
+                        double delay = currentAction.getDelay();
+                        if (delay < MINIMUM_DELAY_SECONDS) {
+                            delay = MINIMUM_DELAY_SECONDS;
+                        }
+
+                        System.out.println("ActionRunner: delay");
+                        Timer.delay(delay);
+                        continue;
+                    }
+                }
+
+                // Nothing to do; delay before looping.
+                Timer.delay(IDLE_DELAY_SECONDS);
+            }
         }
     }
 }

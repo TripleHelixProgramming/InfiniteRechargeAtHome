@@ -8,84 +8,73 @@
 package frc.robot.status;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.Timer;
 
 public class LedAction extends Action {
 
-    // How many times to run, less than 0 will run until the thread dies.
-    protected int intervalCount = -1;
+    // How many times to run, less than 0 will run forever.
+    protected int intervalCount = 1;
 
     // How long to delay intervals.
-    protected double intervalTime = 0.050;
+    protected double intervalTime = 0.0;
 
-    // Buffer this action uses, and sends to the LEDs.
+    // Buffer this action uses for sending to the LEDs.
     protected AddressableLEDBuffer buffer = new AddressableLEDBuffer(Status.ADDRESSABLE_LED_COUNT);
 
-    // Default behavior of this action is to run a rainbow pattern.
-    // This member tracks the hue between periodics.
-    private int rainbowHue = 0;
-
-    // Default will run a rainbow pattern.
     public LedAction() {
-
+        // Initialize the buffer to black.
+        for (var i = 0; i < buffer.getLength(); i++) {
+            buffer.setRGB(i, 0, 0, 0);
+        }
     }
 
     // Invoke with a specific color.
     public LedAction(int red, int green, int blue, int brightness) {
-        double b = brightness / 255;
+        double b = brightness / 255.0;
+
         red = (int) (red * b);
         green = (int) (green * b);
         blue = (int) (blue * b);
 
+        // Set the entire buffer (string of leds) to the same color.
         for (var i = 0; i < buffer.getLength(); i++) {
             buffer.setRGB(i, red, green, blue);
         }
-
-        // One and done.
-        intervalCount = 1;
     }
 
     // Implementations should override the updateBuffer method.
     // This will be invoked every intervalTime seconds and only needs to
-    // alter the buffer. The outer run() will handle the intervalTime,
-    // intervalCount,
-    // and set/sending the buffer to the LEDs.
+    // alter the buffer. The outer run() method will handle the intervalTime,
+    // intervalCount, and set/sending the buffer to the LEDs.
     protected void updateBuffer() {
 
-        // For every pixel
-        for (var i = 0; i < buffer.getLength(); i++) {
-        
-            // Calculate the hue - hue is easier for rainbows because the color
-            // shape is a circle so only one value needs to precess
-            final var hue = (rainbowHue + (i * 180 / buffer.getLength())) % 180;
-
-            // Set the value
-            buffer.setHSV(i, hue, 255, 128);
-        }
-        // Increase by to make the rainbow "move"
-        rainbowHue += 3;
-
-        // Check bounds
-        rainbowHue %= 180;
     }
 
     @Override
     public boolean isFinished() {
+        // If the intervalCount is greater than 0 or less than zero
+        // we're not finished. The run() method will decrement if greater
+        // and never finish if less than (a repeating pattern).
+        if (intervalCount == 0) {
+            return true;
+        }
         return false;
     }
 
-    // Expected to run in a thread dedicated for LED stuff.
+    // Require by the parent Action class.
+    // This is invoked by the running thread until isFinished returns true.
     @Override
     public void run() {
 
-        while (intervalCount != 0) {
-            updateBuffer();
+        // Update the buffer.
+        updateBuffer();
 
-            Status.getStatus().setLedData(buffer);
+        // Send the buffer to the leds.
+        Status.getStatus().setLedData(buffer);
 
+        // Only decrement the intervalCount if it's over 0.
+        // Otherwise it may overflow backwords and cause problems.
+        if (intervalCount > 0) {
             --intervalCount;
-
-            Timer.delay(intervalTime);
         }
     }
 }
