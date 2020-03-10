@@ -20,12 +20,8 @@ import frc.robot.drivetrain.Camera;
 
 public abstract class AbstractVisionDriving extends Command {
 
-  // private final PIDController controller = new PIDController(10000, 0, 0); //.05,0,0
-  // private final Notifier notifier = new Notifier(this::calculate);
   private final Camera camera;
   private double angleToTarget, output;
-
-  // private boolean isFinished = false;
 
   public AbstractVisionDriving() {
     requires(getDrivetrain());
@@ -36,16 +32,12 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void initialize() {
-    // notifier.startPeriodic(0.01);
     camera.setDockingMode();
-    // isFinished = false;
   }
 
-  @Override
-  protected void execute() {
-    // controller.setReference(0);
-    double kP = 0.125; // 0.15
-    double kF = 0.65; //.5
+  @Override protected void execute() {
+    double kP = 0.11; // 0.125
+    double kF = 0.8; //.65
     angleToTarget = camera.getRotationalDegreesToTarget();
     output = -angleToTarget * kP - kF*(Math.abs(angleToTarget) / angleToTarget);
     getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
@@ -58,22 +50,12 @@ public abstract class AbstractVisionDriving extends Command {
 
   @Override
   protected void end() {
-    // notifier.stop();
     HelixEvents.getInstance().addEvent("DRIVETRAIN", "Stopping Vision Driving");
     camera.setDriverMode();
-    // getDrivetrain().setPIDFValues();
-    // isFinished = true;
   }
 
   @Override
   protected void interrupted() {
-    camera.setDriverMode();
     end();
   }
-
-  // private void calculate() {
-  //   output = controller.calculate(camera.getRotationalDegreesToTarget());
-  //   getDrivetrain().setSetpoint(FPS, getThrottle() - output, getThrottle() + output);
-  //   // if (isFinished) notifier.stop();
-  // }
 }

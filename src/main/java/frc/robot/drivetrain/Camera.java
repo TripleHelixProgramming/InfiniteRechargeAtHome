@@ -25,6 +25,10 @@ public class Camera {
         cameraAlignment = Preferences.getInstance().getDouble(name + "-alignment", 0);
     }
 
+    public String getCameraName() {
+        return name;
+    }
+
     public double getCameraAlignment() {
         return cameraAlignment;
     }
@@ -53,8 +57,8 @@ public class Camera {
     }
 
     public boolean isTargetFound() {
-        double v = getDefault().getTable(name).getEntry("tx").getDouble(0);
-        return v != 0;
+        double v = getDefault().getTable(name).getEntry("tv").getDouble(0);
+        return v == 1;
     }
 
     public boolean isTargetClose() {

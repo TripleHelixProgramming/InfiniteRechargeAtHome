@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
     getStatus().resetAuto();
 
     getDrivetrain().resetHeading();
-    getDrivetrain().getFrontCamera().setDockingMode();
+    getDrivetrain().getFrontCamera().setDriverMode();
 
     AutoMode mode;
     
