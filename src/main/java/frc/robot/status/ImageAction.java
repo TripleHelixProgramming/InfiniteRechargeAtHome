@@ -87,7 +87,7 @@ public class ImageAction extends LedAction {
             // Scale the height of the image to the size of the buffer
             // Do some shenanigans to force float arithmetic
             double percent = (i * 1.0) / (buffer.getLength()-1);
-            int imageY = (int)(percent * (image.getHeight()-1));
+            int imageY = (int)((1.0 - percent) * (image.getHeight()-1));
 
             int rgb = image.getRGB(currentColumn, imageY);
             Color pixelColor = intToColor(rgb);
