@@ -201,7 +201,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     if (firstTime) {
-      Scheduler.getInstance().add(new SetBallHandlingCG(BallHandlingState.ADVANCE));
+      //Scheduler.getInstance().add(new SetBallHandlingCG(BallHandlingState.ADVANCE));
       firstTime = false;
     }
 

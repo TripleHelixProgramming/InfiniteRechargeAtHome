@@ -108,37 +108,50 @@ public class Status extends Subsystem {
     // Note: these can't be commands since commands require enablement.
     private void scheduleBootActions() {
 
-        ScannerAction action = new ScannerAction(245, 0, 255, 90);
-        action.setIntervalTime(0.075);
-        action.setIntervalCount(ADDRESSABLE_LED_COUNT * 5 * 2); // number of lights, how many times to update them, back and fourth
-        setAction(action);
+        ScannerAction scannerAction = new ScannerAction(245, 0, 255, 90);
+        scannerAction.setIntervalTime(0.075);
+        scannerAction.setIntervalCount(ADDRESSABLE_LED_COUNT * 5 * 2); // number of lights, how many times to update them, back and fourth
+        setAction(scannerAction);
+
+        ChaseAction chaseAction = new ChaseAction(245, 0, 255, 90);
+        chaseAction.setIntervalCount(-1);
+        //setAction(chaseAction);
     }
 
     // Things to do when auto resets/inits.
     // This can be scheduled commands, command groups, etc.
     private void scheduleAutoActions() {
 
-        // Set the color to purple by default.
-        setAction(null);
-        setColor(245, 0, 255, 90);
+        // Power up to purple, and stay on.
+        PowerUpAction powerUpAction = new PowerUpAction(245, 0, 255, 90);
+        powerUpAction.setIntervalCount(ADDRESSABLE_LED_COUNT);
+        setAction(powerUpAction);
     }
 
     // This is what we want to run when teleop starts.
     // This can be scheduled commands, command groups, etc.
     private void scheduleTeleOpActions() {
 
-        // Set the color to purple by default.
-        setAction(null);
-        setColor(245, 0, 255, 90);
+        // Power up to purple, and stay on - should be on already in match.
+        PowerUpAction powerUpAction = new PowerUpAction(245, 0, 255, 90);
+        powerUpAction.setIntervalCount(ADDRESSABLE_LED_COUNT);
+        setAction(powerUpAction);
 
         // Using a command group with sequentials to force timely control of the leds.
         CommandGroup commandGroup = new CommandGroup();
 
-        // Don't do anything until 135 seconds into teleop.
-        commandGroup.addSequential(new WaitCommand(134)); // 15 sec before match end (adding extra since it takes a bit to start an action)
+        // With 40s to remain, warning.
+        commandGroup.addSequential(new WaitCommand(94));
+        LedAction warnAction = new LedAction(255, 127, 0, 127);
+        commandGroup.addSequential(new ActionCommand(warnAction));
+
+        // With 15s remain, go nuts to climb.
+        commandGroup.addSequential(new WaitCommand(24)); // 15 sec before match end (adding extra since it takes a bit to start an action)
 
         // Run the rainbow to indicate we need to climb.
-        commandGroup.addSequential(new ActionCommand(new RainbowAction()));
+        ChaseAction chaseAction = new ChaseAction(255, 127, 0, 90);
+        chaseAction.setIntervalCount(-1);
+        commandGroup.addSequential(new ActionCommand(chaseAction));
 
         // Don't do anything for some time.
         commandGroup.addSequential(new WaitCommand(15)); // match end
@@ -278,9 +291,6 @@ public class Status extends Subsystem {
                         if (currentAction.isFinished() == true) {
                             //System.out.println("ActionRunner: finished");
                             currentAction = null;
-
-                            // Action done, turn the LEDs off.
-                            setColor(Color.kBlack, 0);
                             continue;
                         }
 
