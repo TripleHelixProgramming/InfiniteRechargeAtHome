@@ -1,13 +1,11 @@
 package frc.robot.status;
 
+import edu.wpi.first.wpilibj.util.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
-import edu.wpi.first.wpilibj.util.Color;
-
-import java.awt.image.BufferedImage;
 /**
  * Use an image file to set the addressable LEDs
  * 
