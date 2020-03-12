@@ -41,6 +41,14 @@ public class LedAction extends Action {
         }
     }
 
+    public void setIntervalTime(double intervalTime) {
+        this.intervalTime = intervalTime;
+    }
+
+    public void setIntervalCount(int intervalCount) {
+        this.intervalCount = intervalCount;
+    }
+
     // Implementations should override the updateBuffer method.
     // This will be invoked every intervalTime seconds and only needs to
     // alter the buffer. The outer run() method will handle the intervalTime,

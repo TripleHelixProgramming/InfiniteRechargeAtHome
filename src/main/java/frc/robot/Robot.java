@@ -10,14 +10,14 @@ package frc.robot;
 import static frc.robot.Preferences.getPreferences;
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
-// import static frc.robot.controlpanel.ControlPanel.getControlPanel;
+import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.intake.Intake.getIntake;
 import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
 import static frc.robot.indexer.Indexer.getIndexer;
 import static frc.robot.oi.OI.getOI;
-// import static frc.robot.status.Status.getStatus;
+import static frc.robot.status.Status.getStatus;
 
 import com.team2363.logger.HelixEvents;
 import com.team2363.logger.HelixLogger;
@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
   }
 
   private void initializeSubsystems() {
-    // getStatus();
+    getStatus();
     getOI();
     getDrivetrain();
     getIntake();
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
 
-    // getStatus().resetBoot();
+    getStatus().resetBoot();
   }
 
   /** 
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // getStatus().resetAuto();
+    getStatus().resetAuto();
 
     getDrivetrain().resetHeading();
     getDrivetrain().getFrontCamera().setDriverMode();
@@ -180,7 +180,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // getStatus().resetTeleOp();
+    getStatus().resetTeleOp();
     
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

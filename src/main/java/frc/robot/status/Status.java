@@ -108,34 +108,53 @@ public class Status extends Subsystem {
     // Note: these can't be commands since commands require enablement.
     private void scheduleBootActions() {
 
+        ScannerAction scannerAction = new ScannerAction(245, 0, 255, 90);
+        scannerAction.setIntervalTime(0.075);
+        scannerAction.setIntervalCount(ADDRESSABLE_LED_COUNT * 5 * 2); // number of lights, how many times to update them, back and fourth
+        setAction(scannerAction);
+
+        ChaseAction chaseAction = new ChaseAction(245, 0, 255, 90);
+        chaseAction.setIntervalCount(-1);
+        //setAction(chaseAction);
     }
 
     // Things to do when auto resets/inits.
     // This can be scheduled commands, command groups, etc.
     private void scheduleAutoActions() {
 
-        // Set the color to purple by default.
-        setColor(245, 0, 255, 90);
+        // Power up to purple, and stay on.
+        PowerUpAction powerUpAction = new PowerUpAction(245, 0, 255, 90);
+        powerUpAction.setIntervalCount(ADDRESSABLE_LED_COUNT);
+        setAction(powerUpAction);
     }
 
     // This is what we want to run when teleop starts.
     // This can be scheduled commands, command groups, etc.
     private void scheduleTeleOpActions() {
 
-        // Set the color to purple by default.
-        setColor(245, 0, 255, 90);
+        // Power up to purple, and stay on - should be on already in match.
+        PowerUpAction powerUpAction = new PowerUpAction(245, 0, 255, 90);
+        powerUpAction.setIntervalCount(ADDRESSABLE_LED_COUNT);
+        setAction(powerUpAction);
 
         // Using a command group with sequentials to force timely control of the leds.
         CommandGroup commandGroup = new CommandGroup();
 
-        // Don't do anything until 135 seconds into teleop.
-        commandGroup.addSequential(new WaitCommand(135));
+        // With 40s to remain, warning.
+        commandGroup.addSequential(new WaitCommand(94));
+        LedAction warnAction = new LedAction(255, 127, 0, 127);
+        commandGroup.addSequential(new ActionCommand(warnAction));
+
+        // With 15s remain, go nuts to climb.
+        commandGroup.addSequential(new WaitCommand(24)); // 15 sec before match end (adding extra since it takes a bit to start an action)
 
         // Run the rainbow to indicate we need to climb.
-        commandGroup.addSequential(new ActionCommand(new RainbowAction()));
+        ChaseAction chaseAction = new ChaseAction(255, 127, 0, 90);
+        chaseAction.setIntervalCount(-1);
+        commandGroup.addSequential(new ActionCommand(chaseAction));
 
         // Don't do anything for some time.
-        commandGroup.addSequential(new WaitCommand(15));
+        commandGroup.addSequential(new WaitCommand(15)); // match end
 
         // Set red which should indicate match end.
         commandGroup.addSequential(new ActionCommand(new LedAction(255, 0, 0, 127)));
@@ -249,7 +268,7 @@ public class Status extends Subsystem {
         // The minium amount of time to delay the tread.
         // While the RIO should handle it either way, the delay
         // allows the OS schedular a good slice to do things.
-        private static final double MINIMUM_DELAY_SECONDS = 0.050;
+        private static final double MINIMUM_DELAY_SECONDS = 0.010;
 
         // How long to delay/sleep when there's no action.
         private static final double IDLE_DELAY_SECONDS = 0.250;
@@ -265,12 +284,12 @@ public class Status extends Subsystem {
                 synchronized (actionLock) {
                     if (currentAction != null) {
 
-                        System.out.println("ActionRunner: run");
+                        //System.out.println("ActionRunner: run");
                         currentAction.run();
 
                         // If the current action is now done, remove it and loop back around.
                         if (currentAction.isFinished() == true) {
-                            System.out.println("ActionRunner: finished");
+                            //System.out.println("ActionRunner: finished");
                             currentAction = null;
                             continue;
                         }
@@ -281,7 +300,7 @@ public class Status extends Subsystem {
                             delay = MINIMUM_DELAY_SECONDS;
                         }
 
-                        System.out.println("ActionRunner: delay");
+                        //System.out.println("ActionRunner: delay");
                         Timer.delay(delay);
                         continue;
                     }
