@@ -37,6 +37,7 @@ public class ImageAction extends LedAction {
     private int currentColumn = 0;
     private boolean oscillate = false;
     private boolean goForward = true;
+    private double brightness = 1.0;
 
     public ImageAction() {
         super();
@@ -68,6 +69,17 @@ public class ImageAction extends LedAction {
     @Override
     public double getDelay() {
         return intervalTime;
+    }
+
+    public ImageAction brightness(double brightness) {
+        setBrightness(brightness);
+        return this;
+    }
+
+    public void setBrightness(double brightness) {
+        if (0.0 > brightness) { brightness = 0.0;}
+        if (1.0 < brightness) { brightness = 1.0;}
+        this.brightness = brightness;
     }
 
     public ImageAction oscillate() {
@@ -126,7 +138,7 @@ public class ImageAction extends LedAction {
         int greeni = (pixel >> 8) & 0xff;
         int bluei = (pixel) & 0xff;
 
-        double brightness = (alpha / 255.0);
+        double brightness = (alpha / 255.0) * this.brightness;
         double red = brightness * (redi / 255.0);
         double green = brightness * (greeni / 255.0);
         double blue = brightness * (bluei / 255.0);
