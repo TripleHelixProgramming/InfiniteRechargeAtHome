@@ -1,7 +1,7 @@
 
 package frc.robot.status.commands;
 
-import com.team2363.logger.HelixEvents;
+// import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.status.Status;
@@ -33,7 +33,7 @@ public class ToggleFlashlight extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        HelixEvents.getInstance().addEvent("STATUS", "Starting ToggleFlashlight");
+        // HelixEvents.getInstance().addEvent("STATUS", "Starting ToggleFlashlight");
 
         // The command can either toggle as is, or set to a specific sate.
         if (forceSet == true) {
@@ -59,7 +59,7 @@ public class ToggleFlashlight extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-        HelixEvents.getInstance().addEvent("STATUS", "Ending ToggleFlashlight");
+        // HelixEvents.getInstance().addEvent("STATUS", "Ending ToggleFlashlight");
     }
 
     // Called when another command which requires one or more of the same

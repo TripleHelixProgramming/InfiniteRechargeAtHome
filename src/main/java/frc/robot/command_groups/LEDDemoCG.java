@@ -3,8 +3,8 @@ package frc.robot.command_groups;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import frc.robot.status.ImageAction;
-import frc.robot.status.LedAction;
+import frc.robot.status.actions.ImageAction;
+import frc.robot.status.actions.LedAction;
 import frc.robot.status.commands.ActionCommand;
 import java.io.File;
 

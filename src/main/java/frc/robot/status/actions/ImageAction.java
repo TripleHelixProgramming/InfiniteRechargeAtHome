@@ -1,10 +1,10 @@
-package frc.robot.status;
+package frc.robot.status.actions;
 
-import edu.wpi.first.wpilibj.util.Color;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import edu.wpi.first.wpilibj.util.Color;
+import java.awt.image.BufferedImage;
 
 /**
  * Use an image file to set the addressable LEDs
@@ -28,8 +28,8 @@ import javax.imageio.ImageIO;
  */
 public class ImageAction extends LedAction {
 
-    private static final double DEFAULT_INTERVAL = 0.050;
-    private static final int FOREVER = -1; // forever
+    public static final double DEFAULT_INTERVAL = 0.050;
+    public static final int FOREVER = -1; // forever
 
     private File imageFile;
     private BufferedImage image;
@@ -60,15 +60,16 @@ public class ImageAction extends LedAction {
             imageFile = new File(pathname);
             image = ImageIO.read(imageFile);
             intervalCount = count * image.getWidth();
+            curIntCount = intervalCount;
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Problem opening image. Check the path.\nImage path = " + pathname);
         }
     }
 
-    @Override
-    public double getDelay() {
-        return intervalTime;
+    public void reset() {
+        super.reset();
+        this.currentColumn = 0;
     }
 
     public ImageAction brightness(double brightness) {
