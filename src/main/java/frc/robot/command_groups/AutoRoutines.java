@@ -23,6 +23,7 @@ import frc.paths.RendLayupPartOne;
 import frc.paths.RendLayupPartTwo;
 import frc.paths.Right;
 import frc.paths.RightSweep;
+import frc.paths.RightSweepWeave;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.shooter.Position;
 
@@ -38,7 +39,8 @@ public class AutoRoutines {
 		NONE(0.0, 0.0), 						// Don't run any auto
 		REND_LAYUP(0.0, 0.0),
 		TRENCH_LAYUP(0.0, 0.0),
-		OPP_TRENCH_LAYUP(0.0, 0.0);
+		OPP_TRENCH_LAYUP(0.0, 0.0),
+		TRENCH_WEAVE(0.0,0.0);
 		
 		private double pigeon_offset;
 		private double delay;
@@ -46,7 +48,6 @@ public class AutoRoutines {
 		private AutoMode(double offset, double delay) {
 			this.pigeon_offset = offset;
 			this.delay = delay;
-			
 		}
 		
 		// Get delay in second, ball pickup path for deploying the intake.
@@ -66,6 +67,7 @@ public class AutoRoutines {
 	private static DigitalInput rendLayup = new DigitalInput(2);
 	private static DigitalInput trenchLayup = new DigitalInput(3);
 	private static DigitalInput oppTrenchLayup = new DigitalInput(4);
+	private static DigitalInput trenchWeave = new DigitalInput(5);
 
 	/* 
 	 * Base onselectedAutoMode Robot Position on the alliance wall & plates states, determines 
@@ -113,6 +115,12 @@ public class AutoRoutines {
 		case TEST_3FEET_FORWARD:
 			// Tuning Auto
 			return new AutoCG(new ThreeFeetForward());
+		case TRENCH_WEAVE:
+			return new FarAutoCG(
+				new Right(),
+				new RightSweepWeave(),
+				true
+			);
 		case NONE:
 		default:  
 			// Auto Mode of NONE or unkown mode passed in, so no auto command
@@ -132,6 +140,8 @@ public class AutoRoutines {
 			return AutoMode.OPP_TRENCH_LAYUP;
 		} else if (!trenchLayup.get()) {
 			return AutoMode.TRENCH_LAYUP;
+		} else if (!trenchWeave.get()) {
+			return AutoMode.TRENCH_WEAVE;
 		} else {
             return AutoMode.NONE;
         }
