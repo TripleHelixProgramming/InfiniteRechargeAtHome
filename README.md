@@ -1,3 +1,3 @@
-# InfiniteRecharge
+# Infinite Recharge At Home
 
-Code for the robot for the 2020 season, [Infinite Recharge](https://info.firstinspires.org/infinite-recharge).
+Code for the robot for the 2021 season, [Infinite Recharge](https://info.firstinspires.org/2021season/infiniterecharge).
