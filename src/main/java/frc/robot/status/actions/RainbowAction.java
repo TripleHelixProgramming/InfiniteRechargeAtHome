@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.status;
+package frc.robot.status.actions;
 
 public class RainbowAction extends LedAction {
 

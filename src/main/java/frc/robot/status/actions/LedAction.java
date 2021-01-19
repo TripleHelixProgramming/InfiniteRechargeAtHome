@@ -5,17 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.status;
+package frc.robot.status.actions;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import frc.robot.status.Status;
 
 public class LedAction extends Action {
 
     // How many times to run, less than 0 will run forever.
     protected int intervalCount = 1;
-
-    // How long to delay intervals.
-    protected double intervalTime = 0.0;
+    protected int curIntCount = 1; // The current interval. 
 
     // Buffer this action uses for sending to the LEDs.
     protected AddressableLEDBuffer buffer = new AddressableLEDBuffer(Status.ADDRESSABLE_LED_COUNT);
@@ -41,12 +40,17 @@ public class LedAction extends Action {
         }
     }
 
-    public void setIntervalTime(double intervalTime) {
-        this.intervalTime = intervalTime;
-    }
-
     public void setIntervalCount(int intervalCount) {
         this.intervalCount = intervalCount;
+        this.curIntCount = intervalCount;
+    }
+
+    public int getIntervalCount() {
+        return this.intervalCount;
+    }
+
+    public int getCurrentIntervalCount() {
+        return this.curIntCount;
     }
 
     // Implementations should override the updateBuffer method.
@@ -62,11 +66,18 @@ public class LedAction extends Action {
         // If the intervalCount is greater than 0 or less than zero
         // we're not finished. The run() method will decrement if greater
         // and never finish if less than (a repeating pattern).
-        if (intervalCount == 0) {
+        if (curIntCount == 0) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
+
+    @Override
+    public void reset() {
+        this.curIntCount = this.intervalCount;
+    }
+
 
     // Require by the parent Action class.
     // This is invoked by the running thread until isFinished returns true.
@@ -81,8 +92,8 @@ public class LedAction extends Action {
 
         // Only decrement the intervalCount if it's over 0.
         // Otherwise it may overflow backwords and cause problems.
-        if (intervalCount > 0) {
-            --intervalCount;
+        if (curIntCount > 0) {
+            --curIntCount;
         }
     }
 }
