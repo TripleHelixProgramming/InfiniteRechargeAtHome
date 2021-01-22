@@ -16,22 +16,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.command_groups.ClimbCG;
-import frc.robot.command_groups.EnableLightsCG;
 import frc.robot.command_groups.LayUpCG;
 import frc.robot.drivetrain.commands.CarsonDrive;
-import frc.robot.drivetrain.commands.DisableLights;
-import frc.robot.drivetrain.commands.EnableLights;
-import frc.robot.drivetrain.commands.ManualVisionDriving;
-import frc.robot.drivetrain.commands.RampDown;
-import frc.robot.drivetrain.commands.SampleDrive;
-import frc.robot.drivetrain.commands.TuneDrivetrain;
-import frc.robot.drivetrain.commands.VisionTakeOverGroup;
-import frc.robot.drivetrain.commands.AimInPlace;
 import frc.robot.intake.Intake;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.intake.commands.ReverseIntake;
@@ -41,6 +31,7 @@ import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
+import frc.robot.shooter.commands.setRealRPM;
 import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -90,8 +81,8 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
 
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.MIDFIELD_SHOOT));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
+    new JoystickButton(driver, ControllerMap.X_BOX_B).whileHeld(new setRealRPM(3000));
+    // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
 
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new LayUpCG());
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
@@ -102,21 +93,17 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new StowTelescope());
 
     // Aiming is on a whileHeld reft button
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new DisableLights());
     // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
-    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new SetBallHandlingCG(BallHandlingState.STOP));
+    // new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
+    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new StartIntakeCG(true));
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new StopIntakeCG());
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
 
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new AimAndSpinCG());
     new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new StopShooter());
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new DisableLights());
-
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new EnableLightsCG());
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenReleased(new DisableLights());
 
     new CTrigger().whenActive(new ClimbCG());
 

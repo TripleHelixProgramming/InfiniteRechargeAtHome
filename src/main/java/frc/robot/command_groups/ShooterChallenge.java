@@ -8,15 +8,21 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-
-import frc.robot.drivetrain.commands.AimInPlace;
+import frc.paths.RedZone;
+import frc.robot.drivetrain.commands.PathFollower;
+import frc.robot.drivetrain.commands.visionAim;
+import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.shooter.commands.StopShooter;
 
-
-public class AimAndSpinCG extends CommandGroup {
-  public AimAndSpinCG() {
-    addParallel(new AimInPlace());
-    addSequential(new SpinShooterUp(Position.UNKNOWN));
+public class ShooterChallenge extends CommandGroup {
+  public ShooterChallenge() {
+    addSequential(new PathFollower(new RedZone()));
+    addParallel(new SpinShooterUp(Position.BLUE_ZONE));
+    addSequential(new visionAim(), 2);
+    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);
+    addSequential(new StopShooter());
+    addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
   }
 }

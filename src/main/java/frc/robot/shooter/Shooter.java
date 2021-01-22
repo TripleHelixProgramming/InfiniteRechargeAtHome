@@ -191,7 +191,7 @@ public class Shooter extends Subsystem {
 
         SmartDashboard.putString("Shooter State", currentState.toString());
         SmartDashboard.putNumber("Set RPM", currentRPM);
-        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
+        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity() * 30.0 / 18.0);
 
         SmartDashboard.putString("Current Position", currentPosition.toString());
         SmartDashboard.putNumber("Position RPM", currentPosition.getRPM());
@@ -212,7 +212,7 @@ public class Shooter extends Subsystem {
 
     // Get the current shooter velocity from the encoder (in RPMs)
     public double getRPM() {
-        return encoder.getVelocity();
+        return encoder.getVelocity() * 30.0 / 18.0;
     }
 
     public boolean isAtRPM() {
@@ -249,6 +249,10 @@ public class Shooter extends Subsystem {
     // Defaults to to Position.UNKONWN
     public Position getCurrentPosition() {
         return currentPosition;
+    }
+
+    public double getPosition() {
+        return master.getEncoder().getPosition();
     }
 
     // Gets the current number of bump ticks relative to the last position.

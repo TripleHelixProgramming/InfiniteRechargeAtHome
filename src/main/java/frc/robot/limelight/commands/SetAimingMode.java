@@ -5,24 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.drivetrain.commands;
-
-import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
+package frc.robot.limelight.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.drivetrain.Drivetrain;
+import frc.robot.limelight.Limelight;
 
-public class StopDrivetrain extends Command {
-  public StopDrivetrain() {
+public class SetAimingMode extends Command {
+  public SetAimingMode() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Drivetrain.getDrivetrain());
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Drivetrain.getDrivetrain().setSetpoint(PERCENT_FULLSPEED, 0.0, 0.0);
+    Limelight.getLimelight().setAimingMode();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -33,7 +30,7 @@ public class StopDrivetrain extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

@@ -8,11 +8,15 @@
 package frc.robot.drivetrain.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain.Drivetrain.CommandUnits;
+import frc.robot.limelight.Limelight;
 
-public class DisableLights extends Command {
-  public DisableLights() {
+public class visionAim extends Command {
+
+  double velocity;
+
+  public visionAim() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -20,19 +24,21 @@ public class DisableLights extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
-    SmartDashboard.putString("Camera Light:", "Disable");
+
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    double angleToTarget = Limelight.getLimelight().getXOffset();
+    velocity = angleToTarget * 0.6;
+    Drivetrain.getDrivetrain().setSetpoint(CommandUnits.FPS, velocity, -velocity);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
@@ -44,5 +50,6 @@ public class DisableLights extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }
