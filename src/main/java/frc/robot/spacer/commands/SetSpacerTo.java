@@ -18,8 +18,8 @@ import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
-  private double SHOOT_SPEED = 0.5;
-  private double INTAKE_SPEED = 0.5;
+  private double SHOOT_SPEED = 400;
+  private double INTAKE_SPEED = 400;
 
   private double power = 0.0;
 
@@ -50,16 +50,17 @@ public class SetSpacerTo extends Command {
     ballAtSpacer = Magazine.getMagazine().ballAtSpacer();
 
     SmartDashboard.putString("Spacer State", action.toString());
+    SmartDashboard.putNumber("Spacer Velocity", Spacer.getSpacer().getVelocity());
 
     switch (action) {
       case SHOOT_NO_LOGIC:
         //  Case for no ball spacing logic when spacer is in SHOOT mode.
-        Spacer.getSpacer().setPower(SHOOT_SPEED);
+        Spacer.getSpacer().setVelocity(SHOOT_SPEED);
         break;
 
       case INTAKE_NO_LOGIC:
         //  Case for no ball spacing logic when Spacer is in INTAKE mode.
-        Spacer.getSpacer().setPower(INTAKE_SPEED);
+        Spacer.getSpacer().setVelocity(INTAKE_SPEED);
         break;
 
       case SHOOT_ONE:  //SHOOT ONE is same as SHOOT, except case ADVANCE is executed on button release.
@@ -69,7 +70,7 @@ public class SetSpacerTo extends Command {
         if (Shooter.getShooter().isAtRPM()) {
             power = SHOOT_SPEED;
         } 
-        Spacer.getSpacer().setPower(power);
+        Spacer.getSpacer().setVelocity(power);
         break;
       
       case ADVANCE:
@@ -79,12 +80,12 @@ public class SetSpacerTo extends Command {
         if (ballAtShooter) { 
           power = 0.0;
         }
-        Spacer.getSpacer().setPower(power);
+        Spacer.getSpacer().setVelocity(power);
         break;
 
       case STOP:
       default:
-        Spacer.getSpacer().setPower(0.0);
+        Spacer.getSpacer().setPower(0);
         break;
     }
   }

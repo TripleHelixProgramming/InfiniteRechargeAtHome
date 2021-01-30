@@ -42,6 +42,7 @@ import frc.robot.shooter.commands.HoodGoUp;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 import frc.robot.shooter.commands.setRealRPM;
+import frc.robot.spacer.commands.SetSpacerTo;
 import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -108,7 +109,9 @@ public class OI {
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new flashlightOff());
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new flashlightOn());
 
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new visionAim());
+    new JoystickButton(driver, ControllerMap.X_BOX_X).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+
 
     new CTrigger().whenActive(new ClimbCG());
 
