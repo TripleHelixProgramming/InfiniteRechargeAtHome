@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.paths.LayupAutoPartTwo;
 import frc.paths.RightTurn;
+import frc.paths.Slalom;
 import frc.paths.TenFeetForward;
 import frc.paths.ThreeFeetBackward;
 import frc.paths.ThreeFeetForward;
@@ -166,12 +167,12 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.NONE;
 
     // autonomousCommand = new PathFollower(new g());
-    autonomousCommand = new ShooterChallenge();
+    autonomousCommand = new PathFollower(new Slalom());
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
     }
-    Limelight.getLimelight().setAimingMode();
+    Limelight.getLimelight().setDriverMode();
   }
 
   /**
@@ -195,7 +196,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    Limelight.getLimelight().setAimingMode();
+    Limelight.getLimelight().setDriverMode();
   }
 
   /**

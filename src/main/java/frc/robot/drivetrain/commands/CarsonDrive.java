@@ -50,7 +50,7 @@ public class CarsonDrive extends HelixDrive {
           return 0;
       }
       double rawTurn = regraphDeadzone(OI.getOI().getTurn());
-      return Math.pow(rawTurn, 2) * Math.abs(rawTurn) / rawTurn * 0.5;
+      return Math.pow(rawTurn, 1) * 0.4;
   }
 
   @Override

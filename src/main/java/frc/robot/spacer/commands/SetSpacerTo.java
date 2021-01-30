@@ -66,21 +66,23 @@ public class SetSpacerTo extends Command {
       case SHOOT_ONE:  //SHOOT ONE is same as SHOOT, except case ADVANCE is executed on button release.
       case SHOOT:
         // Case for ball spacing logic when spacer is in SHOOT mode.
-        power = 0.0;
         if (Shooter.getShooter().isAtRPM()) {
-            power = SHOOT_SPEED;
-        } 
-        Spacer.getSpacer().setVelocity(power);
+          Spacer.getSpacer().setVelocity(SHOOT_SPEED);
+        } else {
+          Spacer.getSpacer().setPower(0);
+        }
+        
         break;
       
       case ADVANCE:
       case INTAKE:
         // Case for ball spacing logic when spacer is in INTAKE mode.
-        power = INTAKE_SPEED;
         if (ballAtShooter) { 
-          power = 0.0;
+          Spacer.getSpacer().setPower(0);
+        } else {
+          Spacer.getSpacer().setVelocity(INTAKE_SPEED);
         }
-        Spacer.getSpacer().setVelocity(power);
+        
         break;
 
       case STOP:

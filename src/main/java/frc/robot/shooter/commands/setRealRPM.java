@@ -10,6 +10,8 @@ package frc.robot.shooter.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.command_groups.SetBallHandlingCG;
+import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.Shooter.ShooterState;
