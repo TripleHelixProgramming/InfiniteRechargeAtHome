@@ -191,7 +191,7 @@ public class Shooter extends Subsystem {
 
         SmartDashboard.putString("Shooter State", currentState.toString());
         SmartDashboard.putNumber("Set RPM", currentRPM);
-        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity() * 30.0 / 18.0);
+        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
 
         SmartDashboard.putString("Current Position", currentPosition.toString());
         SmartDashboard.putNumber("Position RPM", currentPosition.getRPM());
@@ -212,11 +212,15 @@ public class Shooter extends Subsystem {
 
     // Get the current shooter velocity from the encoder (in RPMs)
     public double getRPM() {
-        return encoder.getVelocity() * 30.0 / 18.0;
+        return encoder.getVelocity();
     }
 
     public boolean isAtRPM() {
         return (Math.abs(currentRPM - getRPM()) <= RPM_DELTA);
+    }
+
+    public void resetEncoder() {
+        encoder.setPosition(0);
     }
 
     public void setRPM(ShooterState state, double rpm) {

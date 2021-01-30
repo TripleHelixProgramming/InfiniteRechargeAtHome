@@ -49,7 +49,8 @@ public class CarsonDrive extends HelixDrive {
       if (Math.abs(OI.getOI().getTurn()) < deadZone) {
           return 0;
       }
-      return regraphDeadzone(OI.getOI().getTurn()) * 0.5;
+      double rawTurn = regraphDeadzone(OI.getOI().getTurn());
+      return Math.pow(rawTurn, 2) * Math.abs(rawTurn) / rawTurn * 0.5;
   }
 
   @Override

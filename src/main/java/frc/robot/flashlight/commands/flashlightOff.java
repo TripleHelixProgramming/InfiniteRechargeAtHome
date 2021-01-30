@@ -5,34 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.drivetrain.commands;
+package frc.robot.flashlight.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.Drivetrain.CommandUnits;
-import frc.robot.limelight.Limelight;
+import frc.robot.flashlight.Flashlight;
 
-public class visionAim extends Command {
-
-  double velocity;
-
-  public visionAim() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+public class flashlightOff extends Command {
+  public flashlightOff() {
+    requires(Flashlight.getFlashlight());
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
+    Flashlight.getFlashlight().flashlightOff();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double angleToTarget = Limelight.getLimelight().getXOffset();
-    velocity = angleToTarget * 0.75;
-    Drivetrain.getDrivetrain().setSetpoint(CommandUnits.FPS, velocity, -velocity);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -50,6 +41,5 @@ public class visionAim extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

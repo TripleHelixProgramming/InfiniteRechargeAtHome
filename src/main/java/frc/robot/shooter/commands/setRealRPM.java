@@ -10,16 +10,17 @@ package frc.robot.shooter.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.Shooter.ShooterState;
 
 public class setRealRPM extends Command {
 
-  double pos0;
   double deltaPos;
   double targetPos;
   Timer clock;
   double RPM;
+  double position;
 
   public setRealRPM(double RPM) {
     this.RPM = RPM;
@@ -30,21 +31,26 @@ public class setRealRPM extends Command {
   protected void initialize() {
     clock = new Timer();
     clock.start();
-    pos0 = Shooter.getShooter().getPosition();
+    Shooter.getShooter().resetEncoder();
   }
 
   @Override
   protected void execute() {
+    if (Shooter.getShooter().getRPM() < RPM * 0.9) {
+      Shooter.getShooter().resetEncoder();
+      clock.reset();
+    }
+    position = Shooter.getShooter().getPosition();
     targetPos = clock.get() * RPM / 60.0;
-    deltaPos = (Shooter.getShooter().getPosition() - pos0) * 30.0 / 18.0;
-    Shooter.getShooter().setRPM(ShooterState.SHOOT, (targetPos - deltaPos) * 25);
+    Shooter.getShooter().setRPM(ShooterState.SHOOT, RPM + (targetPos - position) * 25);
     SmartDashboard.putNumber("Target Position", targetPos);
     SmartDashboard.putNumber("clock", clock.get());
-    SmartDashboard.putNumber("position", deltaPos);
+    SmartDashboard.putNumber("position", position);
   }
 
   @Override
   protected boolean isFinished() {
+    // boolean isFinished = false;
     return false;
   }
 

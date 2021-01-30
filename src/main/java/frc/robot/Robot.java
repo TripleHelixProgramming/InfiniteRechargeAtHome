@@ -36,6 +36,7 @@ import frc.paths.g;
 // import frc.robot.command_groups.AutoRoutines;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.ShooterChallenge;
+import frc.robot.command_groups.StartIntakeCG;
 // import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
 
@@ -43,6 +44,7 @@ import frc.robot.drivetrain.Drivetrain;
 // import frc.robot.drivetrain.commands.AutoVisionDriving;
 // import frc.robot.drivetrain.commands.ManualVisionDriving;
 import frc.robot.drivetrain.commands.PathFollower;
+import frc.robot.intake.Intake;
 // import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 import frc.robot.limelight.Limelight;
 import frc.robot.magazine.Magazine;
@@ -193,7 +195,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    Limelight.getLimelight().setAimingMode();;
+    Limelight.getLimelight().setAimingMode();
   }
 
   /**

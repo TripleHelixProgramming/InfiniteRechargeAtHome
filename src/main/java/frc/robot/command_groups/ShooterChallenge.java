@@ -15,12 +15,12 @@ import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
+import frc.robot.shooter.commands.setRealRPM;
 
 public class ShooterChallenge extends CommandGroup {
   public ShooterChallenge() {
+    addParallel(new setRealRPM(3350));
     addSequential(new PathFollower(new RedZone()));
-    addParallel(new SpinShooterUp(Position.BLUE_ZONE));
-    addSequential(new visionAim(), 2);
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);
     addSequential(new StopShooter());
     addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
