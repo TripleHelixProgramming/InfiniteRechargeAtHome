@@ -53,36 +53,15 @@ public class SetSpacerTo extends Command {
     SmartDashboard.putNumber("Spacer Velocity", Spacer.getSpacer().getVelocity());
 
     switch (action) {
-      case SHOOT_NO_LOGIC:
-        //  Case for no ball spacing logic when spacer is in SHOOT mode.
-        Spacer.getSpacer().setVelocity(SHOOT_SPEED);
-        break;
-
-      case INTAKE_NO_LOGIC:
-        //  Case for no ball spacing logic when Spacer is in INTAKE mode.
-        Spacer.getSpacer().setVelocity(INTAKE_SPEED);
-        break;
-
-      case SHOOT_ONE:  //SHOOT ONE is same as SHOOT, except case ADVANCE is executed on button release.
       case SHOOT:
         // Case for ball spacing logic when spacer is in SHOOT mode.
-        if (Shooter.getShooter().isAtRPM()) {
-          Spacer.getSpacer().setVelocity(SHOOT_SPEED);
-        } else {
-          Spacer.getSpacer().setPower(0);
-        }
-        
+        Spacer.getSpacer().setVelocity(SHOOT_SPEED);
         break;
       
-      case ADVANCE:
       case INTAKE:
         // Case for ball spacing logic when spacer is in INTAKE mode.
-        if (ballAtShooter) { 
-          Spacer.getSpacer().setPower(0);
-        } else {
+        if (!ballAtShooter)
           Spacer.getSpacer().setVelocity(INTAKE_SPEED);
-        }
-        
         break;
 
       case STOP:

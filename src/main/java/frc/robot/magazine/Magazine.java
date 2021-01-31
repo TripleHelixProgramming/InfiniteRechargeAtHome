@@ -43,7 +43,7 @@ public class Magazine extends Subsystem {
   // subsystem from controller action command groups
   // like ShootCG, IntakeCG, etc.
   public enum BallHandlingState {
-    SHOOT, INTAKE, SHOOT_NO_LOGIC, INTAKE_NO_LOGIC, SHOOT_ONE, ADVANCE, STOP
+    SHOOT, INTAKE, STOP
   };
 
   private Magazine() {

@@ -62,42 +62,13 @@ public class SetMagazineTo extends Command {
 
     switch (action) {
 
-    case SHOOT_NO_LOGIC: // For testing purposes before beam breaks.
+    case SHOOT:
       Magazine.getMagazine().setVelocity(SHOOT_SPEED);
       break;
 
-    case INTAKE_NO_LOGIC: // For testing purposes before beam breaks.
-      Magazine.getMagazine().setVelocity(INTAKE_SPEED);
-      break;
-      
-    case SHOOT_ONE:  
-      // power = 0.0;
-      // if (Shooter.getShooter().isAtRPM() && ballAtSpacer) {
-      //   power = SHOOT_SPEED;
-      // }
-      // Magazine.getMagazine().setPower(power);
-      // break;
-
-    case SHOOT:
-      if (Shooter.getShooter().isAtRPM()) {
-        Magazine.getMagazine().setVelocity(SHOOT_SPEED);
-      } else {
-        Magazine.getMagazine().setPower(0);
-      }
-      break;
-
-    case ADVANCE:  
-      // Called when SHOOT ONE button is released to advance the magazine to next ball.
-      // Magazine will run indefinitely, when no balls left in magazine.
-
-      break;
-
     case INTAKE:
-      if (!ballAtShooter && ballAtSpacer) {
-        Magazine.getMagazine().setVelocity(SHOOT_SPEED);
-      } else {
-        Magazine.getMagazine().setPower(0);
-      }
+      if (!ballAtShooter && ballAtSpacer)
+        Magazine.getMagazine().setVelocity(INTAKE_SPEED);
       break;
 
     case STOP:
