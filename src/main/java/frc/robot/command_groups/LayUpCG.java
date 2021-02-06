@@ -24,7 +24,7 @@ public class LayUpCG extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LayUpCG(Command hood, Path input) {
+  public LayUpCG(Command hood, String input) {
     addSequential(new ResetPigeon());
     addSequential(hood);
     addSequential(new PathFollower(input).reverse());

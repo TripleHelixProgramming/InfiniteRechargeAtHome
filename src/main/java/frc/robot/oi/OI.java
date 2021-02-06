@@ -92,8 +92,8 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new setRealRPM(1790));
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
 
-    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new LayUpCG(new HoodGoUp(), new goback()));
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new LayUpCG(new HoodGoDown(), new bluezone()));
+    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new LayUpCG(new HoodGoUp(), "goback"));
+    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new LayUpCG(new HoodGoDown(), "bluezone"));
     // new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new LayUpCG(new HoodGoUp(), new yellowzone()));
 
     new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new HoodGoUp());

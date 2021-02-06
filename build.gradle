@@ -65,7 +65,7 @@ dependencies {
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 
     compile 'com.github.TripleHelixProgramming:HelixUtilities:v2.6.21'
-    compile 'com.github.JoshuaAN:BobTrajectory:v1.0'
+    compile 'com.github.JoshuaAN:BobTrajectory:v2021.1'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

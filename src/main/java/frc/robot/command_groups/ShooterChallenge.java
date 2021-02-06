@@ -20,7 +20,7 @@ import frc.robot.shooter.commands.setRealRPM;
 public class ShooterChallenge extends CommandGroup {
   public ShooterChallenge() {
     addParallel(new setRealRPM(3350));
-    addSequential(new PathFollower(new RedZone()));
+    addSequential(new PathFollower("RedZone"));
     addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);
     addSequential(new StopShooter());
     addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);

@@ -167,7 +167,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.NONE;
 
     // autonomousCommand = new PathFollower(new g());
-    autonomousCommand = new PathFollower(new Slalom());
+    autonomousCommand = new PathFollower("Slalom");
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
