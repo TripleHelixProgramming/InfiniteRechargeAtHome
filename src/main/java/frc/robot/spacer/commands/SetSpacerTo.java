@@ -18,8 +18,8 @@ import frc.robot.spacer.Spacer;
 
 public class SetSpacerTo extends Command {
 
-  private double SHOOT_SPEED = 400;
-  private double INTAKE_SPEED = 400;
+  private double SHOOT_SPEED = 300;
+  private double INTAKE_SPEED = 300;
 
   private double power = 0.0;
 

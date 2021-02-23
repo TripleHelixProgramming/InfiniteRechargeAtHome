@@ -10,7 +10,6 @@ package frc.robot;
 import static frc.robot.Preferences.getPreferences;
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
-import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.intake.Intake.getIntake;
 import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
@@ -27,29 +26,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.paths.LayupAutoPartTwo;
-import frc.paths.RightTurn;
-import frc.paths.Slalom;
-import frc.paths.TenFeetForward;
-import frc.paths.ThreeFeetBackward;
-import frc.paths.ThreeFeetForward;
-import frc.paths.g;
 // import frc.robot.command_groups.AutoRoutines;
-import frc.robot.command_groups.SetBallHandlingCG;
-import frc.robot.command_groups.ShooterChallenge;
-import frc.robot.command_groups.StartIntakeCG;
 // import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
 
 import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain.commands.BouncePathCG;
 // import frc.robot.drivetrain.commands.AutoVisionDriving;
 // import frc.robot.drivetrain.commands.ManualVisionDriving;
-import frc.robot.drivetrain.commands.PathFollower;
-import frc.robot.intake.Intake;
 // import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
 import frc.robot.limelight.Limelight;
 import frc.robot.magazine.Magazine;
-import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.oi.OI;
 
 /**
@@ -166,8 +153,8 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.LAYUP;
     // mode = AutoMode.NONE;
 
-    // autonomousCommand = new PathFollower(new g());
-    autonomousCommand = new PathFollower("Slalom");
+    // autonomousCommand = new PathFollower("SandableLacquers");
+    autonomousCommand = new BouncePathCG();
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
@@ -196,7 +183,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    Limelight.getLimelight().setDriverMode();
+    Limelight.getLimelight().setAimingMode();
   }
 
   /**

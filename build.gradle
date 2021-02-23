@@ -64,7 +64,7 @@ dependencies {
     // upon debugging
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 
-    compile 'com.github.TripleHelixProgramming:HelixUtilities:v2.6.21'
+    compile 'com.github.TripleHelixProgramming:HelixUtilities:v2021.4'
     compile 'com.github.JoshuaAN:BobTrajectory:v2021.2'
 }
 
@@ -75,3 +75,4 @@ jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
+

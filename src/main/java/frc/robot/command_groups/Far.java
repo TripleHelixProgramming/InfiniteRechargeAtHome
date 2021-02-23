@@ -8,21 +8,13 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.paths.RedZone;
 import frc.robot.drivetrain.commands.PathFollower;
-import frc.robot.drivetrain.commands.visionAim;
-import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.shooter.Position;
-import frc.robot.shooter.commands.SpinShooterUp;
-import frc.robot.shooter.commands.StopShooter;
+import frc.robot.shooter.commands.HoodGoDown;
 import frc.robot.shooter.commands.setRealRPM;
 
-public class ShooterChallenge extends CommandGroup {
-  public ShooterChallenge() {
-    addParallel(new setRealRPM(3350));
-    addSequential(new PathFollower("RedZone"));
-    addSequential(new SetBallHandlingCG(BallHandlingState.SHOOT), 3);
-    addSequential(new StopShooter());
-    addSequential(new SetBallHandlingCG(BallHandlingState.STOP), 0.1);
+public class Far extends CommandGroup {
+  public Far() {
+    addSequential(new HoodGoDown());
+    addParallel(new setRealRPM(3550));
   }
 }
