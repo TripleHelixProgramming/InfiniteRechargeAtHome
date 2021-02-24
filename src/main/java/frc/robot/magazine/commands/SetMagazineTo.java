@@ -19,8 +19,8 @@ public class SetMagazineTo extends Command {
 
   public BallHandlingState action;
 
-  private double SHOOT_SPEED = 0.9;
-  private double INTAKE_SPEED = 0.9;
+  private double SHOOT_SPEED = 800;
+  private double INTAKE_SPEED = 800;
 
   private double power = 0.0;
 
@@ -58,15 +58,16 @@ public class SetMagazineTo extends Command {
     if (action == Magazine.BallHandlingState.SHOOT) Magazine.getMagazine().setBallCount(0);
 
     SmartDashboard.putString("Magazine State", action.toString());
+    SmartDashboard.putNumber("Magazine Velocity", Magazine.getMagazine().getVelocity());
 
     switch (action) {
 
     case SHOOT_NO_LOGIC: // For testing purposes before beam breaks.
-      Magazine.getMagazine().setPower(SHOOT_SPEED);
+      Magazine.getMagazine().setVelocity(SHOOT_SPEED);
       break;
 
     case INTAKE_NO_LOGIC: // For testing purposes before beam breaks.
-      Magazine.getMagazine().setPower(INTAKE_SPEED);
+      Magazine.getMagazine().setVelocity(INTAKE_SPEED);
       break;
       
     case SHOOT_ONE:  
@@ -78,29 +79,25 @@ public class SetMagazineTo extends Command {
       // break;
 
     case SHOOT:
-      power = 0.0;
       if (Shooter.getShooter().isAtRPM()) {
-        power = SHOOT_SPEED;
+        Magazine.getMagazine().setVelocity(SHOOT_SPEED);
+      } else {
+        Magazine.getMagazine().setPower(0);
       }
-      Magazine.getMagazine().setPower(power);
       break;
 
     case ADVANCE:  
       // Called when SHOOT ONE button is released to advance the magazine to next ball.
       // Magazine will run indefinitely, when no balls left in magazine.
-      power = 0.0;
-      if (!ballAtShooter) {
-        power = SHOOT_SPEED;
-      }
-      Magazine.getMagazine().setPower(power);
+
       break;
 
     case INTAKE:
-      power = 0.0;
       if (!ballAtShooter && ballAtSpacer) {
-        power = INTAKE_SPEED;
+        Magazine.getMagazine().setVelocity(SHOOT_SPEED);
+      } else {
+        Magazine.getMagazine().setPower(0);
       }
-      Magazine.getMagazine().setPower(power);
       break;
 
     case STOP:

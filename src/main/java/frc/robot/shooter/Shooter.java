@@ -219,6 +219,10 @@ public class Shooter extends Subsystem {
         return (Math.abs(currentRPM - getRPM()) <= RPM_DELTA);
     }
 
+    public void resetEncoder() {
+        encoder.setPosition(0);
+    }
+
     public void setRPM(ShooterState state, double rpm) {
 
         currentState = state;
@@ -249,6 +253,10 @@ public class Shooter extends Subsystem {
     // Defaults to to Position.UNKONWN
     public Position getCurrentPosition() {
         return currentPosition;
+    }
+
+    public double getPosition() {
+        return master.getEncoder().getPosition();
     }
 
     // Gets the current number of bump ticks relative to the last position.

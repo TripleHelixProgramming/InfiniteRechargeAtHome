@@ -24,8 +24,8 @@ import com.team319.models.LeaderBobTalonSRX;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.drivetrain.commands.SampleDrive;
 import frc.robot.drivetrain.commands.CarsonDrive;
+import frc.robot.drivetrain.commands.TestDrive;
 
 public class Drivetrain extends Subsystem {
 
@@ -146,7 +146,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new CarsonDrive());
+    setDefaultCommand(new TestDrive());
   }
 
   private void setVelocityOutput(final double leftVelocity, final double rightVelocity) {

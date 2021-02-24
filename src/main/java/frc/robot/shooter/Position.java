@@ -15,10 +15,14 @@ public enum Position {
 
     // POSITION(rpms expected, hood position)
     MIDFIELD_SHOOT(2150, 0), //2000 for bot2
-    TRENCH_SHOOT(3100, 1), //2750 works for bot2 (blue) 2900 NOVA
+    TRENCH_SHOOT(3500, 1), //2750 works for bot2 (blue) 2900 NOVA
     DUMP_BALLS(1150, 0), // 1000 for bot2
     LAYUP_SHOOT(2600, 0), // 2250 for bot2  NOVA 2400
     REND_SHOOT(2850, 1),
+    RED_ZONE(3800,1),
+    BLUE_ZONE(3500,1),
+    YELLOW_ZONE(3400,1),
+    GREEN_ZONE(3900,1),
     UNKNOWN(0, 1);
 
     private int rpm;
