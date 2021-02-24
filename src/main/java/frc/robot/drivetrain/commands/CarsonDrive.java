@@ -12,7 +12,6 @@ import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
 import com.team2363.commands.HelixDrive;
 import com.team2363.utilities.RollingAverager;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.oi.OI;
 
@@ -38,18 +37,14 @@ public class CarsonDrive extends HelixDrive {
   @Override
   protected double getThrottle() {
       double newThrottle = OI.getOI().getThrottle();
-      if (Math.abs(newThrottle) < deadZone) {
-          return 0;
-      }
-      return -regraphDeadzone(OI.getOI().getThrottle());
+      return -handleDeadzone(deadZone, OI.getOI().getThrottle());
   }
 
   @Override
   protected double getTurn() {
-      if (Math.abs(OI.getOI().getTurn()) < deadZone) {
-          return 0;
-      }
-      return regraphDeadzone(OI.getOI().getTurn()) * 0.5;
+      double rawTurn = OI.getOI().getTurn();
+      // return handleDeadzone(deadZone, OI.getOI().getThrottle()) == 0 ? rawTurn * 0.5 : rawTurn * -handleDeadzone(deadZone, OI.getOI().getThrottle());
+      return handleDeadzone(deadZone, rawTurn);
   }
 
   @Override
@@ -57,11 +52,7 @@ public class CarsonDrive extends HelixDrive {
       Drivetrain.getDrivetrain().setSetpoint(PERCENT_FULLSPEED, left, right);
   }
 
-  private double regraphDeadzone(double throttleInput) {
-    double absThrottle = Math.abs(throttleInput);
-    double termOne = absThrottle / throttleInput;
-    double termTwo = 1/(1 - deadZone);
-    double termThree = absThrottle - deadZone;
-    return (termOne * termTwo * termThree);
+  private double handleDeadzone(double deadZone, double val) {
+    return Math.abs(val) > Math.abs(deadZone) ? val / (1 - deadZone) - Math.signum(val) * deadZone : 0;
   }
 }

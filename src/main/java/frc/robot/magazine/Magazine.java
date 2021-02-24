@@ -8,7 +8,9 @@
 package frc.robot.magazine;
 
 import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -32,6 +34,8 @@ public class Magazine extends Subsystem {
   // Number of balls currently in the system.
   public int ball_count = 0;
   public int balls_processed = 0;
+
+  private final CANPIDController controller;
 
   // The various states of the Ball Handling subsystems, which include the magazine,
   // the spacer and the intake. Each subsytem, based on the state given to
@@ -58,6 +62,15 @@ public class Magazine extends Subsystem {
     ball_count = 0;
     balls_processed = Preferences.getPreferences().getBallsProcessed();
 
+    motor.getEncoder().setVelocityConversionFactor(1.0/16.0);
+
+    controller = motor.getPIDController();
+
+    controller.setP(0.0014);
+    controller.setI(0);
+    controller.setD(0.0);
+    controller.setFF(0.00125);
+
     setupLogs();
   }
 
@@ -69,6 +82,14 @@ public class Magazine extends Subsystem {
       INSTANCE = new Magazine();
     }
     return INSTANCE;
+  }
+
+  public void setVelocity(double velocity) {
+    controller.setReference(velocity, ControlType.kVelocity);
+  }
+
+  public double getVelocity() {
+    return motor.getEncoder().getVelocity();
   }
 
   public void setPower(double power) {

@@ -1,3 +1,4 @@
+
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -16,31 +17,38 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import frc.robot.command_groups.AimAndSpinCG;
 import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
+import frc.paths.bluezone;
+import frc.paths.goback;
+import frc.paths.yellowzone;
+import frc.robot.command_groups.AimSpin;
 import frc.robot.command_groups.ClimbCG;
-import frc.robot.command_groups.EnableLightsCG;
+import frc.robot.command_groups.Close;
+import frc.robot.command_groups.Far;
 import frc.robot.command_groups.LayUpCG;
+import frc.robot.command_groups.SecondClose;
+import frc.robot.command_groups.SecondFar;
 import frc.robot.drivetrain.commands.CarsonDrive;
-import frc.robot.drivetrain.commands.DisableLights;
-import frc.robot.drivetrain.commands.EnableLights;
-import frc.robot.drivetrain.commands.ManualVisionDriving;
-import frc.robot.drivetrain.commands.RampDown;
-import frc.robot.drivetrain.commands.SampleDrive;
-import frc.robot.drivetrain.commands.TuneDrivetrain;
-import frc.robot.drivetrain.commands.VisionTakeOverGroup;
-import frc.robot.drivetrain.commands.AimInPlace;
+import frc.robot.drivetrain.commands.visionAim;
+import frc.robot.flashlight.commands.flashlightOff;
+import frc.robot.flashlight.commands.flashlightOn;
 import frc.robot.intake.Intake;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.intake.commands.ReverseIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.magazine.commands.SetMagazineTo;
+import frc.robot.magazine.commands.ShootOne;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.commands.BumpShooter;
+import frc.robot.shooter.commands.HoodGoDown;
+import frc.robot.shooter.commands.HoodGoUp;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
+import frc.robot.shooter.commands.setRealRPM;
+import frc.robot.spacer.commands.SetSpacerTo;
 import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -71,52 +79,54 @@ public class OI {
   private Joystick driver = getPatroller().get(DRIVER, DRIVER_PORT);
   private Joystick operator = getPatroller().get(OPERATOR, OPERATOR_PORT);
 
-  private OI() { 
-    
-    // Starts the Intake and Ball Handling for intake.  When released runs the command  
-    // RetractIntake(), which pulls the intake in and stops the rollers.
-    new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));  
-    new JoystickButton(operator, ControllerMap.PS4_R1).whenReleased(new StopIntakeCG());
+  private OI() {
 
-    new JoystickButton(operator, ControllerMap.PS4_L1).whenPressed(new StartIntakeCG(false));
+    // Intake buttons - Right trigger activates intake, left trigger retractes and
+    // disables
+    new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));
     new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new StopIntakeCG());
 
-    new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new ReverseIntake());
-    new JoystickButton(operator, ControllerMap.PS4_R2).whenPressed(new SetBallHandlingCG(BallHandlingState.INTAKE));
-    new JoystickButton(operator, ControllerMap.PS4_R2).whenReleased(new StopIntakeCG());
-
-    // All SpinUpShooter() commands should rumble the controller when shooter is at speed. 
-    // When released the shooter is stopped and the hood is pulled inward.
-    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinShooterUp(Position.DUMP_BALLS));
-    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
-
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinShooterUp(Position.MIDFIELD_SHOOT));
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
-
-    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new LayUpCG());
+    // Set shooter speeds - Triangle farthest zone from goal, circle third farthest,
+    // x second closest, square closest
+    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new Far());
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
 
-    new JoystickButton(operator, ControllerMap.PS4_X).whileHeld(new SpinShooterUp(Position.TRENCH_SHOOT));
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SecondFar());
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
+
+    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SecondClose());
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
-    new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new StowTelescope());
+    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new Close());
+    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
+
+    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new LayUpCG(new goback()));
+    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new LayUpCG(new bluezone()));
+    // new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new LayUpCG(new yellowzone()));
+
+    new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new HoodGoUp());
+    new JoystickButton(operator, ControllerMap.PS4_SHARE).whenPressed(new HoodGoDown());
 
     // Aiming is on a whileHeld reft button
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whileHeld(new AimInPlace());
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new DisableLights());
-    // new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT_ONE));
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.ADVANCE));
-    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new SetBallHandlingCG(BallHandlingState.STOP));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.INTAKE));
 
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new AimAndSpinCG());
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new StopShooter());
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new DisableLights());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SecondFar());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new EnableLightsCG());
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenReleased(new DisableLights());
+    // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new StartIntakeCG(true));
+
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new flashlightOff());
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new flashlightOn());
+
+    new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new visionAim());
+
+    // new JoystickButton(driver, ControllerMap.X_BOX_X).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
+    // new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
+
+
 
     new CTrigger().whenActive(new ClimbCG());
 
@@ -141,6 +151,10 @@ public class OI {
    */
   public double getThrottle() {
     return driver.getRawAxis(X_BOX_LEFT_STICK_Y);
+  }
+
+  public boolean getRightTrigger() {
+    return driver.getRawAxis(ControllerMap.X_BOX_RIGHT_TRIGGER) > 0.5;
   }
 
   /**

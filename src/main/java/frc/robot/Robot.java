@@ -10,7 +10,6 @@ package frc.robot;
 import static frc.robot.Preferences.getPreferences;
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
-import static frc.robot.controlpanel.ControlPanel.getControlPanel;
 import static frc.robot.intake.Intake.getIntake;
 import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
@@ -27,24 +26,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.paths.LayupAutoPartTwo;
-import frc.paths.RightTurn;
-import frc.paths.TenFeetForward;
-import frc.paths.ThreeFeetBackward;
-import frc.paths.ThreeFeetForward;
-import frc.paths.g;
-import frc.robot.command_groups.AutoRoutines;
-import frc.robot.command_groups.SetBallHandlingCG;
-import frc.robot.command_groups.AutoRoutines.AutoMode;
+// import frc.robot.command_groups.AutoRoutines;
+// import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
 
 import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.commands.AutoVisionDriving;
-import frc.robot.drivetrain.commands.ManualVisionDriving;
-import frc.robot.drivetrain.commands.PathFollower;
-import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
+import frc.robot.drivetrain.commands.BouncePathCG;
+// import frc.robot.drivetrain.commands.AutoVisionDriving;
+// import frc.robot.drivetrain.commands.ManualVisionDriving;
+// import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
+import frc.robot.limelight.Limelight;
 import frc.robot.magazine.Magazine;
-import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.oi.OI;
 
 /**
@@ -70,7 +62,7 @@ public class Robot extends TimedRobot {
     initializeSubsystems();
     getDrivetrain().resetHeading();
     HelixEvents.getInstance().startLogging();
-    SmartDashboard.putData(new SetFrontCameraAlignment());
+    // SmartDashboard.putData(new SetFrontCameraAlignment());
   }
 
   private void initializeSubsystems() {
@@ -124,7 +116,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
-    SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
+    // SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
 
     Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
   }
@@ -147,10 +139,10 @@ public class Robot extends TimedRobot {
     getDrivetrain().resetHeading();
     getDrivetrain().getFrontCamera().setDriverMode();
 
-    AutoMode mode;
+    // AutoMode mode;
     
     // GET THE AUTO MODE FROM THE HARDWARE SWITCH
-    mode = AutoRoutines.getSelectedAutoMode(); 
+    // mode = AutoRoutines.getSelectedAutoMode(); 
 
     // HARDCODE THE AUTO MODE FOR TESTING PURPOSES, BY-PASSING THE SWITCH
     // mode = AutoMode.TEST_RIGHT_TURN;
@@ -161,12 +153,13 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.LAYUP;
     // mode = AutoMode.NONE;
 
-    // autonomousCommand = new PathFollower(new g());
-    autonomousCommand = AutoRoutines.getAutoRoutine(mode);
+    // autonomousCommand = new PathFollower("SandableLacquers");
+    autonomousCommand = new BouncePathCG();
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
     }
+    Limelight.getLimelight().setDriverMode();
   }
 
   /**
@@ -190,7 +183,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    getDrivetrain().getFrontCamera().setDriverMode();
+    Limelight.getLimelight().setAimingMode();
   }
 
   /**
@@ -200,10 +193,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    if (firstTime) {
-      Scheduler.getInstance().add(new SetBallHandlingCG(BallHandlingState.ADVANCE));
-      firstTime = false;
-    }
+    // if (firstTime) {
+    //   Scheduler.getInstance().add(new SetBallHandlingCG(BallHandlingState.ADVANCE));
+    //   firstTime = false;
+    // }
 
     HelixLogger.getInstance().saveLogs();
     // SmartDashboard.putNumber("Throttle", OI.getOI().getThrottle());
