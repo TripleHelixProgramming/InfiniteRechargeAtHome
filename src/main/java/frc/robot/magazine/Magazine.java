@@ -46,6 +46,8 @@ public class Magazine extends Subsystem {
     SHOOT, INTAKE, SHOOT_NO_LOGIC, INTAKE_NO_LOGIC, SHOOT_ONE, ADVANCE, STOP
   };
 
+  private final double velocitySP = 800;
+
   private Magazine() {
     super();
 
@@ -126,8 +128,8 @@ public class Magazine extends Subsystem {
     // return(false);
   }
 
-  public Boolean ballAtSpacer() {
-    return Spacer.getSpacer().isBallPresent();
+  public double getVelocitySP(){
+    return velocitySP;
   }
 
   private void setupLogs() {
@@ -141,7 +143,7 @@ public class Magazine extends Subsystem {
     super.periodic();
 
     SmartDashboard.putNumber("Ball Count", ball_count);
-    SmartDashboard.putBoolean("Ball At Spacer", ballAtSpacer());
+    SmartDashboard.putBoolean("Ball At Spacer", Spacer.getSpacer().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", ballAtShooter());
 
   }

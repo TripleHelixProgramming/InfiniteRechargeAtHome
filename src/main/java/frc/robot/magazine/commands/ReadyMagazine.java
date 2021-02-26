@@ -5,25 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.spacer.commands;
+package frc.robot.magazine.commands;
 
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.spacer.Spacer;
-import frc.robot.command_groups.LoadMagazineCG;
-import frc.robot.magazine.commands.AdvanceMagazine;
+import frc.robot.magazine.Magazine;
 
-public class RunSpacer extends Command {
+public class ReadyMagazine extends Command {
 
-  private Command nextAdvanceMagazine = new AdvanceMagazine();
-  private Command nextLoadMagazine = new LoadMagazineCG();
-
-  public RunSpacer() {
+  public ReadyMagazine() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Spacer.getSpacer());
+    requires(Magazine.getMagazine());
   }
 
   // Called just before this Command runs the first time
@@ -32,28 +27,27 @@ public class RunSpacer extends Command {
     if (isFinished()) {
       end();
     } else {
-      HelixEvents.getInstance().addEvent("SPACER", "Run Spacer");
-      Spacer.getSpacer().setVelocity(Spacer.getSpacer().getVelocitySP());
+      HelixEvents.getInstance().addEvent("MAGAZINE", "Ready Magazine");
+      Magazine.getMagazine().setVelocity(Magazine.getMagazine().getVelocitySP());
     }
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //SmartDashboard.putNumber("Spacer Velocity", Spacer.getSpacer().getVelocity());
+    //SmartDashboard.putNumber("Magazine Velocity", Magazine.getMagazine().getVelocity());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Spacer.getSpacer().ballAtSpacer();
+    return Magazine.getMagazine().ballAtShooter();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    nextAdvanceMagazine.start(); //finishes when !ballAtSpacer || ballAtShooter
-    nextLoadMagazine.start();    //sequential commandGroup that loops back to RunSpacer
+    Magazine.getMagazine().setPower(0.0);
   }
 
   // Called when another command which requires one or more of the same

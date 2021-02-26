@@ -15,9 +15,7 @@ import frc.robot.spacer.Spacer;
 
 public class AdvanceSpacer extends Command {
 
-  private double speed;
-
-  public AdvanceSpacer(double speed) {
+  public AdvanceSpacer() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Spacer.getSpacer());
@@ -26,8 +24,12 @@ public class AdvanceSpacer extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    HelixEvents.getInstance().addEvent("SPACER", "Advance Spacer");
-    Spacer.getSpacer().setVelocity(speed);
+    if (isFinished()) {
+      end();
+    } else {
+      HelixEvents.getInstance().addEvent("SPACER", "Advance Spacer");
+      Spacer.getSpacer().setVelocity(Spacer.getSpacer().getVelocitySP());  
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run

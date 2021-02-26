@@ -38,6 +38,7 @@ import frc.robot.drivetrain.commands.BouncePathCG;
 import frc.robot.limelight.Limelight;
 import frc.robot.magazine.Magazine;
 import frc.robot.oi.OI;
+import frc.robot.spacer.Spacer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -111,7 +112,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
     SmartDashboard.putNumber("Target Skew", camera.getTargetSkew());
 
-    SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
+    SmartDashboard.putBoolean("Ball At Spacer", Spacer.getSpacer().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
     SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
     SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());

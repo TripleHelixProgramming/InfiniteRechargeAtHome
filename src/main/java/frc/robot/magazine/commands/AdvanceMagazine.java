@@ -12,12 +12,14 @@ import com.team2363.logger.HelixEvents;
 import edu.wpi.first.wpilibj.command.Command;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
+import frc.robot.spacer.Spacer;
+//import frc.robot.spacer.commands.StopSpacer;
 
 public class AdvanceMagazine extends Command {
 
-  private double speed;
+  //private Command nextStopSpacer = new StopSpacer();
 
-  public AdvanceMagazine(double speed) {
+  public AdvanceMagazine() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Magazine.getMagazine());
@@ -26,8 +28,12 @@ public class AdvanceMagazine extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    HelixEvents.getInstance().addEvent("MAGAZINE", "Advance Magazine");
-    Magazine.getMagazine().setVelocity(speed);
+    if (isFinished()) {
+      end();
+    } else {
+      HelixEvents.getInstance().addEvent("MAGAZINE", "Advance Magazine");
+      Magazine.getMagazine().setVelocity(Magazine.getMagazine().getVelocitySP());
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -39,13 +45,14 @@ public class AdvanceMagazine extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return !Magazine.getMagazine().ballAtSpacer() || Magazine.getMagazine().ballAtShooter();
+    return !Spacer.getSpacer().ballAtSpacer() || Magazine.getMagazine().ballAtShooter();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
     Magazine.getMagazine().setPower(0.0);
+    //nextStopSpacer.start();
   }
 
   // Called when another command which requires one or more of the same

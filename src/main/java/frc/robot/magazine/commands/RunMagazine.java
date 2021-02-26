@@ -15,9 +15,7 @@ import frc.robot.magazine.Magazine;
 
 public class RunMagazine extends Command {
 
-  private double speed;
-
-  public RunMagazine(double speed) {
+  public RunMagazine() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Magazine.getMagazine());
@@ -27,7 +25,7 @@ public class RunMagazine extends Command {
   @Override
   protected void initialize() {
     HelixEvents.getInstance().addEvent("MAGAZINE", "Run Magazine");
-    Magazine.getMagazine().setVelocity(speed);
+    Magazine.getMagazine().setVelocity(Magazine.getMagazine().getVelocitySP());
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -45,11 +43,13 @@ public class RunMagazine extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Magazine.getMagazine().setPower(0.0);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

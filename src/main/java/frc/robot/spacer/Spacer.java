@@ -21,8 +21,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.revrobotics.CANPIDController;
 
-import frc.robot.spacer.commands.RunSpacer;
-
 /**
  * Add your docs here.
  */
@@ -39,6 +37,8 @@ public class Spacer extends Subsystem {
   private final CANDigitalInput limit;
 
   private final CANPIDController controller;
+
+  private final double velocitySP = 800;
   
   public Spacer() {
     super();
@@ -87,7 +87,7 @@ public class Spacer extends Subsystem {
     motor.set(power);
   }
 
-  public boolean isBallPresent() {
+  public boolean ballAtSpacer() {
     return motor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen).get();
   }
 
@@ -95,6 +95,10 @@ public class Spacer extends Subsystem {
     return spacer_running;
   }
   
+  public double getVelocitySP(){
+    return velocitySP;
+  }
+
   private void setupLogs() {
     HelixLogger.getInstance().addSource("SPACER CURRENT", motor::getOutputCurrent);
     HelixLogger.getInstance().addSource("SPACER VOLTAGE", motor::getBusVoltage);
@@ -103,7 +107,5 @@ public class Spacer extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new RunSpacer(800));
-
   }
 }

@@ -10,7 +10,6 @@ package frc.robot.intake;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.command_groups.StopIntakeCG;
 
 import frc.robot.intake.commands.RetractIntake;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

@@ -17,9 +17,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import frc.robot.command_groups.SetBallHandlingCG;
 import frc.robot.command_groups.StartIntakeCG;
-import frc.robot.command_groups.StopIntakeCG;
 import frc.paths.bluezone;
 import frc.paths.goback;
 import frc.paths.yellowzone;
@@ -30,6 +28,8 @@ import frc.robot.command_groups.Far;
 import frc.robot.command_groups.LayUpCG;
 import frc.robot.command_groups.SecondClose;
 import frc.robot.command_groups.SecondFar;
+import frc.robot.command_groups.ShootCG;
+import frc.robot.command_groups.StopShootingCG;
 import frc.robot.drivetrain.commands.CarsonDrive;
 import frc.robot.drivetrain.commands.visionAim;
 import frc.robot.flashlight.commands.flashlightOff;
@@ -38,7 +38,6 @@ import frc.robot.intake.Intake;
 import frc.robot.intake.commands.RetractIntake;
 import frc.robot.intake.commands.ReverseIntake;
 import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.magazine.commands.SetMagazineTo;
 import frc.robot.magazine.commands.ShootOne;
 import frc.robot.shooter.Position;
 import frc.robot.shooter.Shooter;
@@ -48,7 +47,7 @@ import frc.robot.shooter.commands.HoodGoUp;
 import frc.robot.shooter.commands.SpinShooterUp;
 import frc.robot.shooter.commands.StopShooter;
 import frc.robot.shooter.commands.setRealRPM;
-import frc.robot.spacer.commands.SetSpacerTo;
+import frc.robot.spacer.commands.RunSpacer;
 import frc.robot.telescope.commands.StowTelescope;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -83,8 +82,8 @@ public class OI {
 
     // Intake buttons - Right trigger activates intake, left trigger retractes and
     // disables
-    new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG(true));
-    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new StopIntakeCG());
+    new JoystickButton(operator, ControllerMap.PS4_R1).whenPressed(new StartIntakeCG());
+    new JoystickButton(operator, ControllerMap.PS4_L1).whenReleased(new RetractIntake());
 
     // Set shooter speeds - Triangle farthest zone from goal, circle third farthest,
     // x second closest, square closest
@@ -110,8 +109,8 @@ public class OI {
     // Aiming is on a whileHeld reft button
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new ShootCG());
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new StopShootingCG());
 
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SecondFar());
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());

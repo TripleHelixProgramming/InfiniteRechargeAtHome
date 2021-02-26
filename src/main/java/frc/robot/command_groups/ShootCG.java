@@ -8,15 +8,18 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.spacer.commands.AdvanceSpacer;
-import frc.robot.spacer.commands.RunSpacer;
+import frc.robot.magazine.commands.ReadyMagazine;
+import frc.robot.magazine.commands.RunMagazine;
 
-public class LoadMagazineCG extends CommandGroup {
+public class ShootCG extends CommandGroup {
+  /**
+   * Add your docs here.
+   */
+  public ShootCG() {
 
-  public LoadMagazineCG() {
-
-    addSequential(new AdvanceSpacer(), 0.5); //never finishes, stops spacer when ending
-    addSequential(new RunSpacer());          //finshes when ballAtSpacer
-    
+    //if shooter is at speed
+    addSequential(new ReadyMagazine());
+    addSequential(new RunMagazine(), 1.0);
+  
   }
 }

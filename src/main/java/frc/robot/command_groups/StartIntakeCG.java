@@ -8,14 +8,14 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.magazine.Magazine.BallHandlingState;
+import frc.robot.spacer.commands.RunSpacer;
 import frc.robot.intake.commands.DeployIntake;
 
 public class StartIntakeCG extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public StartIntakeCG(boolean runRoller) {
+  public StartIntakeCG() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -37,8 +37,10 @@ public class StartIntakeCG extends CommandGroup {
     // look at the various beam breaks in the magazine to determine whether it
     // should run or not.
 
+    final boolean runRoller = true;
+
     addParallel(new DeployIntake(runRoller));
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    addParallel(new RunSpacer());
   
   }
 }
