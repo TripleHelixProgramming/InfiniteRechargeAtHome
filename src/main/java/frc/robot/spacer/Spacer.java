@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.revrobotics.CANPIDController;
 
+import frc.robot.spacer.commands.RunSpacer;
+
 /**
  * Add your docs here.
  */
@@ -101,7 +103,7 @@ public class Spacer extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new RunSpacer(800));
 
   }
 }
