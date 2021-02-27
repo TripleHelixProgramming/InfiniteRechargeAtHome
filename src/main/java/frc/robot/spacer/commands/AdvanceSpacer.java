@@ -50,6 +50,7 @@ public class AdvanceSpacer extends Command {
   @Override
   protected void end() {
       Spacer.getSpacer().setPower(0.0);
+      HelixEvents.getInstance().addEvent("SPACER", "Ending Advance Spacer");
   }
 
   // Called when another command which requires one or more of the same

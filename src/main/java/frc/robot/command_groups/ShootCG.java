@@ -7,6 +7,8 @@
 
 package frc.robot.command_groups;
 
+import com.team2363.logger.HelixEvents;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.magazine.commands.FireMagazine;
 import frc.robot.spacer.commands.StopSpacer;
@@ -16,6 +18,8 @@ public class ShootCG extends CommandGroup {
    * Add your docs here.
    */
   public ShootCG() {
+
+    HelixEvents.getInstance().addEvent("MAGAZINE", "Shoot CG");
 
     addSequential(new StopSpacer());
     addSequential(new FireMagazine(), 1.5);
