@@ -23,8 +23,12 @@ public class RunMagazine extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    HelixEvents.getInstance().addEvent("MAGAZINE", "Run Magazine");
-    Magazine.getMagazine().setVelocity(Magazine.getMagazine().getVelocitySP());
+    if (isFinished()) {
+      end();
+    } else {
+      HelixEvents.getInstance().addEvent("MAGAZINE", "Run Magazine");
+      Magazine.getMagazine().setVelocity(Magazine.getMagazine().getVelocitySP());  
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -41,7 +45,6 @@ public class RunMagazine extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Magazine.getMagazine().setPower(0.0);
   }
 
   // Called when another command which requires one or more of the same

@@ -10,8 +10,8 @@ package frc.robot.command_groups;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.spacer.commands.RunSpacer;
 import frc.robot.magazine.commands.StopMagazine;
+import frc.robot.command_groups.CycleMagazineCG;
 
 public class StopShootingCG extends CommandGroup {
   /**
@@ -22,7 +22,7 @@ public class StopShootingCG extends CommandGroup {
     HelixEvents.getInstance().addEvent("MAGAZINE", "Stop Shooting CG");
 
     addSequential(new StopMagazine());
-    addSequential(new RunSpacer());
+    addSequential(new CycleMagazineCG());
   
   }
 }

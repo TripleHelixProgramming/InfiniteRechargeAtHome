@@ -4,8 +4,8 @@ package frc.robot.intake.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.command_groups.CycleMagazineCG;
 import frc.robot.intake.Intake;
-import frc.robot.spacer.commands.RunSpacer;
 
 public class DeployIntake extends Command {
 
@@ -62,6 +62,6 @@ public class DeployIntake extends Command {
   }
 
   protected Command parallelCommand() {
-    return new RunSpacer();
+    return new CycleMagazineCG();
   }
 }

@@ -11,9 +11,6 @@ import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.spacer.Spacer;
-import frc.robot.magazine.Magazine;
-import frc.robot.command_groups.LoadMagazineCG;
-import frc.robot.magazine.commands.AdvanceMagazine;
 
 public class RunSpacer extends Command {
 
@@ -42,27 +39,17 @@ public class RunSpacer extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Spacer.getSpacer().ballAtSpacer() || Magazine.getMagazine().ballAtShooter();
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    nextAdvanceMagazine().start(); //finishes when !ballAtSpacer || ballAtShooter
-    nextLoadMagazine().start();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-  }
-
-  protected Command nextAdvanceMagazine () {
-    return new AdvanceMagazine();
-  }
-
-  protected Command nextLoadMagazine () {
-    return new LoadMagazineCG(true);
   }
 }
