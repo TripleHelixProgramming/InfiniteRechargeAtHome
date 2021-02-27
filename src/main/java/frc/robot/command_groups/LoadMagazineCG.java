@@ -15,17 +15,17 @@ import frc.robot.spacer.commands.StopSpacer;
 import frc.robot.magazine.commands.RunMagazine;
 import frc.robot.magazine.commands.StopMagazine;
 
-public class CycleMagazineCG extends CommandGroup {
+public class LoadMagazineCG extends CommandGroup {
 
-  public CycleMagazineCG() {
+  public LoadMagazineCG() {
     addSequential(new RunSpacerUntilBeamBroken());
-    addSequential(new CycleMagazineCGInner());
+    addSequential(new LoadMagazineCGInner());
     addSequential(new StopMagazine());
-    addSequential(new CycleMagazineCG());
+    addSequential(new LoadMagazineCG());
   }
 
-  class CycleMagazineCGInner extends CommandGroup {
-    public CycleMagazineCGInner() {
+  class LoadMagazineCGInner extends CommandGroup {
+    public LoadMagazineCGInner() {
       addParallel(new RunMagazineUntilBeamCleared());
       addParallel(new RunSpacerMore(), 0.3);
       addSequential(new StopSpacer());

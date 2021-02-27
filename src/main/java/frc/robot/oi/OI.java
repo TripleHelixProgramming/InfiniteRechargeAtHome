@@ -25,7 +25,7 @@ import frc.robot.command_groups.Far;
 import frc.robot.command_groups.LayUpCG;
 import frc.robot.command_groups.SecondClose;
 import frc.robot.command_groups.SecondFar;
-import frc.robot.command_groups.ShootCG;
+import frc.robot.command_groups.ShootMagazineCG;
 import frc.robot.command_groups.StopShootingCG;
 import frc.robot.drivetrain.commands.visionAim;
 import frc.robot.flashlight.commands.flashlightOff;
@@ -97,7 +97,7 @@ public class OI {
     // Aiming is on a whileHeld reft button
 
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new ShootCG());
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new ShootMagazineCG());
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new StopShootingCG());
 
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SecondFar());

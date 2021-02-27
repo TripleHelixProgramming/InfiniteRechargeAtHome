@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.magazine.commands.FireMagazine;
 import frc.robot.spacer.commands.StopSpacer;
 
-public class ShootCG extends CommandGroup {
+public class ShootMagazineCG extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public ShootCG() {
+  public ShootMagazineCG() {
 
     HelixEvents.getInstance().addEvent("MAGAZINE", "Shoot CG");
 
