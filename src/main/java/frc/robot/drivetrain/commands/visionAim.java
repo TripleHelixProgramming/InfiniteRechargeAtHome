@@ -8,17 +8,19 @@
 package frc.robot.drivetrain.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.lib.util.control.Curve;
+import frc.lib.util.control.LinCurve;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.Drivetrain.CommandUnits;
 import frc.robot.limelight.Limelight;
+import frc.robot.oi.OI;
 
 public class visionAim extends Command {
 
   double velocity;
+  private final Curve curve = new LinCurve(0, 0.7, 0.1);
 
   public visionAim() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
@@ -31,8 +33,8 @@ public class visionAim extends Command {
   @Override
   protected void execute() {
     double angleToTarget = Limelight.getLimelight().getXOffset();
-    velocity = angleToTarget * 0.75;
-    Drivetrain.getDrivetrain().setSetpoint(CommandUnits.FPS, velocity, -velocity);
+    velocity = (angleToTarget - 0.6) * 0.15;
+    Drivetrain.getDrivetrain().setSetpoint(CommandUnits.FPS, -curve.calculateMappedVal(OI.getOI().getThrottle()) * 10 + velocity,-curve.calculateMappedVal(OI.getOI().getThrottle()) * 10 - velocity);
   }
 
   // Make this return true when this Command no longer needs to run execute()

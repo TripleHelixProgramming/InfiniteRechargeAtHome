@@ -8,7 +8,7 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.shooter.commands.HoodGoDown;
+import frc.robot.shooter.commands.HoodGoUp;
 import frc.robot.shooter.commands.setRealRPM;
 
 public class SecondFar extends CommandGroup {
@@ -16,7 +16,7 @@ public class SecondFar extends CommandGroup {
    * Add your docs here.
    */
   public SecondFar() {
-    addSequential(new HoodGoDown());
-    addParallel(new setRealRPM(3400));
+    addSequential(new HoodGoUp()); // changed for Power Port Challenge
+    addParallel(new setRealRPM(2800)); // originally 3400
   }
 }

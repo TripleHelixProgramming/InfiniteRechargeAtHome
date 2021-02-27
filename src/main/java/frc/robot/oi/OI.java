@@ -113,13 +113,12 @@ public class OI {
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
     new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.INTAKE));
 
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SecondFar());
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new ShootOne());
 
     // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new StartIntakeCG(true));
 
-    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new flashlightOff());
-    new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new flashlightOn());
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new flashlightOff());
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new flashlightOn());
 
     new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new visionAim());
 

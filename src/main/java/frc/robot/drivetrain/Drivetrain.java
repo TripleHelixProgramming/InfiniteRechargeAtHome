@@ -65,7 +65,6 @@ public class Drivetrain extends Subsystem {
 
   // private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
-  private final Camera frontCamera = new Camera("limelight-front");
   PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   private Drivetrain() {
@@ -270,10 +269,6 @@ public class Drivetrain extends Subsystem {
 
   public double getRightPosition() {
     return  HelixMath.convertFromTicksToFeet(right.getSelectedSensorPosition(), WHEEL_DIAMETER_IN_INCHES, ENCODER_TICKS_PER_REVOLUTION);
-  }
-
-  public Camera getFrontCamera() {
-    return frontCamera;
   }
 
   @Override

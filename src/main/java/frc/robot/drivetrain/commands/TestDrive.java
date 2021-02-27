@@ -12,6 +12,7 @@ import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
 import com.team2363.commands.HelixDrive;
 import com.team2363.utilities.RollingAverager;
 
+import frc.lib.util.control.Curve;
 import frc.lib.util.control.ExpCurve;
 import frc.lib.util.control.SplineCurve;
 import frc.lib.util.control.SplineType;
@@ -22,11 +23,8 @@ public class TestDrive extends HelixDrive {
 
   private final double deadZone = 0.05;
 
-  private final ExpCurve expThrottleCurve;
-  private final ExpCurve expTurnCurve;
-
-  private final SplineCurve splineThrottleCurve;
-  private final SplineCurve splineTurnCurve;
+  private final Curve throttleCurve;
+  private final Curve turnCurve;
 
   private final double[][] splineThrottlePoints;
   private final double[][] splineTurnPoints;
@@ -37,14 +35,14 @@ public class TestDrive extends HelixDrive {
   public TestDrive() {
     requires(Drivetrain.getDrivetrain());
 
-    expThrottleCurve = new ExpCurve(10.0, 0.0, 1.0, deadZone);
-    expTurnCurve = new ExpCurve(16.0, 0.0, 0.5, deadZone);
+    throttleCurve = new ExpCurve(10.0, 0.0, 0.7, deadZone);
+    turnCurve = new ExpCurve(18.0, 0.0, 0.2, deadZone);
 
     splineThrottlePoints = new double[][]{{-1.0, -1.0}, {0.0, 0.0}, {1.0, 1.0}};
     splineTurnPoints = new double[][]{{-1.0, -1.0}, {0.0, 0.0}, {1.0, 1.0}};
     
-    splineThrottleCurve = new SplineCurve(SplineType.SMOOTH, splineThrottlePoints, 0.0, 1.0, deadZone);
-    splineTurnCurve = new SplineCurve(SplineType.SMOOTH, splineTurnPoints, 0.0, 1, deadZone);
+    //throttleCurve = new SplineCurve(SplineType.SMOOTH, splineThrottlePoints, 0.0, 1.0, deadZone);
+    //turnCurve = new SplineCurve(SplineType.SMOOTH, splineTurnPoints, 0.0, 1, deadZone);
   }
 
   @Override
@@ -54,13 +52,13 @@ public class TestDrive extends HelixDrive {
 
   @Override
   protected double getThrottle() {
-      throttleMap = expThrottleCurve.calculateMappedVal(OI.getOI().getThrottle());
+      throttleMap = throttleCurve.calculateMappedVal(OI.getOI().getThrottle());
       return -throttleMap;
   }
 
   @Override
   protected double getTurn() {
-      turnMap = expTurnCurve.calculateMappedVal(OI.getOI().getTurn());
+      turnMap = turnCurve.calculateMappedVal(OI.getOI().getTurn());
       return turnMap;
   }
 
