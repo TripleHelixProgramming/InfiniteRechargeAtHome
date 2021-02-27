@@ -20,17 +20,19 @@ public class LoadMagazineCG extends CommandGroup {
 
   public LoadMagazineCG() {
     addSequential(new RunSpacerUntilBeamBroken());
-    addSequential(new LoadMagazineCGInner());
+    addSequential(new AddBall());
     addSequential(new StopMagazine());
   }
 
   @Override
   protected void end() {
-    nextCommand().start();
+    if (!Magazine.getMagazine().ballAtShooter()) {
+      nextCommand().start();
+    }
   }
 
-  class LoadMagazineCGInner extends CommandGroup {
-    public LoadMagazineCGInner() {
+  class AddBall extends CommandGroup {
+    public AddBall() {
       addParallel(new RunMagazineUntilBeamCleared());
       addSequential(new RunSpacerMore(), 0.3);
       addSequential(new StopSpacer());
