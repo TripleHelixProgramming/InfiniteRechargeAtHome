@@ -8,6 +8,7 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.spacer.Spacer;
 import frc.robot.magazine.Magazine;
 import frc.robot.spacer.commands.RunSpacer;
@@ -21,13 +22,17 @@ public class LoadMagazineCG extends CommandGroup {
     addSequential(new RunSpacerUntilBeamBroken());
     addSequential(new LoadMagazineCGInner());
     addSequential(new StopMagazine());
-    addSequential(new LoadMagazineCG());
+  }
+
+  @Override
+  protected void end() {
+    nextCommand().start();
   }
 
   class LoadMagazineCGInner extends CommandGroup {
     public LoadMagazineCGInner() {
       addParallel(new RunMagazineUntilBeamCleared());
-      addParallel(new RunSpacerMore(), 0.3);
+      addSequential(new RunSpacerMore(), 0.3);
       addSequential(new StopSpacer());
     }
 
@@ -51,5 +56,9 @@ public class LoadMagazineCG extends CommandGroup {
     protected boolean isFinished() {
       return Spacer.getSpacer().ballAtSpacer() || Magazine.getMagazine().ballAtShooter();
     }
+  }
+
+  protected Command nextCommand() {
+    return new LoadMagazineCG();
   }
 }

@@ -23,31 +23,32 @@ public class ShootMagazineCG extends CommandGroup {
 
     HelixEvents.getInstance().addEvent("MAGAZINE", "Shoot CG");
 
-    addParallel(new ShootMagazineCGInner());
+    //addParallel(new ShootMagazineCGInner());
     addSequential(new RunMagazine(), 1.5);
     addSequential(new StopShootingCG());
   }
 
-  class ShootMagazineCGInner extends CommandGroup {
-    public ShootMagazineCGInner() {
-      addSequential(new StopSpacerUntilBeamCleared());
-      addSequential(new RunSpacerUntilBeamBroken());
-      addSequential(new RunSpacer(), 0.3);
-      addSequential(new ShootMagazineCGInner());
-    }
+  //class ShootMagazineCGInner extends CommandGroup {
+    //public ShootMagazineCGInner() {
+      //addSequential(new StopSpacerUntilBeamCleared());
+      //addSequential(new RunSpacerUntilBeamBroken());
+      //addSequential(new RunSpacer(), 0.3);
+      //addSequential(new StopSpacer());
+      //addSequential(new ShootMagazineCGInner());
+    //}
   
-    class StopSpacerUntilBeamCleared extends StopSpacer {
-      @Override
-      protected boolean isFinished() {
-        return !Spacer.getSpacer().ballAtSpacer();
-      }
-    }
+    // class StopSpacerUntilBeamCleared extends StopSpacer {
+    //   @Override
+    //   protected boolean isFinished() {
+    //     return !Spacer.getSpacer().ballAtSpacer();
+    //   }
+    // }
 
-    class RunSpacerUntilBeamBroken extends RunSpacer {
-      @Override
-      protected boolean isFinished() {
-        return Spacer.getSpacer().ballAtSpacer();
-      }
-    }
-  }
+    // class RunSpacerUntilBeamBroken extends RunSpacer {
+    //   @Override
+    //   protected boolean isFinished() {
+    //     return Spacer.getSpacer().ballAtSpacer();
+    //   }
+    // }
+  //}
 }
