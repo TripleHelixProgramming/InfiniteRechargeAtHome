@@ -9,9 +9,6 @@ package frc.robot.intake;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import frc.robot.intake.commands.RetractIntake;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
@@ -101,7 +98,7 @@ public class Intake extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        setDefaultCommand(new RetractIntake());
+        //setDefaultCommand(new RetractIntake());
     }
 
     @Override

@@ -47,6 +47,5 @@ public class StopMagazine extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    HelixEvents.getInstance().addEvent("MAGAZINE", "Interrupted Stop Magazine");
   }
 }

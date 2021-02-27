@@ -5,6 +5,7 @@ import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.intake.Intake;
+import frc.robot.spacer.commands.RunSpacer;
 
 public class DeployIntake extends Command {
 
@@ -24,7 +25,10 @@ public class DeployIntake extends Command {
   protected void initialize() {
     HelixEvents.getInstance().addEvent("INTAKE", "Starting DeployIntake");
 
+    parallelCommand().start();
+
     myIntake.extend();
+    
     if (runRoller) {
       myIntake.rollerIn();
     } else {
@@ -41,13 +45,13 @@ public class DeployIntake extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false; // Never finish
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    HelixEvents.getInstance().addEvent("INTAKE", "Ending DeployIntake");
+    //HelixEvents.getInstance().addEvent("INTAKE", "Ending DeployIntake");
   }
 
   // Called when another command which requires one or more of the same
@@ -55,5 +59,9 @@ public class DeployIntake extends Command {
   @Override
   protected void interrupted() {
     // Default Command will retract and stop Intake
+  }
+
+  protected Command parallelCommand() {
+    return new RunSpacer();
   }
 }

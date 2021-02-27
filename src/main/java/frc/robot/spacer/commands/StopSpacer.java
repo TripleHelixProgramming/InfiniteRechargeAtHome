@@ -47,6 +47,5 @@ public class StopSpacer extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    HelixEvents.getInstance().addEvent("SPACER", "Interrupted Stop Spacer");
   }
 }

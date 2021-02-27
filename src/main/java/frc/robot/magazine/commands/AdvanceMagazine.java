@@ -10,14 +10,11 @@ package frc.robot.magazine.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
 import frc.robot.spacer.Spacer;
-//import frc.robot.spacer.commands.StopSpacer;
+import frc.robot.spacer.commands.RunSpacer;
 
 public class AdvanceMagazine extends Command {
-
-  //private Command nextStopSpacer = new StopSpacer();
 
   public AdvanceMagazine() {
     // Use requires() here to declare subsystem dependencies
@@ -39,7 +36,6 @@ public class AdvanceMagazine extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //SmartDashboard.putNumber("Magazine Velocity", Magazine.getMagazine().getVelocity());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -51,14 +47,21 @@ public class AdvanceMagazine extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Magazine.getMagazine().setPower(0.0);
-    //nextStopSpacer.start();
+    nextStopMagazine().start();
+    nextRunSpacer().start();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
+  }
+
+  protected Command nextRunSpacer() {
+    return new RunSpacer();
+  }
+
+  protected Command nextStopMagazine() {
+    return new StopMagazine();
   }
 }

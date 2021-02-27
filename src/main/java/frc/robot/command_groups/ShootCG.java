@@ -8,8 +8,8 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.magazine.commands.ReadyMagazine;
-import frc.robot.magazine.commands.RunMagazine;
+import frc.robot.magazine.commands.FireMagazine;
+import frc.robot.spacer.commands.StopSpacer;
 
 public class ShootCG extends CommandGroup {
   /**
@@ -17,9 +17,8 @@ public class ShootCG extends CommandGroup {
    */
   public ShootCG() {
 
-    //if shooter is at speed
-    addSequential(new ReadyMagazine());
-    addSequential(new RunMagazine(), 1.0);
+    addSequential(new StopSpacer());
+    addSequential(new FireMagazine(), 1.5);
   
   }
 }

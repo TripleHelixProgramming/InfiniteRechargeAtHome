@@ -9,14 +9,12 @@ package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.spacer.commands.AdvanceSpacer;
-import frc.robot.spacer.commands.RunSpacer;
 
 public class LoadMagazineCG extends CommandGroup {
 
-  public LoadMagazineCG() {
+  public LoadMagazineCG(boolean stow) {
 
-    addSequential(new AdvanceSpacer(), 0.5); //never finishes, stops spacer when ending
-    addSequential(new RunSpacer());          //finshes when ballAtSpacer
-    
+    addSequential(new AdvanceSpacer(stow), 0.3);
+
   }
 }

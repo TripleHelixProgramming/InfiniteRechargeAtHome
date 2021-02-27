@@ -10,15 +10,12 @@ package frc.robot.spacer.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.spacer.Spacer;
+import frc.robot.magazine.Magazine;
 import frc.robot.command_groups.LoadMagazineCG;
 import frc.robot.magazine.commands.AdvanceMagazine;
 
 public class RunSpacer extends Command {
-
-  private Command nextAdvanceMagazine = new AdvanceMagazine();
-  private Command nextLoadMagazine = new LoadMagazineCG();
 
   public RunSpacer() {
     // Use requires() here to declare subsystem dependencies
@@ -40,26 +37,32 @@ public class RunSpacer extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //SmartDashboard.putNumber("Spacer Velocity", Spacer.getSpacer().getVelocity());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Spacer.getSpacer().ballAtSpacer();
+    return Spacer.getSpacer().ballAtSpacer() || Magazine.getMagazine().ballAtShooter();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    nextAdvanceMagazine.start(); //finishes when !ballAtSpacer || ballAtShooter
-    nextLoadMagazine.start();    //sequential commandGroup that loops back to RunSpacer
+    nextAdvanceMagazine().start(); //finishes when !ballAtSpacer || ballAtShooter
+    nextLoadMagazine().start();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
+  }
+
+  protected Command nextAdvanceMagazine () {
+    return new AdvanceMagazine();
+  }
+
+  protected Command nextLoadMagazine () {
+    return new LoadMagazineCG(true);
   }
 }

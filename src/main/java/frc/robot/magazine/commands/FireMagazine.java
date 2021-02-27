@@ -10,12 +10,12 @@ package frc.robot.magazine.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.command_groups.StopShootingCG;
 import frc.robot.magazine.Magazine;
 
-public class ReadyMagazine extends Command {
+public class FireMagazine extends Command {
 
-  public ReadyMagazine() {
+  public FireMagazine() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Magazine.getMagazine());
@@ -27,7 +27,7 @@ public class ReadyMagazine extends Command {
     if (isFinished()) {
       end();
     } else {
-      HelixEvents.getInstance().addEvent("MAGAZINE", "Ready Magazine");
+      HelixEvents.getInstance().addEvent("MAGAZINE", "Fire Magazine");
       Magazine.getMagazine().setVelocity(Magazine.getMagazine().getVelocitySP());
     }
   }
@@ -35,19 +35,18 @@ public class ReadyMagazine extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //SmartDashboard.putNumber("Magazine Velocity", Magazine.getMagazine().getVelocity());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Magazine.getMagazine().ballAtShooter();
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Magazine.getMagazine().setPower(0.0);
+    nextCommand().start();
   }
 
   // Called when another command which requires one or more of the same
@@ -55,5 +54,9 @@ public class ReadyMagazine extends Command {
   @Override
   protected void interrupted() {
     end();
+  }
+
+  protected Command nextCommand() {
+    return new StopShootingCG();
   }
 }

@@ -10,7 +10,6 @@ package frc.robot.magazine.commands;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.Command;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.magazine.Magazine;
 
 public class RunMagazine extends Command {
@@ -31,7 +30,6 @@ public class RunMagazine extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //SmartDashboard.putNumber("Magazine Velocity", Magazine.getMagazine().getVelocity());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -50,6 +48,5 @@ public class RunMagazine extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }
