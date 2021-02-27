@@ -10,7 +10,9 @@ package frc.robot.command_groups;
 import com.team2363.logger.HelixEvents;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.magazine.commands.FireMagazine;
+import frc.robot.spacer.Spacer;
+import frc.robot.magazine.commands.RunMagazine;
+import frc.robot.spacer.commands.RunSpacer;
 import frc.robot.spacer.commands.StopSpacer;
 
 public class ShootMagazineCG extends CommandGroup {
@@ -21,8 +23,31 @@ public class ShootMagazineCG extends CommandGroup {
 
     HelixEvents.getInstance().addEvent("MAGAZINE", "Shoot CG");
 
-    addSequential(new StopSpacer());
-    addSequential(new FireMagazine(), 1.5);
+    addParallel(new ShootMagazineCGInner());
+    addSequential(new RunMagazine(), 1.5);
+    addSequential(new StopShootingCG());
+  }
+
+  class ShootMagazineCGInner extends CommandGroup {
+    public ShootMagazineCGInner() {
+      addSequential(new StopSpacerUntilBeamCleared());
+      addSequential(new RunSpacerUntilBeamBroken());
+      addSequential(new RunSpacer(), 0.3);
+      addSequential(new ShootMagazineCGInner());
+    }
   
+    class StopSpacerUntilBeamCleared extends StopSpacer {
+      @Override
+      protected boolean isFinished() {
+        return !Spacer.getSpacer().ballAtSpacer();
+      }
+    }
+
+    class RunSpacerUntilBeamBroken extends RunSpacer {
+      @Override
+      protected boolean isFinished() {
+        return Spacer.getSpacer().ballAtSpacer();
+      }
+    }
   }
 }
