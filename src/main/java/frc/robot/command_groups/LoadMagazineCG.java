@@ -21,6 +21,7 @@ public class LoadMagazineCG extends CommandGroup {
   public LoadMagazineCG() {
     addSequential(new RunSpacerUntilBeamBroken());
     addSequential(new AddBall());
+    addSequential(new RunMagazineMore(), 0.05);
     addSequential(new StopMagazine());
   }
 
@@ -57,6 +58,13 @@ public class LoadMagazineCG extends CommandGroup {
     @Override
     protected boolean isFinished() {
       return Spacer.getSpacer().ballAtSpacer() || Magazine.getMagazine().ballAtShooter();
+    }
+  }
+
+  class RunMagazineMore extends RunMagazine {
+    @Override
+    protected boolean isFinished() {
+      return Magazine.getMagazine().ballAtShooter();
     }
   }
 

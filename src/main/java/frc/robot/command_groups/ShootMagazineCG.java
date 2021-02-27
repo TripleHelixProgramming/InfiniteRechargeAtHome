@@ -30,6 +30,7 @@ public class ShootMagazineCG extends CommandGroup {
   class AddBallInverted extends CommandGroup {
     public AddBallInverted() {
       addSequential(new StopSpacerUntilBeamCleared());
+      addSequential(new StopSpacer(), 0.1);
       addSequential(new RunSpacerUntilBeamBroken());
       addSequential(new RunSpacer(), 0.3);
     }
