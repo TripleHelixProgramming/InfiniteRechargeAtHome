@@ -35,8 +35,8 @@ public class TestDrive extends HelixDrive {
   public TestDrive() {
     requires(Drivetrain.getDrivetrain());
 
-    throttleCurve = new ExpCurve(10.0, 0.0, 0.7, deadZone);
-    turnCurve = new ExpCurve(18.0, 0.0, 0.2, deadZone);
+    throttleCurve = new ExpCurve(10.0, 0.0, 1.0, deadZone);
+    turnCurve = new ExpCurve(18.0, 0.0, 0.8, deadZone);
 
     splineThrottlePoints = new double[][]{{-1.0, -1.0}, {0.0, 0.0}, {1.0, 1.0}};
     splineTurnPoints = new double[][]{{-1.0, -1.0}, {0.0, 0.0}, {1.0, 1.0}};
