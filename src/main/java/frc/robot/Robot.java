@@ -28,9 +28,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.command_groups.AutoRoutines;
 // import frc.robot.command_groups.AutoRoutines.AutoMode;
-
+import frc.paths.*;
 import frc.robot.drivetrain.Drivetrain;
+import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.BouncePathCG;
+import frc.robot.drivetrain.commands.CSVFollower;
 // import frc.robot.drivetrain.commands.AutoVisionDriving;
 // import frc.robot.drivetrain.commands.ManualVisionDriving;
 // import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
@@ -144,8 +146,8 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.LAYUP;
     // mode = AutoMode.NONE;
 
-    // autonomousCommand = new PathFollower("SandableLacquers");
-    autonomousCommand = new BouncePathCG();
+    autonomousCommand = new PathFollower("BarrelRun");
+    // autonomousCommand = new BouncePathCG();
 
     if (autonomousCommand != null) {
       autonomousCommand.start();

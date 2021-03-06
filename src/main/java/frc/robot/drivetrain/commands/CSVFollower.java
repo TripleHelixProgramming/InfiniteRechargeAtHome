@@ -45,7 +45,7 @@ public abstract class CSVFollower extends Command {
 
   public CSVFollower(String filename) {
     try {
-      this.filename = Filesystem.getDeployDirectory().getPath() + filename + ".csv";
+      this.filename = Filesystem.getDeployDirectory().getPath() + "/paths/" + filename + ".csv";
       pathReader = new BufferedReader(new FileReader(this.filename));
       pathReader.readLine();
       line = pathReader.readLine();
@@ -150,6 +150,10 @@ public abstract class CSVFollower extends Command {
   }
 
   public double getIndex(INDEX index) {
-    return Double.parseDouble(timestamp[(index).getIndex()].replaceAll("\\s", ""));
+    try {
+      return Double.parseDouble(timestamp[(index).getIndex()].replaceAll("\\s", ""));
+    } catch (Exception e) {
+      return 0.0;
+    }
   }
 }
