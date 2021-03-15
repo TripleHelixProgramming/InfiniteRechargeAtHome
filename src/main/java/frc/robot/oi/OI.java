@@ -23,6 +23,9 @@ import frc.robot.command_groups.StopIntakeCG;
 import frc.paths.bluezone;
 import frc.paths.goback;
 import frc.paths.yellowzone;
+import frc.robot.Webcam.webcam.CompareImages;
+import frc.robot.Webcam.webcam.SetReferenceImage;
+import frc.robot.Webcam.webcam.SetTestImage;
 import frc.robot.command_groups.AimSpin;
 import frc.robot.command_groups.ClimbCG;
 import frc.robot.command_groups.Close;
@@ -100,9 +103,9 @@ public class OI {
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new Close());
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
 
-    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new LayUpCG(new goback()));
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new LayUpCG(new bluezone()));
-    // new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new LayUpCG(new yellowzone()));
+    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new SetReferenceImage());
+    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new SetTestImage());
+    new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new CompareImages());
 
     new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new HoodGoUp());
     new JoystickButton(operator, ControllerMap.PS4_SHARE).whenPressed(new HoodGoDown());

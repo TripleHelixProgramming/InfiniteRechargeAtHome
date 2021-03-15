@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Webcam.Webcam;
 // import frc.robot.command_groups.AutoRoutines;
 // import frc.robot.command_groups.AutoRoutines.AutoMode;
 import frc.robot.drivetrain.Camera;
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
     getShooter();
     getTelescope();
     getIndexer();
+    Webcam.getWebcam();
 
     // No Control Panel subsystem hardware yet.
     // getControlPanel();
