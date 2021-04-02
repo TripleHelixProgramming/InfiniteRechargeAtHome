@@ -20,6 +20,7 @@ import static frc.robot.status.Status.getStatus;
 
 import com.team2363.logger.HelixEvents;
 import com.team2363.logger.HelixLogger;
+import frc.com.team319.io.FileManager;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -33,6 +34,7 @@ import frc.robot.drivetrain.Camera;
 
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.drivetrain.commands.BouncePathCG;
+import frc.robot.drivetrain.commands.PathFollower;
 // import frc.robot.drivetrain.commands.AutoVisionDriving;
 // import frc.robot.drivetrain.commands.ManualVisionDriving;
 // import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
@@ -63,6 +65,7 @@ public class Robot extends TimedRobot {
     initializeSubsystems();
     getDrivetrain().resetHeading();
     HelixEvents.getInstance().startLogging();
+    FileManager.generate();
     // SmartDashboard.putData(new SetFrontCameraAlignment());
   }
 
@@ -156,7 +159,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.NONE;
 
     // autonomousCommand = new PathFollower("SandableLacquers");
-    autonomousCommand = new BouncePathCG();
+    autonomousCommand = new PathFollower("ARed");
 
     if (autonomousCommand != null) {
       autonomousCommand.start();

@@ -24,28 +24,9 @@ public abstract class CSVFollower extends Command {
   private BufferedReader pathReader;
   private String[] timestamp;
 
-  public enum INDEX {
-
-    DT(0),
-    LEFT_VELOCITY(4),
-    RIGHT_VELOCITY(12),
-    CENTER_POSITION(7),
-    HEADING(15);
-  
-    private int index;
-
-    private INDEX(int index) {
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-  }
-
   public CSVFollower(String filename) {
     try {
-      this.filename = Filesystem.getDeployDirectory().getPath() + filename + ".csv";
+      this.filename = "home/lvuser/local/paths/trajectories/" + filename + ".csv";
       pathReader = new BufferedReader(new FileReader(this.filename));
       pathReader.readLine();
       line = pathReader.readLine();
@@ -79,7 +60,7 @@ public abstract class CSVFollower extends Command {
     getHeadingController().reset();
     isFinished = false;
 
-    pathNotifier.startPeriodic(getIndex(INDEX.DT));
+    pathNotifier.startPeriodic(0.02);
     pidNotifier.startPeriodic(getDistanceController().getPeriod());
   }
 
@@ -129,11 +110,11 @@ public abstract class CSVFollower extends Command {
     if (line == null) return;
     
     mCurrentDistance = getCurrentDistance();
-    mTargetDistance = reverse ? -getIndex(INDEX.CENTER_POSITION) : getIndex(INDEX.CENTER_POSITION);
+    mTargetDistance = reverse ? -getIndex(1) : getIndex(1);
     mCurrentHeading = getCurrentHeading();
-    mTargetHeading = mirror ? -getIndex(INDEX.HEADING) : getIndex(INDEX.HEADING);
-    mLeftVelocity = getIndex(mirror ^ reverse ? INDEX.RIGHT_VELOCITY : INDEX.LEFT_VELOCITY);
-    mRightVelocity = getIndex(mirror ^ reverse ? INDEX.LEFT_VELOCITY : INDEX.RIGHT_VELOCITY);
+    mTargetHeading = mirror ? -getIndex(0) : getIndex(0);
+    mLeftVelocity = getIndex(mirror ^ reverse ? 3 : 2);
+    mRightVelocity = getIndex(mirror ^ reverse ? 2 : 3);
 
     if (reverse) {
       mLeftVelocity *= -1;
@@ -149,7 +130,7 @@ public abstract class CSVFollower extends Command {
     useOutputs(correctedLeftVelocity, correctedRightVelocity);
   }
 
-  public double getIndex(INDEX index) {
-    return Double.parseDouble(timestamp[(index).getIndex()].replaceAll("\\s", ""));
+  public double getIndex(int index) {
+    return Double.parseDouble(timestamp[index].replaceAll("\\s", ""));
   }
 }

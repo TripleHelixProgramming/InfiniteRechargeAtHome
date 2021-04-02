@@ -11,8 +11,6 @@ import com.team319.trajectory.Path;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.paths.EightteenInchesBack;
-import frc.paths.goback;
 import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.drivetrain.commands.ResetPigeon;
 import frc.robot.shooter.Position;
@@ -26,6 +24,5 @@ public class LayUpCG extends CommandGroup {
    */
   public LayUpCG(Path input) {
     addSequential(new ResetPigeon());
-    addSequential(new PathFollower(input).reverse());
   }
 }

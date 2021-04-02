@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - BobTrajectoryApp",
+      "request": "launch",
+      "mainClass": "frc.com.team319.ui.BobTrajectoryApp",
+      "projectName": "InfiniteRechargeAtHome"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Main",
+      "request": "launch",
+      "mainClass": "frc.com.team319.io.Main",
+      "projectName": "InfiniteRechargeAtHome"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - BobRunner",
       "request": "launch",
       "mainClass": "frc.robot.BobRunner",

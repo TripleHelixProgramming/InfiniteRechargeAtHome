@@ -36,7 +36,7 @@ public class Webcam extends Subsystem {
 
   public Mat getImage() {
     Mat mat = new Mat();
-    CameraServer.getInstance().getVideo().grabFrame(mat);
+    // CameraServer.getInstance().getVideo().grabFrame(mat);
     return mat;
   }
 
