@@ -44,8 +44,8 @@ public class GalacticSearcher {
         paths.add(new GalacticSearchPath(PathName.BRED, "C:\\GRIP\\BRed.jpg"));
         paths.add(new GalacticSearchPath(PathName.BBLUE, "C:\\GRIP\\BBlue.jpg"));
 
-        for (int i = 0; i < 4; i++) {
-            paths.get(i).readImage();
+        for (GalacticSearchPath path : paths) {
+            path.readImage();
         }
 
         //create pipeline
@@ -55,11 +55,11 @@ public class GalacticSearcher {
         //run pipeline
         while (capture.isOpened()) {
             if (capture.read(frame)) {
-                for (int i = 0; i < 4; i++) {
+                for (GalacticSearchPath path : paths) {
                     GripPipeline pipeline = new GripPipeline();
-                    pipeline.process(frame, paths.get(i).getImage());
+                    pipeline.process(frame, path.getImage());
                     double meanvalue = findMeanValue(pipeline.cvAbsdiffOutput());
-                    paths.get(i).setMeanValue(meanvalue);
+                    path.setMeanValue(meanvalue);
                 }
             }
 
