@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - GalacticSearcher",
+      "request": "launch",
+      "mainClass": "frc.ntclient.GalacticSearcher",
+      "projectName": "InfiniteRechargeAtHome-1"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - GalacticSearch",
       "request": "launch",
       "mainClass": "frc.ntclient.GalacticSearch",

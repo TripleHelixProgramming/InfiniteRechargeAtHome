@@ -2,6 +2,12 @@ package frc.ntclient;
 
 import java.util.*;
 
+import edu.wpi.cscore.HttpCamera;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.*;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,13 +24,13 @@ import org.opencv.videoio.VideoCapture;
 import frc.ntclient.GalacticSearchPath.PathName;
 import frc.ntclient.GripPipeline;
 
-public class GalacticSearcher {
+public class GalacticSearcherCSCore {
     public static void main(String[] args) {
-        new GalacticSearcher().run();
+        new GalacticSearcherCSCore().run();
     }
 
     static {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
     
     public void run() {
@@ -32,10 +38,11 @@ public class GalacticSearcher {
         NetworkTable table = inst.getTable("datatable");
         NetworkTableEntry selectedGSPath = table.getEntry("selectedGSPath");
         inst.startDSClient();  // recommended if running on DS computer; this gets the robot IP from the DS
-        
-        //create video capture
-        VideoCapture capture = new VideoCapture("http://10.23.63.11:5802");
-        System.out.println("Limelight capture opened: " + capture.isOpened());
+
+        HttpCamera camera = new HttpCamera("Limelight", "http://10.23.63.11:5802");
+        System.out.println("Limelight capture opened: " + camera.isConnected());
+        CvSink cvSink = new CvSink("opencv_http Camera_limelight");
+        cvSink.setSource(camera);
 
         //initialize image sources for reference images
         List<GalacticSearchPath> paths = new ArrayList<GalacticSearchPath>();
@@ -51,24 +58,24 @@ public class GalacticSearcher {
 
         //create pipeline
         Mat frame = new Mat();
-        capture.read(frame);
+        cvSink.grabFrame(frame);
         System.out.println("Video capture is size " + frame.rows() + " rows by " + frame.cols() + " columns");
 
         //run pipeline
-        while (capture.isOpened()) {
-            if (capture.read(frame)) {
+        while (camera.isConnected()) { //capture.isOpened()
+            cvSink.grabFrame(frame);
+            while (!frame.empty()) {  //capture.read(frame)
                 for (GalacticSearchPath path : paths) {
                     GripPipeline pipeline = new GripPipeline();
                     pipeline.process(frame, path.getImage());
                     double meanvalue = findMeanValue(pipeline.cvAbsdiffOutput());
                     path.setMeanValue(meanvalue);
                 }
+                Collections.sort(paths);
+                PathName selectedPath = paths.get(0).getPathName();
+                System.out.println("Best path is " + selectedPath.toString());
+                selectedGSPath.setValue(selectedPath.ordinal());
             }
-
-            Collections.sort(paths);
-            PathName selectedPath = paths.get(0).getPathName();
-            System.out.println("Best path is " + selectedPath.toString());
-            selectedGSPath.setValue(selectedPath.ordinal());
         }
 
         //Close capture
