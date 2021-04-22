@@ -36,7 +36,6 @@ public class CarsonDrive extends HelixDrive {
 
   @Override
   protected double getThrottle() {
-      double newThrottle = OI.getOI().getThrottle();
       return -handleDeadzone(deadZone, OI.getOI().getThrottle());
   }
 

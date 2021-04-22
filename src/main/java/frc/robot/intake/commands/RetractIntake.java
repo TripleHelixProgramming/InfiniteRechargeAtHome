@@ -1,8 +1,6 @@
 
 package frc.robot.intake.commands;
 
-import com.team2363.logger.HelixEvents;
-
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.intake.Intake;
 

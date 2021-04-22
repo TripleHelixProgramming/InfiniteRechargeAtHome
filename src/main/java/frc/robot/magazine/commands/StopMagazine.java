@@ -5,26 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.shooter.commands;
-
-import com.team2363.logger.HelixEvents;
+package frc.robot.magazine.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.magazine.Magazine;
 
-import frc.robot.shooter.Shooter;
-
-public class StopShooter extends Command {
-  public StopShooter() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Shooter.getShooter());
+public class StopMagazine extends Command {
+  public StopMagazine() {
+    requires(Magazine.getMagazine());
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Shooter.getShooter().stop();
-    HelixEvents.getInstance().addEvent("SHOOTER", "StopShooter() Initialized.");
+    Magazine.getMagazine().setPower(0);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -41,7 +35,6 @@ public class StopShooter extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    HelixEvents.getInstance().addEvent("SHOOTER", "StopShooter() End.");
   }
 
   // Called when another command which requires one or more of the same

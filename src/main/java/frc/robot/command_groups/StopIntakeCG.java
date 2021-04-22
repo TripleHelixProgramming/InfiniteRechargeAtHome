@@ -8,7 +8,6 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.intake.commands.RetractIntake;
 
 public class StopIntakeCG extends CommandGroup {
@@ -36,6 +35,6 @@ public class StopIntakeCG extends CommandGroup {
     // look at the various beam breaks in the magazine to determine whether it
     // should run or not.
     addParallel(new RetractIntake());
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    addParallel(new LoadMagazineCG());
   }
 }

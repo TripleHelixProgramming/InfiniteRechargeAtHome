@@ -8,13 +8,14 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.intake.commands.DeployIntake;
+import frc.robot.magazine.commands.SpinMagazine;
+import frc.robot.spacer.commands.SpinSpacer;
 
-public class StartIntakeCG extends CommandGroup {
+public class ShootCG extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public StartIntakeCG(boolean runRoller) {
+  public ShootCG() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -32,12 +33,7 @@ public class StartIntakeCG extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    // Run the ball handling subsystems in INTAKE mode.  Each subsystem will 
-    // look at the various beam breaks in the magazine to determine whether it
-    // should run or not.
-
-    addParallel(new DeployIntake(runRoller));
-    addParallel(new LoadMagazineCG());
-  
+    addSequential(new SpinSpacer(300));
+    addSequential(new SpinMagazine(800));
   }
 }

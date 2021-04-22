@@ -10,13 +10,12 @@ package frc.robot.drivetrain.commands;
 import static frc.robot.drivetrain.Drivetrain.CommandUnits.PERCENT_FULLSPEED;
 
 import com.team2363.commands.HelixDrive;
-import com.team2363.utilities.RollingAverager;
 
-import frc.lib.util.control.ExpCurve;
-import frc.lib.util.control.SplineCurve;
-import frc.lib.util.control.SplineType;
 import frc.robot.drivetrain.Drivetrain;
 import frc.robot.oi.OI;
+import lib.mapping.ExpCurve;
+import lib.mapping.SplineCurve;
+import lib.mapping.SplineType;
 
 public class TestDrive extends HelixDrive {
 

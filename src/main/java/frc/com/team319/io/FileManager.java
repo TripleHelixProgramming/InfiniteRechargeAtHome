@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.com.team2363.trajectory.TrajectoryPlanner;
 
 public class FileManager {
@@ -48,6 +49,7 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println(e);
             System.out.println(e.getStackTrace());
+            SmartDashboard.putString("error", e.getMessage());
         }
     }
     private static void purgeFiles() {

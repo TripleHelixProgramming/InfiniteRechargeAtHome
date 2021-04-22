@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.shooter.Position;
-
 public class Preferences {
 
     // singleton instance
@@ -54,25 +52,6 @@ public class Preferences {
      */
     public String getRobotName() {
         return this.getInitializedValue(RIO_PREF_KEY_ROBOT_NAME, "unkown");
-    }
-
-    public int getPositionBumpTicks(Position pos) {
-        String key = RIO_PREF_KEY_POSITION_BUMP + pos.name();
-        
-        String value = this.getInitializedValue(key, Integer.toString(0));
-        int ticks = 0;
-        try {
-            ticks = Integer.parseInt(value);
-        } catch (Exception ex) {
-            ticks = 0;
-        }
-
-        return ticks;
-    }
-
-    public void setPositionBumpTicks(Position pos, int ticks) {
-        String key = RIO_PREF_KEY_POSITION_BUMP + pos.name();
-        this.rioPrefs.putString(key, Integer.toString(ticks));
     }
 
     public int getBallsProcessed() {
