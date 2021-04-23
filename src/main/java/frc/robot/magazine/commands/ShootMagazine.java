@@ -5,22 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.spacer.commands;
+package frc.robot.magazine.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import static frc.robot.spacer.Spacer.getSpacer;
+import frc.robot.magazine.Magazine;
 
-public class ShootSpacer extends Command {
-  public ShootSpacer() {
+public class ShootMagazine extends Command {
+  public ShootMagazine() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(getSpacer());
+    requires(Magazine.getMagazine());
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    getSpacer().setVelocity(300);
+    Magazine.getMagazine().setVelocity(800);
   }
 
   // Called repeatedly when this Command is scheduled to run

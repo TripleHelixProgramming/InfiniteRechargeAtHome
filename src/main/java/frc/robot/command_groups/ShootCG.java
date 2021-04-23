@@ -8,32 +8,12 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.magazine.commands.SpinMagazine;
-import frc.robot.spacer.commands.SpinSpacer;
+import frc.robot.magazine.commands.ShootMagazine;
+import frc.robot.spacer.commands.ShootSpacer;
 
 public class ShootCG extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
   public ShootCG() {
-    // Add Commands here:
-    // e.g. addSequential(new Command1());
-    // addSequential(new Command2());
-    // these will run in order.
-
-    // To run multiple commands at the same time,
-    // use addParallel()
-    // e.g. addParallel(new Command1());
-    // addSequential(new Command2());
-    // Command1 and Command2 will run in parallel.
-
-    // A command group will require all of the subsystems that each member
-    // would require.
-    // e.g. if Command1 requires chassis, and Command2 requires arm,
-    // a CommandGroup containing them would require both the chassis and the
-    // arm.
-
-    addSequential(new SpinSpacer(300));
-    addSequential(new SpinMagazine(800));
+    addSequential(new ShootSpacer());
+    addSequential(new ShootMagazine());
   }
 }

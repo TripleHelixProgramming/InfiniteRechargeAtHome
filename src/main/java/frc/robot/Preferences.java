@@ -21,7 +21,6 @@ public class Preferences {
     // These will be exposed in Shuffleboard NetworkTables Preferences list
     // so they should make sense to users of Shuffleboard.
     private static String RIO_PREF_KEY_ROBOT_NAME = "robotName";
-    private static String RIO_PREF_KEY_POSITION_BUMP = "posBumpTicks-"; // prefix per Position name
     private static String RIO_STATS_TOTAL_BALLS = "Total Balls: "; 
     //private static String RIO_PREF_KEY.... = "...";
 

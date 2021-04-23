@@ -8,11 +8,14 @@
 package frc.robot.spacer.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import static frc.robot.spacer.Spacer.getSpacer;
+import static frc.robot.magazine.Magazine.getMagazine;
 
 public class IntakeSpacer extends Command {
   public IntakeSpacer() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(getSpacer());
   }
 
   // Called just before this Command runs the first time
@@ -23,6 +26,11 @@ public class IntakeSpacer extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if (getMagazine().ballAtShooter()) {
+      getSpacer().setPower(0);
+    } else {
+      getSpacer().setVelocity(300);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -23,7 +23,6 @@ import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
 import frc.robot.flashlight.commands.flashlightOff;
 import frc.robot.flashlight.commands.flashlightOn;
-import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.shooter.commands.SpinUpBlueZone;
 import frc.robot.shooter.commands.SpinUpGreenZone;
 import frc.robot.shooter.commands.SpinUpRedZone;
