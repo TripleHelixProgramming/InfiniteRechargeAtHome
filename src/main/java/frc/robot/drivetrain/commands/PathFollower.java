@@ -7,20 +7,22 @@
 
 package frc.robot.drivetrain.commands;
 
+import frc.paths.Path;
+
 import static frc.robot.drivetrain.Drivetrain.CommandUnits.FPS;
 
 import com.team2363.controller.PIDController;
 
 import frc.robot.drivetrain.Drivetrain;
 
-public class PathFollower extends CSVFollower {
+public class PathFollower extends HelixFollower {
 
     private final Drivetrain drivetrain = Drivetrain.getDrivetrain();
 
     private final PIDController headingController = new PIDController(15, 0, 0, 0.01);
     private final PIDController distanceController = new PIDController(0.1, 0, 0, 0.01);
 
-    public PathFollower(final String input) {
+    public PathFollower(final Path input) {
         super(input);
         requires(drivetrain);
     }

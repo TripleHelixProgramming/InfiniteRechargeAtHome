@@ -19,7 +19,6 @@ import static frc.robot.status.Status.getStatus;
 
 import com.team2363.logger.HelixEvents;
 import com.team2363.logger.HelixLogger;
-import lib.gui.io.FileManager;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -36,6 +35,8 @@ import frc.robot.drivetrain.commands.PathFollower;
 import frc.robot.limelight.Limelight;
 import frc.robot.magazine.Magazine;
 import frc.robot.oi.OI;
+
+import frc.paths.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -58,8 +59,6 @@ public class Robot extends TimedRobot {
     
     initializeSubsystems();
     getDrivetrain().resetHeading();
-    HelixEvents.getInstance().startLogging();
-    FileManager.generate();
     // SmartDashboard.putData(new SetFrontCameraAlignment());
   }
 
@@ -142,7 +141,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.NONE;
 
     // autonomousCommand = new PathFollower("SandableLacquers");
-    autonomousCommand = new PathFollower("BarrelRacing");
+    autonomousCommand = new PathFollower(new Traj());
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
