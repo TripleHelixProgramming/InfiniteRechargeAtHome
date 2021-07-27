@@ -7,10 +7,9 @@
 
 package frc.robot;
 
-import com.team319.ui.BobTrajectoryApp;
+import lib.gui.ui.BobTrajectoryApp;
 
 public class BobRunner {
-
     public static void main(String... args) {
         new BobTrajectoryApp();
     }

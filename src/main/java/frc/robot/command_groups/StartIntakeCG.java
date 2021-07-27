@@ -8,7 +8,6 @@
 package frc.robot.command_groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.magazine.Magazine.BallHandlingState;
 import frc.robot.intake.commands.DeployIntake;
 
 public class StartIntakeCG extends CommandGroup {
@@ -38,7 +37,7 @@ public class StartIntakeCG extends CommandGroup {
     // should run or not.
 
     addParallel(new DeployIntake(runRoller));
-    addParallel(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    addParallel(new LoadMagazineCG());
   
   }
 }

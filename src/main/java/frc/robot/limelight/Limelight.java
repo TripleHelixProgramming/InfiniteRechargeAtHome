@@ -10,7 +10,6 @@ package frc.robot.limelight;
 import static edu.wpi.first.networktables.NetworkTableInstance.getDefault;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Add your docs here.

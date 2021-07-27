@@ -11,7 +11,6 @@ import static frc.robot.Preferences.getPreferences;
 import static frc.robot.drivetrain.Drivetrain.getDrivetrain;
 import static frc.robot.shooter.Shooter.getShooter;
 import static frc.robot.intake.Intake.getIntake;
-import static frc.robot.telescope.Telescope.getTelescope;
 import static frc.robot.magazine.Magazine.getMagazine;
 import static frc.robot.spacer.Spacer.getSpacer;
 import static frc.robot.indexer.Indexer.getIndexer;
@@ -20,6 +19,7 @@ import static frc.robot.status.Status.getStatus;
 
 import com.team2363.logger.HelixEvents;
 import com.team2363.logger.HelixLogger;
+import lib.gui.io.FileManager;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -28,10 +28,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.command_groups.AutoRoutines;
 // import frc.robot.command_groups.AutoRoutines.AutoMode;
-import frc.robot.drivetrain.Camera;
 
-import frc.robot.drivetrain.Drivetrain;
-import frc.robot.drivetrain.commands.BouncePathCG;
+import frc.robot.drivetrain.commands.PathFollower;
 // import frc.robot.drivetrain.commands.AutoVisionDriving;
 // import frc.robot.drivetrain.commands.ManualVisionDriving;
 // import frc.robot.drivetrain.commands.SetFrontCameraAlignment;
@@ -48,7 +46,6 @@ import frc.robot.oi.OI;
  */
 public class Robot extends TimedRobot {
   Command autonomousCommand;
-  Camera camera = new Camera("limelight-front");
   private final Compressor compressor = new Compressor();
 
   /**
@@ -62,6 +59,7 @@ public class Robot extends TimedRobot {
     initializeSubsystems();
     getDrivetrain().resetHeading();
     HelixEvents.getInstance().startLogging();
+    FileManager.generate();
     // SmartDashboard.putData(new SetFrontCameraAlignment());
   }
 
@@ -73,11 +71,7 @@ public class Robot extends TimedRobot {
     getSpacer();
     getMagazine();
     getShooter();
-    getTelescope();
     getIndexer();
-
-    // No Control Panel subsystem hardware yet.
-    // getControlPanel();
 
     getStatus().resetBoot();
   }
@@ -92,7 +86,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putBoolean("Target Aquired", Drivetrain.getDrivetrain().getFrontCamera().isTargetFound());    
   }
 
   /**
@@ -109,16 +102,12 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
     SmartDashboard.putNumber("Current Heading", getDrivetrain().getHeading());
-    SmartDashboard.putNumber("Target Skew", camera.getTargetSkew());
 
     SmartDashboard.putBoolean("Ball At Spacer", Magazine.getMagazine().ballAtSpacer());
     SmartDashboard.putBoolean("Ball At Shooter", Magazine.getMagazine().ballAtShooter());
-    SmartDashboard.putNumber("Distance", getDrivetrain().getFrontCamera().calculateDistanceToTarget());
-    SmartDashboard.putNumber("rpm", getDrivetrain().getFrontCamera().calculateRPM());
 
     // SmartDashboard.putString("AUTO SWITCH:", AutoRoutines.getSelectedAutoMode().toString());
 
-    Drivetrain.getDrivetrain().getFrontCamera().setDriverMode();
   }
 
   /**
@@ -137,7 +126,6 @@ public class Robot extends TimedRobot {
     getStatus().resetAuto();
 
     getDrivetrain().resetHeading();
-    getDrivetrain().getFrontCamera().setDriverMode();
 
     // AutoMode mode;
     
@@ -154,7 +142,7 @@ public class Robot extends TimedRobot {
     // mode = AutoMode.NONE;
 
     // autonomousCommand = new PathFollower("SandableLacquers");
-    autonomousCommand = new BouncePathCG();
+    autonomousCommand = new PathFollower("BarrelRacing");
 
     if (autonomousCommand != null) {
       autonomousCommand.start();
@@ -212,4 +200,3 @@ public class Robot extends TimedRobot {
     
   }
 }
-

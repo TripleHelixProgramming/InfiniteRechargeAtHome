@@ -17,40 +17,17 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import frc.robot.command_groups.SetBallHandlingCG;
+import frc.robot.command_groups.LoadMagazineCG;
+import frc.robot.command_groups.ShootCG;
 import frc.robot.command_groups.StartIntakeCG;
 import frc.robot.command_groups.StopIntakeCG;
-import frc.paths.bluezone;
-import frc.paths.goback;
-import frc.paths.yellowzone;
-import frc.robot.command_groups.AimSpin;
-import frc.robot.command_groups.ClimbCG;
-import frc.robot.command_groups.Close;
-import frc.robot.command_groups.Far;
-import frc.robot.command_groups.LayUpCG;
-import frc.robot.command_groups.SecondClose;
-import frc.robot.command_groups.SecondFar;
-import frc.robot.drivetrain.commands.CarsonDrive;
-import frc.robot.drivetrain.commands.visionAim;
 import frc.robot.flashlight.commands.flashlightOff;
 import frc.robot.flashlight.commands.flashlightOn;
-import frc.robot.intake.Intake;
-import frc.robot.intake.commands.RetractIntake;
-import frc.robot.intake.commands.ReverseIntake;
-import frc.robot.magazine.Magazine.BallHandlingState;
-import frc.robot.magazine.commands.SetMagazineTo;
-import frc.robot.magazine.commands.ShootOne;
-import frc.robot.shooter.Position;
-import frc.robot.shooter.Shooter;
-import frc.robot.shooter.commands.BumpShooter;
-import frc.robot.shooter.commands.HoodGoDown;
-import frc.robot.shooter.commands.HoodGoUp;
-import frc.robot.shooter.commands.SpinShooterUp;
+import frc.robot.shooter.commands.SpinUpBlueZone;
+import frc.robot.shooter.commands.SpinUpGreenZone;
+import frc.robot.shooter.commands.SpinUpRedZone;
+import frc.robot.shooter.commands.SpinUpYellowZone;
 import frc.robot.shooter.commands.StopShooter;
-import frc.robot.shooter.commands.setRealRPM;
-import frc.robot.spacer.commands.SetSpacerTo;
-import frc.robot.telescope.commands.StowTelescope;
-import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -88,62 +65,29 @@ public class OI {
 
     // Set shooter speeds - Triangle farthest zone from goal, circle third farthest,
     // x second closest, square closest
-    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new Far());
+    new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenPressed(new SpinUpRedZone());
     new JoystickButton(operator, ControllerMap.PS4_TRIANGLE).whenReleased(new StopShooter());
 
-    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SecondFar());
+    new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new SpinUpYellowZone());
     new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenReleased(new StopShooter());
 
-    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SecondClose());
+    new JoystickButton(operator, ControllerMap.PS4_X).whenPressed(new SpinUpBlueZone());
     new JoystickButton(operator, ControllerMap.PS4_X).whenReleased(new StopShooter());
 
-    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new Close());
+    new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenPressed(new SpinUpGreenZone());
     new JoystickButton(operator, ControllerMap.PS4_SQUARE).whenReleased(new StopShooter());
 
-    new JoystickButton(driver, ControllerMap.X_BOX_Y).whenPressed(new LayUpCG(new goback()));
-    new JoystickButton(driver, ControllerMap.X_BOX_B).whenPressed(new LayUpCG(new bluezone()));
-    // new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new LayUpCG(new yellowzone()));
-
-    new JoystickButton(operator, ControllerMap.PS4_OPTIONS).whenPressed(new HoodGoUp());
-    new JoystickButton(operator, ControllerMap.PS4_SHARE).whenPressed(new HoodGoDown());
-
-    // Aiming is on a whileHeld reft button
-
     // Shooting is on a whenPressed / whenReleased right button
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new SetBallHandlingCG(BallHandlingState.INTAKE));
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenPressed(new ShootCG());
+    new JoystickButton(driver, ControllerMap.X_BOX_RB).whenReleased(new LoadMagazineCG());
 
-    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SecondFar());
+    new JoystickButton(driver, ControllerMap.X_BOX_LB).whenPressed(new SpinUpYellowZone());
     new JoystickButton(driver, ControllerMap.X_BOX_LB).whenReleased(new StopShooter());
 
     // new JoystickButton(operator, ControllerMap.PS4_CIRCLE).whenPressed(new StartIntakeCG(true));
 
     new JoystickButton(driver, ControllerMap.X_BOX_A).whenPressed(new flashlightOff());
     new JoystickButton(driver, ControllerMap.X_BOX_A).whenReleased(new flashlightOn());
-
-    new JoystickButton(driver, ControllerMap.X_BOX_X).whileHeld(new visionAim());
-
-    // new JoystickButton(driver, ControllerMap.X_BOX_X).whenPressed(new SetBallHandlingCG(BallHandlingState.SHOOT));
-    // new JoystickButton(driver, ControllerMap.X_BOX_X).whenReleased(new SetBallHandlingCG(BallHandlingState.STOP));
-
-
-
-    new CTrigger().whenActive(new ClimbCG());
-
-    // Bumping up and down  
-    new Button() {
-        @Override
-        public boolean get() {
-          return (driver.getPOV() == 0);
-        }
-    }.whenPressed(new BumpShooter(Shooter.BUMP_UP));
-
-    new Button() {
-      @Override
-      public boolean get() {
-        return (driver.getPOV() == 180);
-      }
-    }.whenPressed(new BumpShooter(Shooter.BUMP_DOWN));
 }
 
   /**
@@ -184,28 +128,10 @@ public class OI {
     controller.setRumble(RumbleType.kRightRumble, state);
   }
 
-  // Get Climber power from operator controller right joystick y-axis
-  public double getClimberPower() {
-    double stick = -operator.getRawAxis(PS4_LEFT_STICK_Y);
-    // stick *= Math.abs(stick);
-    // if (Math.abs(stick) < 0.05) {
-    //   stick = 0;
-    // }
-    return stick;
-  }
-
-  class CTrigger extends Trigger {
-    @Override
-    public boolean get(){
-      return (operator.getRawButton(ControllerMap.PS4_PS) && (getClimberPower() > 0.8));    
-    }
-  }
-
   class RightTriggerButton extends Trigger {
     @Override
     public boolean get(){
       return (driver.getRawAxis(ControllerMap.X_BOX_RIGHT_TRIGGER) > 0.8);    
     }
   }
-
 }

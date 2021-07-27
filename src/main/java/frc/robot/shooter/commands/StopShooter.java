@@ -12,7 +12,6 @@ import com.team2363.logger.HelixEvents;
 import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.shooter.Shooter;
-import frc.robot.shooter.Shooter.ShooterState;
 
 public class StopShooter extends Command {
   public StopShooter() {
@@ -24,13 +23,13 @@ public class StopShooter extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Shooter.getShooter().stop();
     HelixEvents.getInstance().addEvent("SHOOTER", "StopShooter() Initialized.");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Shooter.getShooter().stop();
   }
 
   // Make this return true when this Command no longer needs to run execute()
